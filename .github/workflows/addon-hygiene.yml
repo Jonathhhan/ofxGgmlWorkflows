@@ -1,0 +1,29 @@
+name: reusable-addon-hygiene
+
+on:
+  workflow_call:
+
+jobs:
+  hygiene:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify addon structure
+        run: |
+          test -f README.md
+          test -f addon_config.mk
+          test -d src
+
+      - name: Verify governance files
+        run: |
+          test -f AGENTS.md
+
+      - name: Reject generated artifacts
+        run: |
+          if find . \( -iname "*.gguf" -o -iname "*.dll" -o -iname "*.so" -o -iname "*.dylib" -o -iname "*.exe" \) | grep -q .; then
+            echo "Forbidden artifact detected"
+            exit 1
+          fi
