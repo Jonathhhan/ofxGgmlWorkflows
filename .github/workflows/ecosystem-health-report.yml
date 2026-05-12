@@ -1,0 +1,29 @@
+name: reusable-ecosystem-health-report
+
+on:
+  workflow_call:
+
+jobs:
+  health-report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Generate health report
+        run: |
+          if [ -f scripts/generate-health-report.py ]; then
+            python3 scripts/generate-health-report.py
+          fi
+
+      - name: Verify generated report
+        run: |
+          if [ -f scripts/generate-health-report.py ]; then
+            test -f docs/ecosystem-health-report.md
+          fi
