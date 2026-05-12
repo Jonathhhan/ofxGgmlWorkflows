@@ -1,0 +1,25 @@
+name: reusable-metadata-validation
+
+on:
+  workflow_call:
+
+jobs:
+  metadata-validation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Validate addon metadata
+        run: |
+          if [ -f scripts/validate-addon-metadata.py ]; then
+            python3 scripts/validate-addon-metadata.py
+          else
+            echo "No metadata validator present"
+          fi
