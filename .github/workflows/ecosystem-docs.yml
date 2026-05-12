@@ -1,0 +1,45 @@
+name: reusable-ecosystem-docs
+
+on:
+  workflow_call:
+
+jobs:
+  ecosystem-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Generate ecosystem dashboard
+        run: |
+          if [ -f scripts/generate-ecosystem-dashboard.py ]; then
+            python3 scripts/generate-ecosystem-dashboard.py
+          fi
+
+      - name: Generate compatibility matrix
+        run: |
+          if [ -f scripts/generate-compatibility-matrix.py ]; then
+            python3 scripts/generate-compatibility-matrix.py
+          fi
+
+      - name: Generate release plan
+        run: |
+          if [ -f scripts/plan-release.py ]; then
+            python3 scripts/plan-release.py
+          fi
+
+      - name: Generate PR fanout plan
+        run: |
+          if [ -f scripts/plan-pr-fanout.py ]; then
+            python3 scripts/plan-pr-fanout.py
+          fi
+
+      - name: Verify generated docs directory
+        run: |
+          test -d docs
