@@ -1,0 +1,31 @@
+name: reusable-release-plan
+
+on:
+  workflow_call:
+
+jobs:
+  release-plan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Generate release plan
+        run: |
+          if [ -f scripts/plan-release.py ]; then
+            python3 scripts/plan-release.py
+          else
+            echo "No release planner found"
+          fi
+
+      - name: Verify release plan
+        run: |
+          if [ -f scripts/plan-release.py ]; then
+            test -f docs/release-plan.md
+          fi
