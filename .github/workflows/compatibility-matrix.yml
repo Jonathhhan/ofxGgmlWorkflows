@@ -1,0 +1,29 @@
+name: reusable-compatibility-matrix
+
+on:
+  workflow_call:
+
+jobs:
+  compatibility:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Generate compatibility matrix
+        run: |
+          if [ -f scripts/generate-compatibility-matrix.py ]; then
+            python3 scripts/generate-compatibility-matrix.py
+          fi
+
+      - name: Verify compatibility matrix
+        run: |
+          if [ -f docs/compatibility-matrix.md ]; then
+            test -f docs/compatibility-matrix.md
+          fi
