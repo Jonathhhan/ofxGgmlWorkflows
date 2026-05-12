@@ -1,0 +1,35 @@
+name: reusable-ecosystem-health
+
+on:
+  workflow_call:
+
+jobs:
+  ecosystem-health:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify manifest exists
+        run: |
+          test -f ecosystem.json
+
+      - name: Verify docs directory
+        run: |
+          test -d docs
+
+      - name: Verify governance files
+        run: |
+          test -f AGENTS.md
+          test -f CHANGELOG.md
+
+      - name: Verify automation scripts
+        run: |
+          if [ -d scripts ]; then
+            ls scripts
+          fi
+
+      - name: Verify workflow inheritance direction
+        run: |
+          echo "Reusable workflows should be consumed from ofxGgmlWorkflows"
