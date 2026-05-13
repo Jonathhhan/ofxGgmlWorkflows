@@ -1,0 +1,31 @@
+name: reusable-live-workflow-status
+
+on:
+  workflow_call:
+
+jobs:
+  workflow-status:
+    runs-on: ubuntu-latest
+
+    permissions:
+      actions: read
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Generate workflow status report
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -f scripts/fetch-workflow-status.py ]; then
+            python3 scripts/fetch-workflow-status.py
+          else
+            echo "No workflow status fetcher present"
+          fi
