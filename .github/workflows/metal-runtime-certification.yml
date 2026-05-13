@@ -1,0 +1,33 @@
+name: reusable-metal-runtime-certification
+
+on:
+  workflow_call:
+
+jobs:
+  metal-runtime-certification:
+    runs-on: [self-hosted, macos, metal]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Environment info
+        shell: bash
+        run: |
+          echo "Runner: $RUNNER_OS"
+          system_profiler SPDisplaysDataType || true
+
+      - name: Verify runtime smoke source exists
+        shell: bash
+        run: |
+          test -f tools/runtime-smoke/runtime_smoke.cpp
+
+      - name: Metal runtime smoke certification
+        shell: bash
+        run: |
+          if [ -x build/runtime-smoke/runtime_smoke ]; then
+            build/runtime-smoke/runtime_smoke --backend metal --require-backend
+          else
+            echo "runtime_smoke executable missing; future Metal build step required"
+            exit 1
+          fi
