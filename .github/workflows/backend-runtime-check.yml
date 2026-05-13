@@ -40,15 +40,21 @@ jobs:
         run: |
           test -f tools/runtime-smoke/runtime_smoke.cpp || echo "Runtime smoke source missing"
 
-      - name: CPU runtime smoke build/run
+      - name: Linux CPU runtime smoke execution
+        if: matrix.os == 'ubuntu-latest'
         shell: bash
         run: |
-          if [ -f scripts/build-runtime-smoke.sh ]; then
-            chmod +x scripts/build-runtime-smoke.sh
-            scripts/build-runtime-smoke.sh || echo "Runtime smoke build skipped or unavailable"
-          else
-            echo "No runtime smoke build script present"
-          fi
+          sudo apt-get update
+          sudo apt-get install -y powershell build-essential cmake
+          chmod +x scripts/ci-setup-runtime-smoke.sh
+          scripts/ci-setup-runtime-smoke.sh
+
+      - name: Non-Linux runtime smoke scaffold
+        if: matrix.os != 'ubuntu-latest'
+        shell: bash
+        run: |
+          echo "Runtime smoke execution scaffold for $RUNNER_OS"
+          echo "Future platform-native ggml bootstrap required"
 
       - name: CUDA runtime truth semantics
         shell: bash
