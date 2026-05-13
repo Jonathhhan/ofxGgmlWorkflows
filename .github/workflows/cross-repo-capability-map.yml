@@ -1,0 +1,25 @@
+name: reusable-cross-repo-capability-map
+
+on:
+  workflow_call:
+
+jobs:
+  capability-map:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Generate capability map
+        run: |
+          if [ -f scripts/generate-cross-repo-capability-map.py ]; then
+            python3 scripts/generate-cross-repo-capability-map.py
+          else
+            echo "No capability map generator present"
+          fi
