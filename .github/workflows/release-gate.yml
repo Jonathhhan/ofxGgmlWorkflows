@@ -1,0 +1,30 @@
+name: reusable-release-gate
+
+on:
+  workflow_call:
+
+jobs:
+  release-gate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Gate summary
+        run: |
+          echo "Future release gating scaffold"
+
+      - name: Required reports
+        run: |
+          test -f docs/release-readiness-score.md || echo "Missing release readiness score"
+          test -f docs/metadata-reconciliation-report.md || echo "Missing reconciliation report"
+          test -f docs/cross-repo-capability-map.md || echo "Missing capability map"
+
+      - name: Future CI truth integration
+        run: |
+          echo "Future gating against real CI/workflow results goes here"
+
+      - name: Future runtime verification
+        run: |
+          echo "Future backend/runtime verification goes here"
