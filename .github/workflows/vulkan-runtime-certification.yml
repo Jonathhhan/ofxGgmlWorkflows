@@ -1,0 +1,33 @@
+name: reusable-vulkan-runtime-certification
+
+on:
+  workflow_call:
+
+jobs:
+  vulkan-runtime-certification:
+    runs-on: [self-hosted, linux, vulkan]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Environment info
+        shell: bash
+        run: |
+          echo "Runner: $RUNNER_OS"
+          vulkaninfo || true
+
+      - name: Verify runtime smoke source exists
+        shell: bash
+        run: |
+          test -f tools/runtime-smoke/runtime_smoke.cpp
+
+      - name: Vulkan runtime smoke certification
+        shell: bash
+        run: |
+          if [ -x build/runtime-smoke/runtime_smoke ]; then
+            build/runtime-smoke/runtime_smoke --backend vulkan --require-backend
+          else
+            echo "runtime_smoke executable missing; future Vulkan build step required"
+            exit 1
+          fi
