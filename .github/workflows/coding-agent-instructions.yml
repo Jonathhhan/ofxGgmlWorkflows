@@ -1,0 +1,56 @@
+name: reusable-coding-agent-instructions
+
+on:
+  workflow_call:
+    inputs:
+      require_addon_config:
+        type: boolean
+        required: false
+        default: true
+      require_scripts:
+        type: boolean
+        required: false
+        default: true
+
+jobs:
+  coding-agent-instructions:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify instruction files
+        run: |
+          test -f HERMES.md
+          test -f AGENTS.md
+          test -f .github/copilot-instructions.md
+          grep -q "ofxGgml" HERMES.md
+          grep -q "ofxGgml" AGENTS.md
+          grep -q "ofxGgml" .github/copilot-instructions.md
+
+      - name: Verify validation guidance
+        run: |
+          if ! grep -Eq "scripts[\\\\/](validate-local|release-candidate|plan-ecosystem)\\.ps1|workflow_call" HERMES.md; then
+            echo "HERMES.md must mention validation, ecosystem planning, or workflow_call review guidance"
+            exit 1
+          fi
+          if ! grep -Eq "scripts[\\\\/](validate-local|release-candidate)\\.ps1|workflow_call" AGENTS.md; then
+            echo "AGENTS.md must mention validation or workflow_call review guidance"
+            exit 1
+          fi
+          if ! grep -Eq "scripts[\\\\/](validate-local|release-candidate)\\.ps1|workflow_call" .github/copilot-instructions.md; then
+            echo "copilot-instructions.md must mention validation or workflow_call review guidance"
+            exit 1
+          fi
+
+      - name: Verify addon repository shape
+        if: inputs.require_addon_config
+        run: |
+          test -f addon_config.mk
+          test -d src
+
+      - name: Verify script repository shape
+        if: inputs.require_scripts
+        run: |
+          test -d scripts
