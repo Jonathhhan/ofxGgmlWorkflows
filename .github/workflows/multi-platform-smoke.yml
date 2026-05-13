@@ -1,0 +1,35 @@
+name: reusable-multi-platform-smoke
+
+on:
+  workflow_call:
+
+jobs:
+  smoke-build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Environment info
+        shell: bash
+        run: |
+          echo "OS: $RUNNER_OS"
+          echo "Smoke-build scaffold only"
+
+      - name: Verify addon structure
+        shell: bash
+        run: |
+          test -f README.md
+          test -f addon_config.mk
+          test -d src
+
+      - name: Future smoke build placeholder
+        shell: bash
+        run: |
+          echo "Future openFrameworks smoke build goes here"
