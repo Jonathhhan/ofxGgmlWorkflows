@@ -1,0 +1,29 @@
+name: reusable-backend-capability-report
+
+on:
+  workflow_call:
+
+jobs:
+  backend-capability-report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Generate backend capability report
+        run: |
+          if [ -f scripts/generate-backend-capability-report.py ]; then
+            python3 scripts/generate-backend-capability-report.py
+          else
+            echo "No backend capability report generator present"
+          fi
+
+      - name: Future artifact upload placeholder
+        run: |
+          echo "Future runtime capability artifact upload goes here"
