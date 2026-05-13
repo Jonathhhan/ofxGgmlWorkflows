@@ -1,0 +1,34 @@
+name: reusable-cuda-runtime-certification
+
+on:
+  workflow_call:
+
+jobs:
+  cuda-runtime-certification:
+    runs-on: [self-hosted, linux, cuda]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Environment info
+        shell: bash
+        run: |
+          echo "Runner: $RUNNER_OS"
+          nvidia-smi || true
+          nvcc --version || true
+
+      - name: Verify runtime smoke source exists
+        shell: bash
+        run: |
+          test -f tools/runtime-smoke/runtime_smoke.cpp
+
+      - name: CUDA runtime smoke certification
+        shell: bash
+        run: |
+          if [ -x build/runtime-smoke/runtime_smoke ]; then
+            build/runtime-smoke/runtime_smoke --backend cuda --require-backend
+          else
+            echo "runtime_smoke executable missing; future CUDA build step required"
+            exit 1
+          fi
