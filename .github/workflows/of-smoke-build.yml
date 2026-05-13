@@ -1,0 +1,38 @@
+name: reusable-of-smoke-build
+
+on:
+  workflow_call:
+
+jobs:
+  of-smoke-build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Environment info
+        shell: bash
+        run: |
+          echo "Runner: $RUNNER_OS"
+          echo "Future openFrameworks smoke build scaffold"
+
+      - name: Verify example structure
+        shell: bash
+        run: |
+          test -d examples || echo "No examples directory present"
+
+      - name: Future projectGenerator integration
+        shell: bash
+        run: |
+          echo "Future projectGenerator smoke build step goes here"
+
+      - name: Future example compilation
+        shell: bash
+        run: |
+          echo "Future example compilation step goes here"
