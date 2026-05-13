@@ -27,22 +27,26 @@ jobs:
         run: |
           test -f tools/runtime-smoke/runtime_smoke.cpp || echo "Runtime smoke source missing"
 
-      - name: CPU backend placeholder
+      - name: CPU runtime smoke placeholder
         shell: bash
         run: |
-          echo "Future CPU backend initialization build/run"
+          echo "Future CPU runtime smoke build/run"
+          echo "Expected invocation: runtime_smoke --backend cpu --require-backend"
 
-      - name: CUDA backend placeholder
+      - name: CUDA runtime smoke placeholder
         shell: bash
         run: |
           echo "Future CUDA runtime discovery"
+          echo "Expected invocation: runtime_smoke --backend cuda"
 
-      - name: Metal backend placeholder
+      - name: Metal runtime smoke placeholder
         shell: bash
         run: |
           echo "Future Metal runtime discovery"
+          echo "Expected invocation: runtime_smoke --backend metal"
 
-      - name: Vulkan backend placeholder
+      - name: Vulkan runtime smoke placeholder
         shell: bash
         run: |
           echo "Future Vulkan runtime discovery"
+          echo "Expected invocation: runtime_smoke --backend vulkan"
