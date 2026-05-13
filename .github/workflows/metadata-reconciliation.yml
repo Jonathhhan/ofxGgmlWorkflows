@@ -1,0 +1,25 @@
+name: reusable-metadata-reconciliation
+
+on:
+  workflow_call:
+
+jobs:
+  metadata-reconciliation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Reconcile ecosystem metadata
+        run: |
+          if [ -f scripts/reconcile-ecosystem-metadata.py ]; then
+            python3 scripts/reconcile-ecosystem-metadata.py
+          else
+            echo "No metadata reconciliation script present"
+          fi
