@@ -12,6 +12,8 @@ This repository centralizes lightweight automation for openFrameworks addons in 
 - `.github/workflows/workflow-repo-validation.yml`
 
 Companion repositories can consume these workflows with `workflow_call`.
+See [`docs/workflow-adoption.md`](docs/workflow-adoption.md) for adoption
+tiers, caller patterns, and Core coordination notes.
 
 Example:
 
@@ -39,6 +41,16 @@ cloud agent and code review guardrails.
 
 `workflow-repo-validation.yml` validates this repository's reusable workflow
 templates on push and pull request.
+
+## Adoption order
+
+1. Add `coding-agent-instructions.yml` so Codex, GitHub Copilot, and Hermes
+   Agent guidance stays present.
+2. Add hygiene, metadata, and release checks before widening runtime behavior.
+3. Add status and health workflows so `ofxGgmlCore` can observe ecosystem
+   readiness.
+4. Add runtime certification workflows only for lanes with relevant local
+   validation.
 
 ## Validate
 

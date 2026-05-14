@@ -42,6 +42,7 @@ $workflowRoot = Join-Path $repoRoot ".github\workflows"
 
 Write-Step "Checking workflow repository structure"
 Assert-Path (Join-Path $repoRoot "README.md") "README"
+Assert-Path (Join-Path $repoRoot "docs\workflow-adoption.md") "workflow adoption docs"
 Assert-Path (Join-Path $repoRoot "HERMES.md") "Hermes instructions"
 Assert-Path (Join-Path $repoRoot "AGENTS.md") "Codex instructions"
 Assert-Path (Join-Path $repoRoot ".github\copilot-instructions.md") "Copilot instructions"
@@ -54,6 +55,10 @@ Assert-FileContains (Join-Path $repoRoot "README.md") "coding-agent-instructions
 Assert-FileContains (Join-Path $repoRoot "README.md") "ofxggml-ecosystem.instructions.md" "README"
 Assert-FileContains (Join-Path $repoRoot "README.md") "release-check.yml" "README"
 Assert-FileContains (Join-Path $repoRoot "README.md") "workflow-repo-validation.yml" "README"
+Assert-FileContains (Join-Path $repoRoot "README.md") "workflow-adoption.md" "README"
+Assert-FileContains (Join-Path $repoRoot "docs\workflow-adoption.md") "coding-agent-instructions.yml" "workflow adoption docs"
+Assert-FileContains (Join-Path $repoRoot "docs\workflow-adoption.md") "check-ecosystem-readiness.bat" "workflow adoption docs"
+Assert-FileContains (Join-Path $repoRoot "docs\workflow-adoption.md") "workflow_call" "workflow adoption docs"
 
 Write-Step "Checking coding-agent instruction guidance"
 Assert-FileContains (Join-Path $repoRoot "HERMES.md") "ofxGgmlWorkflows" "Hermes instructions"
