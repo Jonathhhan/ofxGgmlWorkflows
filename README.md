@@ -33,7 +33,9 @@ The workflows enforce basic addon structure, artifact hygiene, and release readi
 
 `coding-agent-instructions.yml` checks that consuming repositories carry
 Hermes Agent `HERMES.md` project context, Codex-style `AGENTS.md` guidance, and
-GitHub Copilot repository instructions.
+GitHub Copilot repository instructions plus
+`.github/instructions/ofxggml-ecosystem.instructions.md` for focused Copilot
+cloud agent and code review guardrails.
 
 `workflow-repo-validation.yml` validates this repository's reusable workflow
 templates on push and pull request.

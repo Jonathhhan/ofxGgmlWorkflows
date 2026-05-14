@@ -45,11 +45,13 @@ Assert-Path (Join-Path $repoRoot "README.md") "README"
 Assert-Path (Join-Path $repoRoot "HERMES.md") "Hermes instructions"
 Assert-Path (Join-Path $repoRoot "AGENTS.md") "Codex instructions"
 Assert-Path (Join-Path $repoRoot ".github\copilot-instructions.md") "Copilot instructions"
+Assert-Path (Join-Path $repoRoot ".github\instructions\ofxggml-ecosystem.instructions.md") "Copilot ecosystem instructions"
 Assert-Path $workflowRoot "workflow directory" -Directory
 
 Write-Step "Checking documented workflow coverage"
 Assert-FileContains (Join-Path $repoRoot "README.md") "addon-hygiene.yml" "README"
 Assert-FileContains (Join-Path $repoRoot "README.md") "coding-agent-instructions.yml" "README"
+Assert-FileContains (Join-Path $repoRoot "README.md") "ofxggml-ecosystem.instructions.md" "README"
 Assert-FileContains (Join-Path $repoRoot "README.md") "release-check.yml" "README"
 Assert-FileContains (Join-Path $repoRoot "README.md") "workflow-repo-validation.yml" "README"
 
@@ -60,6 +62,8 @@ Assert-FileContains (Join-Path $repoRoot "AGENTS.md") "ofxGgmlWorkflows" "Codex 
 Assert-FileContains (Join-Path $repoRoot "AGENTS.md") "workflow_call" "Codex instructions"
 Assert-FileContains (Join-Path $repoRoot ".github\copilot-instructions.md") "ofxGgmlWorkflows" "Copilot instructions"
 Assert-FileContains (Join-Path $repoRoot ".github\copilot-instructions.md") "workflow_call" "Copilot instructions"
+Assert-FileContains (Join-Path $repoRoot ".github\instructions\ofxggml-ecosystem.instructions.md") "ofxGgmlWorkflows" "Copilot ecosystem instructions"
+Assert-FileContains (Join-Path $repoRoot ".github\instructions\ofxggml-ecosystem.instructions.md") "check-ecosystem-readiness" "Copilot ecosystem instructions"
 
 Write-Step "Checking workflow files"
 $workflowFiles = @(Get-ChildItem -LiteralPath $workflowRoot -Filter "*.yml" -File)
@@ -89,6 +93,7 @@ foreach ($requiredReusable in @(
 	Assert-Path $path $requiredReusable
 	Assert-FileContains $path "workflow_call" $requiredReusable
 }
+Assert-FileContains (Join-Path $workflowRoot "coding-agent-instructions.yml") "ofxggml-ecosystem.instructions.md" "coding-agent-instructions.yml"
 
 $selfValidation = Join-Path $workflowRoot "workflow-repo-validation.yml"
 Assert-Path $selfValidation "workflow-repo-validation.yml"

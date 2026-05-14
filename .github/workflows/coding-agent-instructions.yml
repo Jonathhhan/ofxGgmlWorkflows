@@ -25,9 +25,11 @@ jobs:
           test -f HERMES.md
           test -f AGENTS.md
           test -f .github/copilot-instructions.md
+          test -f .github/instructions/ofxggml-ecosystem.instructions.md
           grep -q "ofxGgml" HERMES.md
           grep -q "ofxGgml" AGENTS.md
           grep -q "ofxGgml" .github/copilot-instructions.md
+          grep -q "ofxGgml" .github/instructions/ofxggml-ecosystem.instructions.md
 
       - name: Verify validation guidance
         run: |
@@ -41,6 +43,10 @@ jobs:
           fi
           if ! grep -Eq "scripts[\\\\/](validate-local|release-candidate)\\.ps1|workflow_call" .github/copilot-instructions.md; then
             echo "copilot-instructions.md must mention validation or workflow_call review guidance"
+            exit 1
+          fi
+          if ! grep -Eq "scripts[\\\\/](check-ecosystem-readiness|plan-ecosystem|validate-local|release-candidate)\\.ps1|workflow_call" .github/instructions/ofxggml-ecosystem.instructions.md; then
+            echo "ofxggml-ecosystem.instructions.md must mention ecosystem readiness, planning, validation, or workflow_call review guidance"
             exit 1
           fi
 
