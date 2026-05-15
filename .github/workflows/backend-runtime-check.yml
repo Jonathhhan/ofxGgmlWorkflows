@@ -49,12 +49,32 @@ jobs:
           chmod +x scripts/ci-setup-runtime-smoke.sh
           scripts/ci-setup-runtime-smoke.sh
 
-      - name: Non-Linux runtime smoke scaffold
-        if: matrix.os != 'ubuntu-latest'
+      - name: Windows CPU runtime smoke execution
+        if: matrix.os == 'windows-latest'
+        shell: pwsh
+        run: |
+          if (!(Test-Path -LiteralPath "scripts\setup-ggml.ps1") -or !(Test-Path -LiteralPath "scripts\build-runtime-smoke.ps1")) {
+            Write-Host "Windows runtime smoke scripts are not present in this repository; skipping."
+            exit 0
+          }
+          powershell -NoProfile -ExecutionPolicy Bypass -File scripts\setup-ggml.ps1 -CpuOnly -Jobs 2
+          powershell -NoProfile -ExecutionPolicy Bypass -File scripts\build-runtime-smoke.ps1 -Backend cpu -RequireBackend
+
+      - name: macOS runtime smoke scaffold
+        if: matrix.os == 'macos-latest'
         shell: bash
         run: |
           echo "Runtime smoke execution scaffold for $RUNNER_OS"
           echo "Future platform-native ggml bootstrap required"
+
+      - name: Upload backend runtime smoke evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: backend-runtime-smoke-${{ matrix.os }}
+          path: build/runtime-smoke/backend-runtime-smoke.json
+          if-no-files-found: ignore
 
       - name: CUDA runtime truth semantics
         shell: bash
