@@ -65,6 +65,9 @@ expect workflow callers to stay aligned with these names:
   in the caller repository.
 - Treat backend certification workflows as lane-specific until the relevant
   addon can validate that backend locally.
+- `backend-runtime-check.yml` runs CPU runtime smoke where platform-native
+  scripts exist and uploads `build/runtime-smoke/backend-runtime-smoke.json`
+  as non-source evidence.
 - Do not use workflow updates as permission to change addon runtime/source
   behavior.
 - Validate this repository with `scripts\validate-local.bat` before publishing
