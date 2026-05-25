@@ -15,6 +15,10 @@ Companion repositories can consume these workflows with `workflow_call`.
 See [`docs/workflow-adoption.md`](docs/workflow-adoption.md) for adoption
 tiers, caller patterns, and Core coordination notes.
 
+For local Codex runs with `Qwen3.6-27B-Q4_0` on an RTX 3090, use
+[`docs/codex-qwen3-rtx3090-profile.md`](docs/codex-qwen3-rtx3090-profile.md)
+as the self-planning, self-optimizing, memory-aware operating baseline.
+
 Example:
 
 ```yaml
