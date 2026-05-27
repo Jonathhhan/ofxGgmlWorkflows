@@ -2,6 +2,17 @@ param()
 
 $ErrorActionPreference = "Stop"
 
+function Assert-NoBom {
+	param(
+		[string]$Path,
+		[string]$Label
+	)
+	$bytes = [System.IO.File]::ReadAllBytes($Path)
+	if ($bytes.Length -ge 3 -and $bytes[0] -eq 0xEF -and $bytes[1] -eq 0xBB -and $bytes[2] -eq 0xBF) {
+		throw "$Label contains a UTF-8 BOM which can break YAML parsing and shell execution"
+	}
+}
+
 function Write-Step {
 	param([string]$Message)
 	Write-Host "==> $Message"
@@ -42,6 +53,8 @@ $workflowRoot = Join-Path $repoRoot ".github\workflows"
 
 Write-Step "Checking workflow repository structure"
 Assert-Path (Join-Path $repoRoot "README.md") "README"
+Assert-Path (Join-Path $repoRoot "CHANGELOG.md") "CHANGELOG"
+Assert-Path (Join-Path $repoRoot ".gitignore") ".gitignore"
 Assert-Path (Join-Path $repoRoot "docs\workflow-adoption.md") "workflow adoption docs"
 Assert-Path (Join-Path $repoRoot "docs\codex-qwen3-rtx3090-profile.md") "Codex Qwen RTX 3090 profile"
 Assert-Path (Join-Path $repoRoot "HERMES.md") "Hermes instructions"
@@ -49,6 +62,13 @@ Assert-Path (Join-Path $repoRoot "AGENTS.md") "Codex instructions"
 Assert-Path (Join-Path $repoRoot ".github\copilot-instructions.md") "Copilot instructions"
 Assert-Path (Join-Path $repoRoot ".github\instructions\ofxggml-ecosystem.instructions.md") "Copilot ecosystem instructions"
 Assert-Path $workflowRoot "workflow directory" -Directory
+
+Write-Step "Checking for UTF-8 BOM"
+Assert-NoBom (Join-Path $repoRoot "README.md") "README"
+Assert-NoBom (Join-Path $repoRoot "CHANGELOG.md") "CHANGELOG"
+Assert-NoBom (Join-Path $repoRoot ".gitignore") ".gitignore"
+Assert-NoBom (Join-Path $repoRoot "scripts\validate-local.ps1") "validate-local.ps1"
+Assert-NoBom (Join-Path $repoRoot ".github\copilot-instructions.md") "copilot-instructions.md"
 
 Write-Step "Checking documented workflow coverage"
 Assert-FileContains (Join-Path $repoRoot "README.md") "addon-hygiene.yml" "README"
@@ -58,6 +78,12 @@ Assert-FileContains (Join-Path $repoRoot "README.md") "release-check.yml" "READM
 Assert-FileContains (Join-Path $repoRoot "README.md") "workflow-repo-validation.yml" "README"
 Assert-FileContains (Join-Path $repoRoot "README.md") "workflow-adoption.md" "README"
 Assert-FileContains (Join-Path $repoRoot "README.md") "codex-qwen3-rtx3090-profile.md" "README"
+Assert-FileContains (Join-Path $repoRoot "README.md") "backend-runtime-check.yml" "README"
+Assert-FileContains (Join-Path $repoRoot "README.md") "cuda-runtime-certification.yml" "README"
+Assert-FileContains (Join-Path $repoRoot "README.md") "ecosystem-health.yml" "README"
+Assert-FileContains (Join-Path $repoRoot "README.md") "release-gate.yml" "README"
+Assert-FileContains (Join-Path $repoRoot "README.md") "metadata-validation.yml" "README"
+Assert-FileContains (Join-Path $repoRoot "README.md") "workflow_call" "README"
 Assert-FileContains (Join-Path $repoRoot "docs\codex-qwen3-rtx3090-profile.md") "Qwen3.6-27B-Q4_0" "Codex Qwen RTX 3090 profile"
 Assert-FileContains (Join-Path $repoRoot "docs\codex-qwen3-rtx3090-profile.md") "RTX 3090" "Codex Qwen RTX 3090 profile"
 Assert-FileContains (Join-Path $repoRoot "docs\codex-qwen3-rtx3090-profile.md") "self-planning" "Codex Qwen RTX 3090 profile"

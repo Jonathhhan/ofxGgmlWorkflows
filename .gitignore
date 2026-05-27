@@ -1,0 +1,34 @@
+# Generated artifacts
+*.gguf
+*.dll
+*.so
+*.dylib
+*.exe
+
+# Build output
+build/
+
+# IDE metadata
+.vs/
+*.suo
+*.user
+*.sln
+
+# Codex local state
+.codex/memory/
+.codex/indexes/
+*.codex.trace
+
+# Model weights and runtimes
+models/
+runtimes/
+
+# Downloaded caches
+*.cache
+*.tmp
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
