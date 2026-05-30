@@ -10,45 +10,45 @@ All workflows are reusable via `workflow_call`. See [`docs/workflow-adoption.md`
 
 ### Agent baseline
 
-- `.github/workflows/coding-agent-instructions.yml` — verify `HERMES.md`, `AGENTS.md`, Copilot instructions, and ecosystem guardrails
+- `.github/workflows/coding-agent-instructions.yml` - verify `HERMES.md`, `AGENTS.md`, Copilot instructions, and ecosystem guardrails
 
 ### Addon hygiene
 
-- `.github/workflows/addon-hygiene.yml` — check repository shape, governance files, and reject generated artifacts
-- `.github/workflows/metadata-validation.yml` — validate addon metadata (requires `scripts/validate-addon-metadata.py` in caller)
-- `.github/workflows/release-check.yml` — verify release metadata, docs, scripts, and reject release artifacts
+- `.github/workflows/addon-hygiene.yml` - check repository shape, optional examples, governance files, and generated artifact policy
+- `.github/workflows/metadata-validation.yml` - validate addon metadata, feature promises, README feature coverage, and optional caller validators
+- `.github/workflows/release-check.yml` - verify release metadata, docs, scripts, and reject release artifacts
 
 ### Operational visibility
 
-- `.github/workflows/live-workflow-status.yml` — fetch live workflow status via GitHub API
-- `.github/workflows/workflow-status-plan.yml` — generate workflow status plan
-- `.github/workflows/ecosystem-health.yml` — verify manifest, docs, governance, and workflow inheritance
-- `.github/workflows/ecosystem-health-report.yml` — generate ecosystem health report
+- `.github/workflows/live-workflow-status.yml` - fetch live workflow status via GitHub API
+- `.github/workflows/workflow-status-plan.yml` - generate workflow status plan
+- `.github/workflows/ecosystem-health.yml` - verify manifest, docs, governance, and workflow inheritance
+- `.github/workflows/ecosystem-health-report.yml` - generate ecosystem health report
 
 ### Compatibility and release planning
 
-- `.github/workflows/baseline-compatibility.yml` — check baseline compatibility
-- `.github/workflows/compatibility-matrix.yml` — generate compatibility matrix
-- `.github/workflows/metadata-reconciliation.yml` — reconcile ecosystem metadata
-- `.github/workflows/release-gate.yml` — gate release against required reports
-- `.github/workflows/release-plan.yml` — generate release plan
-- `.github/workflows/release-readiness-score.yml` — generate release readiness score
+- `.github/workflows/baseline-compatibility.yml` - check baseline compatibility
+- `.github/workflows/compatibility-matrix.yml` - generate compatibility matrix
+- `.github/workflows/metadata-reconciliation.yml` - reconcile ecosystem metadata
+- `.github/workflows/release-gate.yml` - gate release against required reports
+- `.github/workflows/release-plan.yml` - generate release plan
+- `.github/workflows/release-readiness-score.yml` - generate release readiness score
 
 ### Runtime certification
 
-- `.github/workflows/backend-runtime-check.yml` — CPU runtime smoke across Linux, Windows, macOS
-- `.github/workflows/backend-capability-report.yml` — generate backend capability report
-- `.github/workflows/cross-repo-capability-map.yml` — generate cross-repo capability map
-- `.github/workflows/multi-platform-smoke.yml` — multi-platform smoke build scaffold
-- `.github/workflows/of-smoke-build.yml` — openFrameworks smoke build scaffold
-- `.github/workflows/cuda-runtime-certification.yml` — CUDA runtime certification (self-hosted)
-- `.github/workflows/metal-runtime-certification.yml` — Metal runtime certification (self-hosted)
-- `.github/workflows/vulkan-runtime-certification.yml` — Vulkan runtime certification (self-hosted)
+- `.github/workflows/backend-runtime-check.yml` - CPU runtime smoke across Linux, Windows, macOS
+- `.github/workflows/backend-capability-report.yml` - generate backend capability report
+- `.github/workflows/cross-repo-capability-map.yml` - generate cross-repo capability map
+- `.github/workflows/multi-platform-smoke.yml` - multi-platform smoke build scaffold
+- `.github/workflows/of-smoke-build.yml` - openFrameworks smoke build scaffold
+- `.github/workflows/cuda-runtime-certification.yml` - CUDA runtime certification (self-hosted)
+- `.github/workflows/metal-runtime-certification.yml` - Metal runtime certification (self-hosted)
+- `.github/workflows/vulkan-runtime-certification.yml` - Vulkan runtime certification (self-hosted)
 
 ### Self-validation
 
-- `.github/workflows/workflow-repo-validation.yml` — validate this repository on push/PR
-- `.github/workflows/ecosystem-docs.yml` — generate ecosystem dashboard and docs
+- `.github/workflows/workflow-repo-validation.yml` - validate this repository on push/PR
+- `.github/workflows/ecosystem-docs.yml` - generate ecosystem dashboard and docs
 
 ## Example
 
@@ -62,6 +62,41 @@ on:
 jobs:
   hygiene:
     uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/addon-hygiene.yml@main
+```
+
+For non-addon repositories, disable addon-specific checks:
+
+```yaml
+jobs:
+  hygiene:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/addon-hygiene.yml@main
+    with:
+      require_addon_config: false
+      require_src: false
+```
+
+For companion addons where examples are part of release readiness, opt into
+the example-directory check:
+
+```yaml
+jobs:
+  hygiene:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/addon-hygiene.yml@main
+    with:
+      require_examples: true
+```
+
+To protect ecosystem feature promises, enable built-in metadata and README
+feature checks:
+
+```yaml
+jobs:
+  metadata:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/metadata-validation.yml@main
+    with:
+      require_metadata_file: true
+      require_feature_metadata: true
+      require_readme_features: true
 ```
 
 ## Policy

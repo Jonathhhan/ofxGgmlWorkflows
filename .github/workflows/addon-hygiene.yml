@@ -2,6 +2,19 @@ name: reusable-addon-hygiene
 
 on:
   workflow_call:
+    inputs:
+      require_addon_config:
+        type: boolean
+        required: false
+        default: true
+      require_src:
+        type: boolean
+        required: false
+        default: true
+      require_examples:
+        type: boolean
+        required: false
+        default: false
 
 jobs:
   hygiene:
@@ -12,10 +25,23 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Verify addon structure
+        if: inputs.require_addon_config || inputs.require_src
         run: |
-          test -f README.md
-          test -f addon_config.mk
-          test -d src
+          if [[ "${{ inputs.require_addon_config }}" == "true" ]]; then
+            test -f README.md
+            test -f addon_config.mk
+          fi
+          if [[ "${{ inputs.require_src }}" == "true" ]]; then
+            test -d src
+          fi
+
+      - name: Verify examples
+        if: inputs.require_examples
+        run: |
+          if ! find . -maxdepth 2 -type d \( -name "examples" -o -name "example*" \) | grep -q .; then
+            echo "No examples found. Expected a top-level examples/ or example* directory."
+            exit 1
+          fi
 
       - name: Verify governance files
         run: |

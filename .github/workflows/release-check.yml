@@ -2,6 +2,11 @@ name: reusable-release-check
 
 on:
   workflow_call:
+    inputs:
+      require_addon_config:
+        type: boolean
+        required: false
+        default: true
 
 jobs:
   release-check:
@@ -15,7 +20,9 @@ jobs:
         run: |
           test -f README.md
           test -f CHANGELOG.md
-          test -f addon_config.mk
+          if [[ "${{ inputs.require_addon_config }}" == "true" ]]; then
+            test -f addon_config.mk
+          fi
 
       - name: Verify docs/scripts
         run: |

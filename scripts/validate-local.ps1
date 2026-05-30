@@ -57,6 +57,8 @@ Assert-Path (Join-Path $repoRoot "CHANGELOG.md") "CHANGELOG"
 Assert-Path (Join-Path $repoRoot ".gitignore") ".gitignore"
 Assert-Path (Join-Path $repoRoot "docs\workflow-adoption.md") "workflow adoption docs"
 Assert-Path (Join-Path $repoRoot "docs\codex-qwen3-rtx3090-profile.md") "Codex Qwen RTX 3090 profile"
+Assert-Path (Join-Path $repoRoot "docs\codex-ecosystem-usage.md") "ecosystem usage docs"
+Assert-Path (Join-Path $repoRoot "scripts\workflow-metadata-extractor.ps1") "workflow metadata extractor"
 Assert-Path (Join-Path $repoRoot "HERMES.md") "Hermes instructions"
 Assert-Path (Join-Path $repoRoot "AGENTS.md") "Codex instructions"
 Assert-Path (Join-Path $repoRoot ".github\copilot-instructions.md") "Copilot instructions"
@@ -69,6 +71,13 @@ Assert-NoBom (Join-Path $repoRoot "CHANGELOG.md") "CHANGELOG"
 Assert-NoBom (Join-Path $repoRoot ".gitignore") ".gitignore"
 Assert-NoBom (Join-Path $repoRoot "scripts\validate-local.ps1") "validate-local.ps1"
 Assert-NoBom (Join-Path $repoRoot ".github\copilot-instructions.md") "copilot-instructions.md"
+Assert-NoBom (Join-Path $repoRoot "docs\codex-ecosystem-usage.md") "ecosystem usage docs"
+Assert-NoBom (Join-Path $repoRoot "scripts\workflow-metadata-extractor.ps1") "workflow metadata extractor"
+
+$workflowFiles = @(Get-ChildItem -LiteralPath $workflowRoot -Filter "*.yml" -File)
+foreach ($workflow in $workflowFiles) {
+	Assert-NoBom $workflow.FullName $workflow.Name
+}
 
 Write-Step "Checking documented workflow coverage"
 Assert-FileContains (Join-Path $repoRoot "README.md") "addon-hygiene.yml" "README"
@@ -92,6 +101,29 @@ Assert-FileContains (Join-Path $repoRoot "docs\workflow-adoption.md") "coding-ag
 Assert-FileContains (Join-Path $repoRoot "docs\workflow-adoption.md") "check-ecosystem-readiness.bat" "workflow adoption docs"
 Assert-FileContains (Join-Path $repoRoot "docs\workflow-adoption.md") "workflow_call" "workflow adoption docs"
 
+Write-Step "Checking workflow optional inputs"
+Assert-FileContains (Join-Path $workflowRoot "addon-hygiene.yml") "require_addon_config" "addon-hygiene.yml"
+Assert-FileContains (Join-Path $workflowRoot "addon-hygiene.yml") "require_src" "addon-hygiene.yml"
+Assert-FileContains (Join-Path $workflowRoot "addon-hygiene.yml") "require_examples" "addon-hygiene.yml"
+Assert-FileContains (Join-Path $workflowRoot "release-check.yml") "require_addon_config" "release-check.yml"
+Assert-FileContains (Join-Path $workflowRoot "metadata-validation.yml") "require_feature_metadata" "metadata-validation.yml"
+Assert-FileContains (Join-Path $workflowRoot "metadata-validation.yml") "require_readme_features" "metadata-validation.yml"
+Assert-FileContains (Join-Path $repoRoot "README.md") "require_addon_config" "README"
+Assert-FileContains (Join-Path $repoRoot "README.md") "require_src" "README"
+Assert-FileContains (Join-Path $repoRoot "README.md") "require_examples" "README"
+Assert-FileContains (Join-Path $repoRoot "README.md") "require_feature_metadata" "README"
+Assert-FileContains (Join-Path $repoRoot "CHANGELOG.md") "require_addon_config" "CHANGELOG"
+
+Write-Step "Checking workflow metadata extractor"
+$metadataJson = & (Join-Path $repoRoot "scripts\workflow-metadata-extractor.ps1") -WorkflowPath (Join-Path $workflowRoot "addon-hygiene.yml")
+$metadata = $metadataJson | ConvertFrom-Json
+if ($metadata.workflow_name -ne "reusable-addon-hygiene") {
+	throw "workflow metadata extractor returned the wrong workflow name."
+}
+if ($metadata.input_count -lt 3) {
+	throw "workflow metadata extractor did not detect addon-hygiene inputs."
+}
+
 Write-Step "Checking coding-agent instruction guidance"
 Assert-FileContains (Join-Path $repoRoot "HERMES.md") "ofxGgmlWorkflows" "Hermes instructions"
 Assert-FileContains (Join-Path $repoRoot "HERMES.md") "workflow_call" "Hermes instructions"
@@ -103,7 +135,6 @@ Assert-FileContains (Join-Path $repoRoot ".github\instructions\ofxggml-ecosystem
 Assert-FileContains (Join-Path $repoRoot ".github\instructions\ofxggml-ecosystem.instructions.md") "check-ecosystem-readiness" "Copilot ecosystem instructions"
 
 Write-Step "Checking workflow files"
-$workflowFiles = @(Get-ChildItem -LiteralPath $workflowRoot -Filter "*.yml" -File)
 if ($workflowFiles.Count -eq 0) {
 	throw "No workflow files found."
 }

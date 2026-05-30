@@ -9,7 +9,7 @@ ofxGgml ecosystem. Companion repositories should consume these workflows with
 | Tier | Purpose | Workflows |
 | --- | --- | --- |
 | Required agent baseline | Keep Codex, GitHub Copilot, and Hermes Agent instructions present and current. | `coding-agent-instructions.yml` |
-| Required addon hygiene | Check repository shape, metadata, generated artifact policy, and release basics. | `addon-hygiene.yml`, `metadata-validation.yml`, `release-check.yml` |
+| Required addon hygiene | Check repository shape, optional examples, metadata, feature promises, generated artifact policy, and release basics. | `addon-hygiene.yml`, `metadata-validation.yml`, `release-check.yml` |
 | Operational visibility | Feed Core planning, dashboards, and live status reports. | `live-workflow-status.yml`, `workflow-status-plan.yml`, `ecosystem-health.yml`, `ecosystem-health-report.yml` |
 | Compatibility and release planning | Score release readiness and compare repository metadata across the family. | `baseline-compatibility.yml`, `compatibility-matrix.yml`, `metadata-reconciliation.yml`, `release-gate.yml`, `release-plan.yml`, `release-readiness-score.yml` |
 | Runtime certification | Reserve backend and platform checks for lanes that can exercise the relevant runtime. | `backend-runtime-check.yml`, `backend-capability-report.yml`, `cross-repo-capability-map.yml`, `multi-platform-smoke.yml`, `of-smoke-build.yml`, `cuda-runtime-certification.yml`, `metal-runtime-certification.yml`, `vulkan-runtime-certification.yml` |
@@ -44,6 +44,41 @@ jobs:
       require_addon_config: false
 ```
 
+For companion addons that should always ship runnable openFrameworks examples,
+enable the optional examples check in the hygiene workflow:
+
+```yaml
+name: addon-hygiene
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  hygiene:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/addon-hygiene.yml@main
+    with:
+      require_examples: true
+```
+
+For managed companion addons, make feature metadata a release-facing contract:
+
+```yaml
+name: addon-metadata
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  metadata:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/metadata-validation.yml@main
+    with:
+      require_metadata_file: true
+      require_feature_metadata: true
+      require_readme_features: true
+```
+
 ## Core coordination
 
 `ofxGgmlCore` is the control-plane consumer for ecosystem planning. Core tools
@@ -61,6 +96,11 @@ expect workflow callers to stay aligned with these names:
 ## Rollout rules
 
 - Prefer adding or updating one caller workflow per pull request.
+- Enable `require_examples` only after the companion addon has a top-level
+  `examples/` or `example*` directory that should be release-maintained.
+- Enable `require_feature_metadata` and `require_readme_features` together for
+  managed addons once their `ofxggml-addon.json` feature list and README
+  `## Features` section describe the same public promise.
 - Keep reusable policy in `ofxGgmlWorkflows`; keep repository-specific commands
   in the caller repository.
 - Treat backend certification workflows as lane-specific until the relevant

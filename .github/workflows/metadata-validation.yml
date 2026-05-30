@@ -2,6 +2,27 @@ name: reusable-metadata-validation
 
 on:
   workflow_call:
+    inputs:
+      metadata_path:
+        type: string
+        required: false
+        default: ofxggml-addon.json
+      require_metadata_file:
+        type: boolean
+        required: false
+        default: false
+      require_feature_metadata:
+        type: boolean
+        required: false
+        default: false
+      require_readme_features:
+        type: boolean
+        required: false
+        default: false
+      require_custom_validator:
+        type: boolean
+        required: false
+        default: false
 
 jobs:
   metadata-validation:
@@ -16,10 +37,56 @@ jobs:
         with:
           python-version: '3.x'
 
+      - name: Validate ecosystem metadata file
+        shell: python
+        run: |
+          import json
+          import os
+          import sys
+
+          metadata_path = "${{ inputs.metadata_path }}"
+          require_metadata_file = "${{ inputs.require_metadata_file }}" == "true"
+          require_feature_metadata = "${{ inputs.require_feature_metadata }}" == "true"
+          require_readme_features = "${{ inputs.require_readme_features }}" == "true"
+
+          if not os.path.isfile(metadata_path):
+              if require_metadata_file or require_feature_metadata:
+                  print(f"Missing addon metadata file: {metadata_path}", file=sys.stderr)
+                  sys.exit(1)
+              print(f"No addon metadata file present at {metadata_path}; skipping built-in metadata checks.")
+              sys.exit(0)
+
+          with open(metadata_path, "r", encoding="utf-8") as handle:
+              metadata = json.load(handle)
+
+          for field in ("name", "lane"):
+              if not str(metadata.get(field, "")).strip():
+                  print(f"{metadata_path} is missing required field: {field}", file=sys.stderr)
+                  sys.exit(1)
+
+          if require_feature_metadata:
+              features = metadata.get("features")
+              if not isinstance(features, list) or not any(str(item).strip() for item in features):
+                  print(f"{metadata_path} must include a non-empty features array.", file=sys.stderr)
+                  sys.exit(1)
+
+          if require_readme_features:
+              if not os.path.isfile("README.md"):
+                  print("README.md is required when require_readme_features is true.", file=sys.stderr)
+                  sys.exit(1)
+              with open("README.md", "r", encoding="utf-8") as handle:
+                  readme = handle.read()
+              if "\n## Features\n" not in f"\n{readme}\n":
+                  print("README.md must include a top-level '## Features' section.", file=sys.stderr)
+                  sys.exit(1)
+
       - name: Validate addon metadata
         run: |
           if [ -f scripts/validate-addon-metadata.py ]; then
             python3 scripts/validate-addon-metadata.py
+          elif [ "${{ inputs.require_custom_validator }}" = "true" ]; then
+            echo "No metadata validator present at scripts/validate-addon-metadata.py"
+            exit 1
           else
             echo "No metadata validator present"
           fi
