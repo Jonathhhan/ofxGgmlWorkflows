@@ -142,9 +142,9 @@ jobs:
         run: |
           echo "CUDA runtime truth requires a CUDA-enabled runner and ggml CUDA build."
           if [ "${{ inputs.require_cuda }}" = "true" ]; then
-            echo "CUDA is required for this run. Future step must execute: runtime_smoke --backend cuda --require-backend"
+            echo "CUDA is required for this run. Certification must execute: runtime_smoke --backend cuda --require-backend"
           else
-            echo "CUDA is optional for this run. Future step may execute: runtime_smoke --backend cuda"
+            echo "CUDA is optional for this run. Certification may execute: runtime_smoke --backend cuda"
           fi
 
       - name: Metal runtime truth semantics
@@ -152,9 +152,9 @@ jobs:
         run: |
           echo "Metal runtime truth requires macOS runner plus ggml Metal build."
           if [ "${{ inputs.require_metal }}" = "true" ]; then
-            echo "Metal is required for this run. Future step must execute: runtime_smoke --backend metal --require-backend"
+            echo "Metal is required for this run. Certification must execute: runtime_smoke --backend metal --require-backend"
           else
-            echo "Metal is optional for this run. Future step may execute: runtime_smoke --backend metal"
+            echo "Metal is optional for this run. Certification may execute: runtime_smoke --backend metal"
           fi
 
       - name: Vulkan runtime truth semantics
@@ -162,7 +162,7 @@ jobs:
         run: |
           echo "Vulkan runtime truth requires Vulkan loader/device availability plus ggml Vulkan build."
           if [ "${{ inputs.require_vulkan }}" = "true" ]; then
-            echo "Vulkan is required for this run. Future step must execute: runtime_smoke --backend vulkan --require-backend"
+            echo "Vulkan is required for this run. Certification must execute: runtime_smoke --backend vulkan --require-backend"
           else
-            echo "Vulkan is optional for this run. Future step may execute: runtime_smoke --backend vulkan"
+            echo "Vulkan is optional for this run. Certification may execute: runtime_smoke --backend vulkan"
           fi

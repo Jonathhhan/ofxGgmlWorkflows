@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Jonathhhan/ofxGgmlWorkflows/schemas/evidence-v1.schema.json",
+  "title": "ofxGgml Evidence v1",
+  "description": "Neutral evidence artifact schema for smoke builds, runtime checks, reports, and backend certification.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/evidence"
+    },
+    {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/evidence"
+      }
+    }
+  ],
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "schema_version",
+        "repo",
+        "lane",
+        "commit_sha",
+        "workflow_name",
+        "runner_os",
+        "backend",
+        "result",
+        "timestamp",
+        "artifact_path"
+      ],
+      "properties": {
+        "schema_version": {
+          "description": "Evidence schema version. Use 1 for this schema.",
+          "oneOf": [
+            {
+              "type": "string",
+              "const": "1"
+            },
+            {
+              "type": "integer",
+              "const": 1
+            }
+          ]
+        },
+        "repo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "lane": {
+          "type": "string",
+          "minLength": 1
+        },
+        "commit_sha": {
+          "type": "string",
+          "minLength": 7
+        },
+        "workflow_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "runner_os": {
+          "type": "string",
+          "minLength": 1
+        },
+        "backend": {
+          "type": "string",
+          "minLength": 1
+        },
+        "result": {
+          "type": "string",
+          "enum": [
+            "pass",
+            "fail",
+            "skipped",
+            "not_certified"
+          ]
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "artifact_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "command": {
+          "type": "string"
+        },
+        "certification_level": {
+          "type": "string",
+          "enum": [
+            "declared",
+            "smoke-built",
+            "runtime-certified",
+            "release-gated"
+          ]
+        },
+        "tool_versions": {
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "string",
+              "number",
+              "boolean",
+              "null"
+            ]
+          }
+        },
+        "device_summary": {
+          "type": [
+            "string",
+            "object",
+            "null"
+          ],
+          "additionalProperties": true
+        },
+        "reason_code": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

@@ -12,7 +12,7 @@ ofxGgml ecosystem. Companion repositories should consume these workflows with
 | Required addon hygiene | Check repository shape, optional examples, metadata, feature promises, generated artifact policy, and release basics. | `addon-hygiene.yml`, `metadata-validation.yml`, `release-check.yml` |
 | Operational visibility | Feed Core planning, dashboards, and live status reports. | `live-workflow-status.yml`, `workflow-status-plan.yml`, `ecosystem-health.yml`, `ecosystem-health-report.yml` |
 | Compatibility and release planning | Score release readiness and compare repository metadata across the family. | `baseline-compatibility.yml`, `compatibility-matrix.yml`, `metadata-reconciliation.yml`, `release-gate.yml`, `release-plan.yml`, `release-readiness-score.yml` |
-| Runtime certification | Reserve backend and platform checks for lanes that can exercise the relevant runtime. | `backend-runtime-check.yml`, `backend-capability-report.yml`, `cross-repo-capability-map.yml`, `multi-platform-smoke.yml`, `of-smoke-build.yml`, `cuda-runtime-certification.yml`, `metal-runtime-certification.yml`, `vulkan-runtime-certification.yml` |
+| Runtime certification | Reserve backend and platform checks for lanes that can exercise the relevant runtime. | `evidence-validation.yml`, `backend-runtime-check.yml`, `backend-capability-report.yml`, `cross-repo-capability-map.yml`, `multi-platform-smoke.yml`, `of-smoke-build.yml`, `cuda-runtime-certification.yml`, `metal-runtime-certification.yml`, `vulkan-runtime-certification.yml` |
 | Workflow repository self-checks | Validate this repository and its documentation. | `workflow-repo-validation.yml`, `ecosystem-docs.yml` |
 
 ## Caller pattern
@@ -80,7 +80,7 @@ jobs:
 ```
 
 For release coordination, keep report checks advisory until the caller can
-generate the matching artifacts, then opt into required reports:
+generate the matching artifacts and evidence, then opt into required gates:
 
 ```yaml
 name: release-gate
@@ -96,6 +96,9 @@ jobs:
       require_release_readiness_score: true
       require_metadata_reconciliation_report: true
       require_cross_repo_capability_map: true
+      require_evidence_file: true
+      require_evidence_schema_valid: true
+      require_current_sha_evidence: true
 ```
 
 For backend CPU runtime smoke, keep the reusable workflow advisory until the
@@ -178,6 +181,27 @@ jobs:
       require_runtime_smoke_evidence: true
 ```
 
+For evidence quality, adopt schema validation before promoting smoke or
+certification artifacts into release gates:
+
+```yaml
+name: evidence-validation
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  evidence:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/evidence-validation.yml@main
+    with:
+      evidence_path: build/**/*.json
+      require_evidence_file: false
+      require_schema_valid: false
+      require_current_sha: false
+      minimum_certification_level: ""
+```
+
 ## Core coordination
 
 `ofxGgmlCore` is the control-plane consumer for ecosystem planning. Core tools
@@ -202,6 +226,8 @@ expect workflow callers to stay aligned with these names:
   `## Features` section describe the same public promise.
 - Enable `release-gate.yml` required report inputs only after the caller
   generates the corresponding report artifacts under `docs/`.
+- Enable release evidence gates only after `evidence-validation.yml` has passed
+  in advisory mode for the same evidence path.
 - Enable `backend-runtime-check.yml` required smoke inputs only after the
   caller has platform-native setup scripts and writes backend runtime evidence.
 - Enable generator/report `require_generator` and `require_report_artifact`
@@ -214,6 +240,12 @@ expect workflow callers to stay aligned with these names:
   smoke evidence only after those scripts produce stable JSON artifacts.
 - For accelerator certification workflows, keep the self-hosted runner labels
   lane-specific and require caller build scripts before enforcing evidence.
+- Enable `evidence-validation.yml` in advisory mode before making evidence
+  required in release gates or backend certification workflows.
+- Enable evidence freshness checks only after callers reliably write
+  `commit_sha` and `timestamp` fields.
+- Require backend/result/certification-level filters only after the caller
+  produces at least one matching evidence record.
 - Keep reusable policy in `ofxGgmlWorkflows`; keep repository-specific commands
   in the caller repository.
 - Treat backend certification workflows as lane-specific until the relevant

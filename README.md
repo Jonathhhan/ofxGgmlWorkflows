@@ -36,6 +36,7 @@ All workflows are reusable via `workflow_call`. See [`docs/workflow-adoption.md`
 
 ### Runtime certification
 
+- `.github/workflows/evidence-validation.yml` - validate neutral evidence JSON artifacts against Evidence Schema v1
 - `.github/workflows/backend-runtime-check.yml` - CPU runtime smoke across Linux, Windows, macOS
 - `.github/workflows/backend-capability-report.yml` - generate backend capability report
 - `.github/workflows/cross-repo-capability-map.yml` - generate cross-repo capability map
@@ -100,7 +101,7 @@ jobs:
 ```
 
 To make the release gate enforce generated ecosystem reports, opt into the
-required report checks that apply to the caller:
+required report and evidence checks that apply to the caller:
 
 ```yaml
 jobs:
@@ -110,6 +111,9 @@ jobs:
       require_release_readiness_score: true
       require_metadata_reconciliation_report: true
       require_cross_repo_capability_map: true
+      require_evidence_file: true
+      require_evidence_schema_valid: true
+      require_current_sha_evidence: true
 ```
 
 To make backend CPU runtime smoke checks executable instead of advisory, require
@@ -171,6 +175,26 @@ jobs:
       require_runtime_smoke_evidence: true
 ```
 
+Evidence artifacts can be validated in advisory mode first, then promoted to a
+required schema contract once a companion addon writes stable JSON:
+
+```yaml
+jobs:
+  evidence:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/evidence-validation.yml@main
+    with:
+      evidence_path: build/**/*.json
+      require_evidence_file: true
+      require_schema_valid: true
+      require_current_sha: true
+      required_backend: cuda
+      required_result: pass
+      minimum_certification_level: runtime-certified
+```
+
+See [docs/evidence-schema-v1.md](docs/evidence-schema-v1.md) for the required
+fields, optional certification fields, and ownership split.
+
 ## Policy
 
 The workflows enforce basic addon structure, artifact hygiene, and release readiness without requiring heavyweight native builds.
@@ -191,7 +215,8 @@ templates on push and pull request.
 2. Add hygiene, metadata, and release checks before widening runtime behavior.
 3. Add status and health workflows so `ofxGgmlCore` can observe ecosystem
    readiness.
-4. Add runtime certification workflows only for lanes with relevant local
+4. Add evidence validation before widening smoke or runtime certification.
+5. Add runtime certification workflows only for lanes with relevant local
    validation.
 
 ## Validate
