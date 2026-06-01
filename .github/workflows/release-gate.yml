@@ -2,6 +2,19 @@ name: reusable-release-gate
 
 on:
   workflow_call:
+    inputs:
+      require_release_readiness_score:
+        type: boolean
+        required: false
+        default: false
+      require_metadata_reconciliation_report:
+        type: boolean
+        required: false
+        default: false
+      require_cross_repo_capability_map:
+        type: boolean
+        required: false
+        default: false
 
 jobs:
   release-gate:
@@ -13,13 +26,35 @@ jobs:
 
       - name: Gate summary
         run: |
-          echo "Future release gating scaffold"
+          echo "Checking release gate reports"
 
       - name: Required reports
         run: |
-          test -f docs/release-readiness-score.md || echo "Missing release readiness score"
-          test -f docs/metadata-reconciliation-report.md || echo "Missing reconciliation report"
-          test -f docs/cross-repo-capability-map.md || echo "Missing capability map"
+          missing=0
+
+          check_report() {
+            local path="$1"
+            local label="$2"
+            local required="$3"
+
+            if [ -f "$path" ]; then
+              echo "Found $label: $path"
+              return
+            fi
+
+            if [ "$required" = "true" ]; then
+              echo "Missing required $label: $path"
+              missing=1
+            else
+              echo "Missing optional $label: $path"
+            fi
+          }
+
+          check_report "docs/release-readiness-score.md" "release readiness score" "${{ inputs.require_release_readiness_score }}"
+          check_report "docs/metadata-reconciliation-report.md" "metadata reconciliation report" "${{ inputs.require_metadata_reconciliation_report }}"
+          check_report "docs/cross-repo-capability-map.md" "cross-repo capability map" "${{ inputs.require_cross_repo_capability_map }}"
+
+          exit "$missing"
 
       - name: Future CI truth integration
         run: |

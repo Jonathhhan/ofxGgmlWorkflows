@@ -2,6 +2,28 @@ name: reusable-multi-platform-smoke
 
 on:
   workflow_call:
+    inputs:
+      require_readme:
+        type: boolean
+        default: true
+      require_addon_config:
+        type: boolean
+        default: true
+      require_src:
+        type: boolean
+        default: true
+      require_smoke_build_script:
+        type: boolean
+        default: false
+      smoke_build_script_path:
+        type: string
+        default: scripts/ci-smoke-build.sh
+      require_smoke_build_evidence:
+        type: boolean
+        default: false
+      smoke_build_evidence_path:
+        type: string
+        default: build/smoke/multi-platform-smoke.json
 
 jobs:
   smoke-build:
@@ -20,16 +42,76 @@ jobs:
         shell: bash
         run: |
           echo "OS: $RUNNER_OS"
-          echo "Smoke-build scaffold only"
+          echo "Multi-platform smoke build"
+          echo "smoke_build_script_path=${{ inputs.smoke_build_script_path }}"
+          echo "smoke_build_evidence_path=${{ inputs.smoke_build_evidence_path }}"
 
       - name: Verify addon structure
         shell: bash
         run: |
-          test -f README.md
-          test -f addon_config.mk
-          test -d src
+          missing=0
 
-      - name: Future smoke build placeholder
+          check_path() {
+            local path="$1"
+            local label="$2"
+            local required="$3"
+            local kind="$4"
+
+            if [ "$kind" = "dir" ]; then
+              if [ -d "$path" ]; then
+                echo "Found $label: $path"
+                return
+              fi
+            elif [ -f "$path" ]; then
+              echo "Found $label: $path"
+              return
+            fi
+
+            if [ "$required" = "true" ]; then
+              echo "Missing required $label: $path"
+              missing=1
+            else
+              echo "Missing optional $label: $path"
+            fi
+          }
+
+          check_path "README.md" "README" "${{ inputs.require_readme }}" "file"
+          check_path "addon_config.mk" "addon_config.mk" "${{ inputs.require_addon_config }}" "file"
+          check_path "src" "source directory" "${{ inputs.require_src }}" "dir"
+
+          exit "$missing"
+
+      - name: Run smoke build script
         shell: bash
         run: |
-          echo "Future openFrameworks smoke build goes here"
+          if [ -f "${{ inputs.smoke_build_script_path }}" ]; then
+            chmod +x "${{ inputs.smoke_build_script_path }}"
+            "${{ inputs.smoke_build_script_path }}"
+          elif [ "${{ inputs.require_smoke_build_script }}" = "true" ]; then
+            echo "Missing smoke build script: ${{ inputs.smoke_build_script_path }}"
+            exit 1
+          else
+            echo "No smoke build script present"
+          fi
+
+      - name: Verify smoke build evidence
+        if: always()
+        shell: bash
+        run: |
+          if [ -f "${{ inputs.smoke_build_evidence_path }}" ]; then
+            echo "Found smoke build evidence: ${{ inputs.smoke_build_evidence_path }}"
+          elif [ "${{ inputs.require_smoke_build_evidence }}" = "true" ]; then
+            echo "Missing smoke build evidence: ${{ inputs.smoke_build_evidence_path }}"
+            exit 1
+          else
+            echo "No smoke build evidence present"
+          fi
+
+      - name: Upload smoke build evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: multi-platform-smoke-${{ matrix.os }}
+          path: ${{ inputs.smoke_build_evidence_path }}
+          if-no-files-found: ignore

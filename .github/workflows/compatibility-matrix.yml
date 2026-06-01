@@ -2,6 +2,16 @@ name: reusable-compatibility-matrix
 
 on:
   workflow_call:
+    inputs:
+      require_generator:
+        type: boolean
+        default: false
+      require_report_artifact:
+        type: boolean
+        default: false
+      report_artifact_path:
+        type: string
+        default: docs/compatibility-matrix.md
 
 jobs:
   compatibility:
@@ -20,10 +30,20 @@ jobs:
         run: |
           if [ -f scripts/generate-compatibility-matrix.py ]; then
             python3 scripts/generate-compatibility-matrix.py
+          elif [ "${{ inputs.require_generator }}" = "true" ]; then
+            echo "Missing compatibility matrix generator: scripts/generate-compatibility-matrix.py"
+            exit 1
+          else
+            echo "No compatibility matrix generator present"
           fi
 
       - name: Verify compatibility matrix
         run: |
-          if [ -f docs/compatibility-matrix.md ]; then
-            test -f docs/compatibility-matrix.md
+          if [ -f "${{ inputs.report_artifact_path }}" ]; then
+            echo "Found compatibility matrix: ${{ inputs.report_artifact_path }}"
+          elif [ "${{ inputs.require_report_artifact }}" = "true" ]; then
+            echo "Missing compatibility matrix: ${{ inputs.report_artifact_path }}"
+            exit 1
+          else
+            echo "No compatibility matrix artifact present"
           fi

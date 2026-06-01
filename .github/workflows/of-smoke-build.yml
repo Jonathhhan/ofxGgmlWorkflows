@@ -2,6 +2,28 @@ name: reusable-of-smoke-build
 
 on:
   workflow_call:
+    inputs:
+      require_examples:
+        type: boolean
+        default: false
+      require_project_generator_script:
+        type: boolean
+        default: false
+      project_generator_script_path:
+        type: string
+        default: scripts/ci-generate-of-projects.sh
+      require_example_build_script:
+        type: boolean
+        default: false
+      example_build_script_path:
+        type: string
+        default: scripts/ci-build-of-examples.sh
+      require_smoke_build_evidence:
+        type: boolean
+        default: false
+      smoke_build_evidence_path:
+        type: string
+        default: build/of-smoke/of-smoke-build.json
 
 jobs:
   of-smoke-build:
@@ -20,19 +42,67 @@ jobs:
         shell: bash
         run: |
           echo "Runner: $RUNNER_OS"
-          echo "Future openFrameworks smoke build scaffold"
+          echo "openFrameworks smoke build"
+          echo "project_generator_script_path=${{ inputs.project_generator_script_path }}"
+          echo "example_build_script_path=${{ inputs.example_build_script_path }}"
+          echo "smoke_build_evidence_path=${{ inputs.smoke_build_evidence_path }}"
 
       - name: Verify example structure
         shell: bash
         run: |
-          test -d examples || echo "No examples directory present"
+          if [ -d examples ] || find . -maxdepth 1 -type d -name "example*" | grep -q .; then
+            echo "Found example directory"
+          elif [ "${{ inputs.require_examples }}" = "true" ]; then
+            echo "No examples found. Expected a top-level examples/ or example* directory."
+            exit 1
+          else
+            echo "No examples directory present"
+          fi
 
-      - name: Future projectGenerator integration
+      - name: Run project generator script
         shell: bash
         run: |
-          echo "Future projectGenerator smoke build step goes here"
+          if [ -f "${{ inputs.project_generator_script_path }}" ]; then
+            chmod +x "${{ inputs.project_generator_script_path }}"
+            "${{ inputs.project_generator_script_path }}"
+          elif [ "${{ inputs.require_project_generator_script }}" = "true" ]; then
+            echo "Missing project generator script: ${{ inputs.project_generator_script_path }}"
+            exit 1
+          else
+            echo "No project generator script present"
+          fi
 
-      - name: Future example compilation
+      - name: Run example build script
         shell: bash
         run: |
-          echo "Future example compilation step goes here"
+          if [ -f "${{ inputs.example_build_script_path }}" ]; then
+            chmod +x "${{ inputs.example_build_script_path }}"
+            "${{ inputs.example_build_script_path }}"
+          elif [ "${{ inputs.require_example_build_script }}" = "true" ]; then
+            echo "Missing example build script: ${{ inputs.example_build_script_path }}"
+            exit 1
+          else
+            echo "No example build script present"
+          fi
+
+      - name: Verify smoke build evidence
+        if: always()
+        shell: bash
+        run: |
+          if [ -f "${{ inputs.smoke_build_evidence_path }}" ]; then
+            echo "Found smoke build evidence: ${{ inputs.smoke_build_evidence_path }}"
+          elif [ "${{ inputs.require_smoke_build_evidence }}" = "true" ]; then
+            echo "Missing smoke build evidence: ${{ inputs.smoke_build_evidence_path }}"
+            exit 1
+          else
+            echo "No smoke build evidence present"
+          fi
+
+      - name: Upload smoke build evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: of-smoke-build-${{ matrix.os }}
+          path: ${{ inputs.smoke_build_evidence_path }}
+          if-no-files-found: ignore

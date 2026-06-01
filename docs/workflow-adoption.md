@@ -79,6 +79,105 @@ jobs:
       require_readme_features: true
 ```
 
+For release coordination, keep report checks advisory until the caller can
+generate the matching artifacts, then opt into required reports:
+
+```yaml
+name: release-gate
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  release-gate:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/release-gate.yml@main
+    with:
+      require_release_readiness_score: true
+      require_metadata_reconciliation_report: true
+      require_cross_repo_capability_map: true
+```
+
+For backend CPU runtime smoke, keep the reusable workflow advisory until the
+caller carries platform-native setup scripts and emits runtime evidence:
+
+```yaml
+name: backend-runtime
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  backend-runtime:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/backend-runtime-check.yml@main
+    with:
+      require_runtime_smoke_source: true
+      require_linux_runtime_smoke_script: true
+      require_windows_runtime_smoke_scripts: true
+      require_macos_runtime_smoke_script: true
+      require_backend_runtime_smoke_evidence: true
+```
+
+For generator/report workflows, use advisory mode during rollout and opt into
+both the script and artifact requirements once the caller owns the report:
+
+```yaml
+name: release-readiness-score
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  readiness:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/release-readiness-score.yml@main
+    with:
+      require_generator: true
+      require_report_artifact: true
+      report_artifact_path: docs/release-readiness-score.md
+```
+
+For build smoke workflows, keep reusable logic generic and require caller-owned
+scripts only after that lane can build on the selected runner:
+
+```yaml
+name: of-smoke-build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  smoke:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/of-smoke-build.yml@main
+    with:
+      require_examples: true
+      require_project_generator_script: true
+      require_example_build_script: true
+      require_smoke_build_evidence: true
+```
+
+For accelerator certification, the reusable workflow should own truth semantics
+and the caller should own backend-specific build commands:
+
+```yaml
+name: cuda-runtime-certification
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  cuda:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/cuda-runtime-certification.yml@main
+    with:
+      require_runtime_smoke_build_script: true
+      runtime_smoke_build_script_path: scripts/ci-build-runtime-smoke.sh
+      runtime_smoke_executable_path: build/runtime-smoke/runtime_smoke
+      require_runtime_smoke_evidence: true
+```
+
 ## Core coordination
 
 `ofxGgmlCore` is the control-plane consumer for ecosystem planning. Core tools
@@ -101,6 +200,20 @@ expect workflow callers to stay aligned with these names:
 - Enable `require_feature_metadata` and `require_readme_features` together for
   managed addons once their `ofxggml-addon.json` feature list and README
   `## Features` section describe the same public promise.
+- Enable `release-gate.yml` required report inputs only after the caller
+  generates the corresponding report artifacts under `docs/`.
+- Enable `backend-runtime-check.yml` required smoke inputs only after the
+  caller has platform-native setup scripts and writes backend runtime evidence.
+- Enable generator/report `require_generator` and `require_report_artifact`
+  together after the caller has the script and expected report path.
+- For status/checker workflows, use their matching `require_fetcher` or
+  `require_checker` input alongside `require_report_artifact`.
+- For `ecosystem-docs.yml`, enable each per-document generator and artifact
+  requirement only after that specific document is owned by the caller.
+- For smoke build workflows, keep build commands in caller scripts and require
+  smoke evidence only after those scripts produce stable JSON artifacts.
+- For accelerator certification workflows, keep the self-hosted runner labels
+  lane-specific and require caller build scripts before enforcing evidence.
 - Keep reusable policy in `ofxGgmlWorkflows`; keep repository-specific commands
   in the caller repository.
 - Treat backend certification workflows as lane-specific until the relevant

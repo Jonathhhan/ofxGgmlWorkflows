@@ -12,6 +12,24 @@ on:
       require_vulkan:
         type: boolean
         default: false
+      require_runtime_smoke_source:
+        type: boolean
+        default: false
+      require_linux_runtime_smoke_script:
+        type: boolean
+        default: false
+      require_windows_runtime_smoke_scripts:
+        type: boolean
+        default: false
+      require_macos_runtime_smoke_script:
+        type: boolean
+        default: false
+      require_backend_runtime_smoke_evidence:
+        type: boolean
+        default: false
+      backend_runtime_smoke_evidence_path:
+        type: string
+        default: build/runtime-smoke/backend-runtime-smoke.json
 
 jobs:
   backend-runtime-check:
@@ -34,16 +52,34 @@ jobs:
           echo "require_cuda=${{ inputs.require_cuda }}"
           echo "require_metal=${{ inputs.require_metal }}"
           echo "require_vulkan=${{ inputs.require_vulkan }}"
+          echo "require_runtime_smoke_source=${{ inputs.require_runtime_smoke_source }}"
+          echo "require_backend_runtime_smoke_evidence=${{ inputs.require_backend_runtime_smoke_evidence }}"
+          echo "backend_runtime_smoke_evidence_path=${{ inputs.backend_runtime_smoke_evidence_path }}"
 
       - name: Verify runtime smoke source exists
         shell: bash
         run: |
-          test -f tools/runtime-smoke/runtime_smoke.cpp || echo "Runtime smoke source missing"
+          if [ -f tools/runtime-smoke/runtime_smoke.cpp ]; then
+            echo "Found runtime smoke source"
+          elif [ "${{ inputs.require_runtime_smoke_source }}" = "true" ]; then
+            echo "Runtime smoke source missing: tools/runtime-smoke/runtime_smoke.cpp"
+            exit 1
+          else
+            echo "Runtime smoke source missing; skipping source requirement"
+          fi
 
       - name: Linux CPU runtime smoke execution
         if: matrix.os == 'ubuntu-latest'
         shell: bash
         run: |
+          if [ ! -f scripts/ci-setup-runtime-smoke.sh ]; then
+            if [ "${{ inputs.require_linux_runtime_smoke_script }}" = "true" ]; then
+              echo "Linux runtime smoke setup script missing: scripts/ci-setup-runtime-smoke.sh"
+              exit 1
+            fi
+            echo "Linux runtime smoke setup script is not present in this repository; skipping."
+            exit 0
+          fi
           sudo apt-get update
           sudo apt-get install -y powershell build-essential cmake
           chmod +x scripts/ci-setup-runtime-smoke.sh
@@ -54,18 +90,43 @@ jobs:
         shell: pwsh
         run: |
           if (!(Test-Path -LiteralPath "scripts\setup-ggml.ps1") -or !(Test-Path -LiteralPath "scripts\build-runtime-smoke.ps1")) {
+            if ("${{ inputs.require_windows_runtime_smoke_scripts }}" -eq "true") {
+              Write-Error "Windows runtime smoke scripts are required but missing: scripts\setup-ggml.ps1 and scripts\build-runtime-smoke.ps1"
+              exit 1
+            }
             Write-Host "Windows runtime smoke scripts are not present in this repository; skipping."
             exit 0
           }
           powershell -NoProfile -ExecutionPolicy Bypass -File scripts\setup-ggml.ps1 -CpuOnly -Jobs 2
           powershell -NoProfile -ExecutionPolicy Bypass -File scripts\build-runtime-smoke.ps1 -Backend cpu -RequireBackend
 
-      - name: macOS runtime smoke scaffold
+      - name: macOS CPU runtime smoke execution
         if: matrix.os == 'macos-latest'
         shell: bash
         run: |
-          echo "Runtime smoke execution scaffold for $RUNNER_OS"
-          echo "Future platform-native ggml bootstrap required"
+          if [ ! -f scripts/ci-setup-runtime-smoke.sh ]; then
+            if [ "${{ inputs.require_macos_runtime_smoke_script }}" = "true" ]; then
+              echo "macOS runtime smoke setup script missing: scripts/ci-setup-runtime-smoke.sh"
+              exit 1
+            fi
+            echo "macOS runtime smoke setup script is not present in this repository; skipping."
+            exit 0
+          fi
+          chmod +x scripts/ci-setup-runtime-smoke.sh
+          scripts/ci-setup-runtime-smoke.sh
+
+      - name: Verify backend runtime smoke evidence
+        if: always()
+        shell: bash
+        run: |
+          if [ -f "${{ inputs.backend_runtime_smoke_evidence_path }}" ]; then
+            echo "Found backend runtime smoke evidence: ${{ inputs.backend_runtime_smoke_evidence_path }}"
+          elif [ "${{ inputs.require_backend_runtime_smoke_evidence }}" = "true" ]; then
+            echo "Missing backend runtime smoke evidence: ${{ inputs.backend_runtime_smoke_evidence_path }}"
+            exit 1
+          else
+            echo "Backend runtime smoke evidence missing; skipping evidence requirement"
+          fi
 
       - name: Upload backend runtime smoke evidence
         if: always()
@@ -73,7 +134,7 @@ jobs:
         continue-on-error: true
         with:
           name: backend-runtime-smoke-${{ matrix.os }}
-          path: build/runtime-smoke/backend-runtime-smoke.json
+          path: ${{ inputs.backend_runtime_smoke_evidence_path }}
           if-no-files-found: ignore
 
       - name: CUDA runtime truth semantics

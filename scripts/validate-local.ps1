@@ -106,12 +106,77 @@ Assert-FileContains (Join-Path $workflowRoot "addon-hygiene.yml") "require_addon
 Assert-FileContains (Join-Path $workflowRoot "addon-hygiene.yml") "require_src" "addon-hygiene.yml"
 Assert-FileContains (Join-Path $workflowRoot "addon-hygiene.yml") "require_examples" "addon-hygiene.yml"
 Assert-FileContains (Join-Path $workflowRoot "release-check.yml") "require_addon_config" "release-check.yml"
+Assert-FileContains (Join-Path $workflowRoot "release-gate.yml") "require_release_readiness_score" "release-gate.yml"
+Assert-FileContains (Join-Path $workflowRoot "release-gate.yml") "require_metadata_reconciliation_report" "release-gate.yml"
+Assert-FileContains (Join-Path $workflowRoot "release-gate.yml") "require_cross_repo_capability_map" "release-gate.yml"
+Assert-FileContains (Join-Path $workflowRoot "backend-runtime-check.yml") "require_runtime_smoke_source" "backend-runtime-check.yml"
+Assert-FileContains (Join-Path $workflowRoot "backend-runtime-check.yml") "require_linux_runtime_smoke_script" "backend-runtime-check.yml"
+Assert-FileContains (Join-Path $workflowRoot "backend-runtime-check.yml") "require_windows_runtime_smoke_scripts" "backend-runtime-check.yml"
+Assert-FileContains (Join-Path $workflowRoot "backend-runtime-check.yml") "require_macos_runtime_smoke_script" "backend-runtime-check.yml"
+Assert-FileContains (Join-Path $workflowRoot "backend-runtime-check.yml") "require_backend_runtime_smoke_evidence" "backend-runtime-check.yml"
 Assert-FileContains (Join-Path $workflowRoot "metadata-validation.yml") "require_feature_metadata" "metadata-validation.yml"
 Assert-FileContains (Join-Path $workflowRoot "metadata-validation.yml") "require_readme_features" "metadata-validation.yml"
+
+foreach ($reportWorkflow in @(
+	"backend-capability-report.yml",
+	"compatibility-matrix.yml",
+	"cross-repo-capability-map.yml",
+	"ecosystem-health-report.yml",
+	"metadata-reconciliation.yml",
+	"release-plan.yml",
+	"release-readiness-score.yml",
+	"workflow-status-plan.yml"
+)) {
+	$path = Join-Path $workflowRoot $reportWorkflow
+	Assert-FileContains $path "require_generator" $reportWorkflow
+	Assert-FileContains $path "require_report_artifact" $reportWorkflow
+	Assert-FileContains $path "report_artifact_path" $reportWorkflow
+}
+
+Assert-FileContains (Join-Path $workflowRoot "baseline-compatibility.yml") "require_checker" "baseline-compatibility.yml"
+Assert-FileContains (Join-Path $workflowRoot "baseline-compatibility.yml") "require_report_artifact" "baseline-compatibility.yml"
+Assert-FileContains (Join-Path $workflowRoot "live-workflow-status.yml") "require_fetcher" "live-workflow-status.yml"
+Assert-FileContains (Join-Path $workflowRoot "live-workflow-status.yml") "require_report_artifact" "live-workflow-status.yml"
+Assert-FileContains (Join-Path $workflowRoot "ecosystem-docs.yml") "require_dashboard_generator" "ecosystem-docs.yml"
+Assert-FileContains (Join-Path $workflowRoot "ecosystem-docs.yml") "require_dashboard_artifact" "ecosystem-docs.yml"
+Assert-FileContains (Join-Path $workflowRoot "ecosystem-docs.yml") "require_compatibility_generator" "ecosystem-docs.yml"
+Assert-FileContains (Join-Path $workflowRoot "ecosystem-docs.yml") "require_compatibility_artifact" "ecosystem-docs.yml"
+Assert-FileContains (Join-Path $workflowRoot "ecosystem-docs.yml") "require_release_plan_generator" "ecosystem-docs.yml"
+Assert-FileContains (Join-Path $workflowRoot "ecosystem-docs.yml") "require_release_plan_artifact" "ecosystem-docs.yml"
+Assert-FileContains (Join-Path $workflowRoot "ecosystem-docs.yml") "require_pr_fanout_generator" "ecosystem-docs.yml"
+Assert-FileContains (Join-Path $workflowRoot "ecosystem-docs.yml") "require_pr_fanout_artifact" "ecosystem-docs.yml"
+Assert-FileContains (Join-Path $workflowRoot "multi-platform-smoke.yml") "require_smoke_build_script" "multi-platform-smoke.yml"
+Assert-FileContains (Join-Path $workflowRoot "multi-platform-smoke.yml") "smoke_build_script_path" "multi-platform-smoke.yml"
+Assert-FileContains (Join-Path $workflowRoot "multi-platform-smoke.yml") "require_smoke_build_evidence" "multi-platform-smoke.yml"
+Assert-FileContains (Join-Path $workflowRoot "of-smoke-build.yml") "require_project_generator_script" "of-smoke-build.yml"
+Assert-FileContains (Join-Path $workflowRoot "of-smoke-build.yml") "require_example_build_script" "of-smoke-build.yml"
+Assert-FileContains (Join-Path $workflowRoot "of-smoke-build.yml") "require_smoke_build_evidence" "of-smoke-build.yml"
+
+foreach ($runtimeWorkflow in @(
+	"cuda-runtime-certification.yml",
+	"metal-runtime-certification.yml",
+	"vulkan-runtime-certification.yml"
+)) {
+	$path = Join-Path $workflowRoot $runtimeWorkflow
+	Assert-FileContains $path "runtime_smoke_source_path" $runtimeWorkflow
+	Assert-FileContains $path "require_runtime_smoke_source" $runtimeWorkflow
+	Assert-FileContains $path "runtime_smoke_build_script_path" $runtimeWorkflow
+	Assert-FileContains $path "require_runtime_smoke_build_script" $runtimeWorkflow
+	Assert-FileContains $path "runtime_smoke_executable_path" $runtimeWorkflow
+	Assert-FileContains $path "require_runtime_smoke_evidence" $runtimeWorkflow
+	Assert-FileContains $path "runtime_smoke_evidence_path" $runtimeWorkflow
+}
+
 Assert-FileContains (Join-Path $repoRoot "README.md") "require_addon_config" "README"
 Assert-FileContains (Join-Path $repoRoot "README.md") "require_src" "README"
 Assert-FileContains (Join-Path $repoRoot "README.md") "require_examples" "README"
 Assert-FileContains (Join-Path $repoRoot "README.md") "require_feature_metadata" "README"
+Assert-FileContains (Join-Path $repoRoot "README.md") "require_release_readiness_score" "README"
+Assert-FileContains (Join-Path $repoRoot "README.md") "require_runtime_smoke_source" "README"
+Assert-FileContains (Join-Path $repoRoot "README.md") "require_report_artifact" "README"
+Assert-FileContains (Join-Path $repoRoot "README.md") "ecosystem-docs.yml" "README"
+Assert-FileContains (Join-Path $repoRoot "README.md") "require_smoke_build_evidence" "README"
+Assert-FileContains (Join-Path $repoRoot "README.md") "require_runtime_smoke_build_script" "README"
 Assert-FileContains (Join-Path $repoRoot "CHANGELOG.md") "require_addon_config" "CHANGELOG"
 
 Write-Step "Checking workflow metadata extractor"

@@ -2,6 +2,16 @@ name: reusable-release-readiness-score
 
 on:
   workflow_call:
+    inputs:
+      require_generator:
+        type: boolean
+        default: false
+      require_report_artifact:
+        type: boolean
+        default: false
+      report_artifact_path:
+        type: string
+        default: docs/release-readiness-score.md
 
 jobs:
   release-readiness:
@@ -20,6 +30,20 @@ jobs:
         run: |
           if [ -f scripts/generate-release-readiness-score.py ]; then
             python3 scripts/generate-release-readiness-score.py
+          elif [ "${{ inputs.require_generator }}" = "true" ]; then
+            echo "Missing release readiness generator: scripts/generate-release-readiness-score.py"
+            exit 1
           else
             echo "No release readiness generator present"
+          fi
+
+      - name: Verify release readiness score
+        run: |
+          if [ -f "${{ inputs.report_artifact_path }}" ]; then
+            echo "Found release readiness score: ${{ inputs.report_artifact_path }}"
+          elif [ "${{ inputs.require_report_artifact }}" = "true" ]; then
+            echo "Missing release readiness score: ${{ inputs.report_artifact_path }}"
+            exit 1
+          else
+            echo "No release readiness score artifact present"
           fi

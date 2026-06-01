@@ -2,6 +2,16 @@ name: reusable-release-plan
 
 on:
   workflow_call:
+    inputs:
+      require_generator:
+        type: boolean
+        default: false
+      require_report_artifact:
+        type: boolean
+        default: false
+      report_artifact_path:
+        type: string
+        default: docs/release-plan.md
 
 jobs:
   release-plan:
@@ -20,12 +30,20 @@ jobs:
         run: |
           if [ -f scripts/plan-release.py ]; then
             python3 scripts/plan-release.py
+          elif [ "${{ inputs.require_generator }}" = "true" ]; then
+            echo "Missing release planner: scripts/plan-release.py"
+            exit 1
           else
             echo "No release planner found"
           fi
 
       - name: Verify release plan
         run: |
-          if [ -f scripts/plan-release.py ]; then
-            test -f docs/release-plan.md
+          if [ -f "${{ inputs.report_artifact_path }}" ]; then
+            echo "Found release plan: ${{ inputs.report_artifact_path }}"
+          elif [ "${{ inputs.require_report_artifact }}" = "true" ]; then
+            echo "Missing release plan: ${{ inputs.report_artifact_path }}"
+            exit 1
+          else
+            echo "No release plan artifact present"
           fi

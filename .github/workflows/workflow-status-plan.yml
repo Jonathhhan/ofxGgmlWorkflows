@@ -2,6 +2,16 @@ name: reusable-workflow-status-plan
 
 on:
   workflow_call:
+    inputs:
+      require_generator:
+        type: boolean
+        default: false
+      require_report_artifact:
+        type: boolean
+        default: false
+      report_artifact_path:
+        type: string
+        default: docs/workflow-status-plan.md
 
 jobs:
   workflow-status-plan:
@@ -20,6 +30,20 @@ jobs:
         run: |
           if [ -f scripts/generate-workflow-status-plan.py ]; then
             python3 scripts/generate-workflow-status-plan.py
+          elif [ "${{ inputs.require_generator }}" = "true" ]; then
+            echo "Missing workflow status planner: scripts/generate-workflow-status-plan.py"
+            exit 1
           else
             echo "No workflow status planner present"
+          fi
+
+      - name: Verify workflow status plan
+        run: |
+          if [ -f "${{ inputs.report_artifact_path }}" ]; then
+            echo "Found workflow status plan: ${{ inputs.report_artifact_path }}"
+          elif [ "${{ inputs.require_report_artifact }}" = "true" ]; then
+            echo "Missing workflow status plan: ${{ inputs.report_artifact_path }}"
+            exit 1
+          else
+            echo "No workflow status plan artifact present"
           fi

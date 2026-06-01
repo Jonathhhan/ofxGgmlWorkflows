@@ -2,6 +2,16 @@ name: reusable-live-workflow-status
 
 on:
   workflow_call:
+    inputs:
+      require_fetcher:
+        type: boolean
+        default: false
+      require_report_artifact:
+        type: boolean
+        default: false
+      report_artifact_path:
+        type: string
+        default: docs/live-workflow-status.md
 
 jobs:
   workflow-status:
@@ -26,6 +36,20 @@ jobs:
         run: |
           if [ -f scripts/fetch-workflow-status.py ]; then
             python3 scripts/fetch-workflow-status.py
+          elif [ "${{ inputs.require_fetcher }}" = "true" ]; then
+            echo "Missing workflow status fetcher: scripts/fetch-workflow-status.py"
+            exit 1
           else
             echo "No workflow status fetcher present"
+          fi
+
+      - name: Verify workflow status report
+        run: |
+          if [ -f "${{ inputs.report_artifact_path }}" ]; then
+            echo "Found workflow status report: ${{ inputs.report_artifact_path }}"
+          elif [ "${{ inputs.require_report_artifact }}" = "true" ]; then
+            echo "Missing workflow status report: ${{ inputs.report_artifact_path }}"
+            exit 1
+          else
+            echo "No workflow status report artifact present"
           fi

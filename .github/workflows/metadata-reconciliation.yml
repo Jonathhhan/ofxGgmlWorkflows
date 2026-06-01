@@ -2,6 +2,16 @@ name: reusable-metadata-reconciliation
 
 on:
   workflow_call:
+    inputs:
+      require_generator:
+        type: boolean
+        default: false
+      require_report_artifact:
+        type: boolean
+        default: false
+      report_artifact_path:
+        type: string
+        default: docs/metadata-reconciliation-report.md
 
 jobs:
   metadata-reconciliation:
@@ -20,6 +30,20 @@ jobs:
         run: |
           if [ -f scripts/reconcile-ecosystem-metadata.py ]; then
             python3 scripts/reconcile-ecosystem-metadata.py
+          elif [ "${{ inputs.require_generator }}" = "true" ]; then
+            echo "Missing metadata reconciliation script: scripts/reconcile-ecosystem-metadata.py"
+            exit 1
           else
             echo "No metadata reconciliation script present"
+          fi
+
+      - name: Verify metadata reconciliation report
+        run: |
+          if [ -f "${{ inputs.report_artifact_path }}" ]; then
+            echo "Found metadata reconciliation report: ${{ inputs.report_artifact_path }}"
+          elif [ "${{ inputs.require_report_artifact }}" = "true" ]; then
+            echo "Missing metadata reconciliation report: ${{ inputs.report_artifact_path }}"
+            exit 1
+          else
+            echo "No metadata reconciliation report artifact present"
           fi

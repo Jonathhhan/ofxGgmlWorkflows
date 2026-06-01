@@ -2,6 +2,43 @@ name: reusable-ecosystem-docs
 
 on:
   workflow_call:
+    inputs:
+      require_dashboard_generator:
+        type: boolean
+        default: false
+      require_dashboard_artifact:
+        type: boolean
+        default: false
+      dashboard_artifact_path:
+        type: string
+        default: docs/ecosystem-dashboard.md
+      require_compatibility_generator:
+        type: boolean
+        default: false
+      require_compatibility_artifact:
+        type: boolean
+        default: false
+      compatibility_artifact_path:
+        type: string
+        default: docs/compatibility-matrix.md
+      require_release_plan_generator:
+        type: boolean
+        default: false
+      require_release_plan_artifact:
+        type: boolean
+        default: false
+      release_plan_artifact_path:
+        type: string
+        default: docs/release-plan.md
+      require_pr_fanout_generator:
+        type: boolean
+        default: false
+      require_pr_fanout_artifact:
+        type: boolean
+        default: false
+      pr_fanout_artifact_path:
+        type: string
+        default: docs/pr-fanout-plan.md
 
 jobs:
   ecosystem-docs:
@@ -20,24 +57,88 @@ jobs:
         run: |
           if [ -f scripts/generate-ecosystem-dashboard.py ]; then
             python3 scripts/generate-ecosystem-dashboard.py
+          elif [ "${{ inputs.require_dashboard_generator }}" = "true" ]; then
+            echo "Missing ecosystem dashboard generator: scripts/generate-ecosystem-dashboard.py"
+            exit 1
+          else
+            echo "No ecosystem dashboard generator present"
+          fi
+
+      - name: Verify ecosystem dashboard
+        run: |
+          if [ -f "${{ inputs.dashboard_artifact_path }}" ]; then
+            echo "Found ecosystem dashboard: ${{ inputs.dashboard_artifact_path }}"
+          elif [ "${{ inputs.require_dashboard_artifact }}" = "true" ]; then
+            echo "Missing ecosystem dashboard: ${{ inputs.dashboard_artifact_path }}"
+            exit 1
+          else
+            echo "No ecosystem dashboard artifact present"
           fi
 
       - name: Generate compatibility matrix
         run: |
           if [ -f scripts/generate-compatibility-matrix.py ]; then
             python3 scripts/generate-compatibility-matrix.py
+          elif [ "${{ inputs.require_compatibility_generator }}" = "true" ]; then
+            echo "Missing compatibility matrix generator: scripts/generate-compatibility-matrix.py"
+            exit 1
+          else
+            echo "No compatibility matrix generator present"
+          fi
+
+      - name: Verify compatibility matrix
+        run: |
+          if [ -f "${{ inputs.compatibility_artifact_path }}" ]; then
+            echo "Found compatibility matrix: ${{ inputs.compatibility_artifact_path }}"
+          elif [ "${{ inputs.require_compatibility_artifact }}" = "true" ]; then
+            echo "Missing compatibility matrix: ${{ inputs.compatibility_artifact_path }}"
+            exit 1
+          else
+            echo "No compatibility matrix artifact present"
           fi
 
       - name: Generate release plan
         run: |
           if [ -f scripts/plan-release.py ]; then
             python3 scripts/plan-release.py
+          elif [ "${{ inputs.require_release_plan_generator }}" = "true" ]; then
+            echo "Missing release planner: scripts/plan-release.py"
+            exit 1
+          else
+            echo "No release planner present"
+          fi
+
+      - name: Verify release plan
+        run: |
+          if [ -f "${{ inputs.release_plan_artifact_path }}" ]; then
+            echo "Found release plan: ${{ inputs.release_plan_artifact_path }}"
+          elif [ "${{ inputs.require_release_plan_artifact }}" = "true" ]; then
+            echo "Missing release plan: ${{ inputs.release_plan_artifact_path }}"
+            exit 1
+          else
+            echo "No release plan artifact present"
           fi
 
       - name: Generate PR fanout plan
         run: |
           if [ -f scripts/plan-pr-fanout.py ]; then
             python3 scripts/plan-pr-fanout.py
+          elif [ "${{ inputs.require_pr_fanout_generator }}" = "true" ]; then
+            echo "Missing PR fanout planner: scripts/plan-pr-fanout.py"
+            exit 1
+          else
+            echo "No PR fanout planner present"
+          fi
+
+      - name: Verify PR fanout plan
+        run: |
+          if [ -f "${{ inputs.pr_fanout_artifact_path }}" ]; then
+            echo "Found PR fanout plan: ${{ inputs.pr_fanout_artifact_path }}"
+          elif [ "${{ inputs.require_pr_fanout_artifact }}" = "true" ]; then
+            echo "Missing PR fanout plan: ${{ inputs.pr_fanout_artifact_path }}"
+            exit 1
+          else
+            echo "No PR fanout plan artifact present"
           fi
 
       - name: Verify generated docs directory

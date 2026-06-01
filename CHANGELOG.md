@@ -10,6 +10,13 @@ All notable changes to ofxGgmlWorkflows are documented here.
 - `addon-hygiene.yml` now accepts `require_examples` for companion addons that release-maintain examples
 - `metadata-validation.yml` now accepts built-in metadata and README feature checks for managed addon feature promises
 - `release-check.yml` now accepts `require_addon_config` input for non-addon repositories
+- `release-gate.yml` now accepts required report inputs so callers can fail when release planning artifacts are missing
+- `backend-runtime-check.yml` now accepts required smoke source, setup script, and evidence inputs for executable CPU runtime checks
+- Generator/report workflows now accept `require_generator`, `require_report_artifact`, and `report_artifact_path` inputs for explicit soft-vs-required rollout
+- `baseline-compatibility.yml` and `live-workflow-status.yml` now accept required checker/fetcher and report artifact inputs
+- `ecosystem-docs.yml` now accepts per-document generator and artifact requirements for dashboard, compatibility, release plan, and PR fanout docs
+- `multi-platform-smoke.yml` and `of-smoke-build.yml` now accept caller-owned script and smoke build evidence requirements
+- CUDA, Metal, and Vulkan runtime certification workflows now accept caller-owned runtime smoke build scripts, executable paths, and evidence paths
 - Rewrote `scripts/workflow-metadata-extractor.ps1` with proper PowerShell syntax and YAML-aware metadata extraction
 - Added `docs/codex-ecosystem-usage.md` with Codex ecosystem usage patterns and best practices
 - `.gitignore` to prevent accidental commits of generated artifacts, model weights, build output, and IDE metadata

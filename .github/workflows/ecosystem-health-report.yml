@@ -2,6 +2,16 @@ name: reusable-ecosystem-health-report
 
 on:
   workflow_call:
+    inputs:
+      require_generator:
+        type: boolean
+        default: false
+      require_report_artifact:
+        type: boolean
+        default: false
+      report_artifact_path:
+        type: string
+        default: docs/ecosystem-health-report.md
 
 jobs:
   health-report:
@@ -20,10 +30,20 @@ jobs:
         run: |
           if [ -f scripts/generate-health-report.py ]; then
             python3 scripts/generate-health-report.py
+          elif [ "${{ inputs.require_generator }}" = "true" ]; then
+            echo "Missing health report generator: scripts/generate-health-report.py"
+            exit 1
+          else
+            echo "No health report generator present"
           fi
 
       - name: Verify generated report
         run: |
-          if [ -f scripts/generate-health-report.py ]; then
-            test -f docs/ecosystem-health-report.md
+          if [ -f "${{ inputs.report_artifact_path }}" ]; then
+            echo "Found health report: ${{ inputs.report_artifact_path }}"
+          elif [ "${{ inputs.require_report_artifact }}" = "true" ]; then
+            echo "Missing health report: ${{ inputs.report_artifact_path }}"
+            exit 1
+          else
+            echo "No health report artifact present"
           fi

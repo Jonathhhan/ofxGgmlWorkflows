@@ -2,6 +2,16 @@ name: reusable-cross-repo-capability-map
 
 on:
   workflow_call:
+    inputs:
+      require_generator:
+        type: boolean
+        default: false
+      require_report_artifact:
+        type: boolean
+        default: false
+      report_artifact_path:
+        type: string
+        default: docs/cross-repo-capability-map.md
 
 jobs:
   capability-map:
@@ -20,6 +30,20 @@ jobs:
         run: |
           if [ -f scripts/generate-cross-repo-capability-map.py ]; then
             python3 scripts/generate-cross-repo-capability-map.py
+          elif [ "${{ inputs.require_generator }}" = "true" ]; then
+            echo "Missing capability map generator: scripts/generate-cross-repo-capability-map.py"
+            exit 1
           else
             echo "No capability map generator present"
+          fi
+
+      - name: Verify capability map
+        run: |
+          if [ -f "${{ inputs.report_artifact_path }}" ]; then
+            echo "Found capability map: ${{ inputs.report_artifact_path }}"
+          elif [ "${{ inputs.require_report_artifact }}" = "true" ]; then
+            echo "Missing capability map: ${{ inputs.report_artifact_path }}"
+            exit 1
+          else
+            echo "No capability map artifact present"
           fi

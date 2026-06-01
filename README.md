@@ -39,8 +39,8 @@ All workflows are reusable via `workflow_call`. See [`docs/workflow-adoption.md`
 - `.github/workflows/backend-runtime-check.yml` - CPU runtime smoke across Linux, Windows, macOS
 - `.github/workflows/backend-capability-report.yml` - generate backend capability report
 - `.github/workflows/cross-repo-capability-map.yml` - generate cross-repo capability map
-- `.github/workflows/multi-platform-smoke.yml` - multi-platform smoke build scaffold
-- `.github/workflows/of-smoke-build.yml` - openFrameworks smoke build scaffold
+- `.github/workflows/multi-platform-smoke.yml` - multi-platform smoke build contract
+- `.github/workflows/of-smoke-build.yml` - openFrameworks example smoke build contract
 - `.github/workflows/cuda-runtime-certification.yml` - CUDA runtime certification (self-hosted)
 - `.github/workflows/metal-runtime-certification.yml` - Metal runtime certification (self-hosted)
 - `.github/workflows/vulkan-runtime-certification.yml` - Vulkan runtime certification (self-hosted)
@@ -97,6 +97,78 @@ jobs:
       require_metadata_file: true
       require_feature_metadata: true
       require_readme_features: true
+```
+
+To make the release gate enforce generated ecosystem reports, opt into the
+required report checks that apply to the caller:
+
+```yaml
+jobs:
+  release-gate:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/release-gate.yml@main
+    with:
+      require_release_readiness_score: true
+      require_metadata_reconciliation_report: true
+      require_cross_repo_capability_map: true
+```
+
+To make backend CPU runtime smoke checks executable instead of advisory, require
+the caller's platform-native smoke setup scripts and evidence artifact:
+
+```yaml
+jobs:
+  backend-runtime:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/backend-runtime-check.yml@main
+    with:
+      require_runtime_smoke_source: true
+      require_linux_runtime_smoke_script: true
+      require_windows_runtime_smoke_scripts: true
+      require_macos_runtime_smoke_script: true
+      require_backend_runtime_smoke_evidence: true
+```
+
+Generator/report workflows can also move from advisory to required once the
+caller owns the generator script and output artifact:
+
+```yaml
+jobs:
+  readiness:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/release-readiness-score.yml@main
+    with:
+      require_generator: true
+      require_report_artifact: true
+      report_artifact_path: docs/release-readiness-score.md
+```
+
+`ecosystem-docs.yml` exposes per-document requirements so callers can harden
+dashboard, compatibility, release plan, and PR fanout generation independently.
+
+Smoke build workflows can stay structural during rollout, then require caller
+scripts and evidence artifacts once a lane owns real build execution:
+
+```yaml
+jobs:
+  smoke:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/of-smoke-build.yml@main
+    with:
+      require_examples: true
+      require_project_generator_script: true
+      require_example_build_script: true
+      require_smoke_build_evidence: true
+```
+
+Accelerator certification workflows stay strict about running `runtime_smoke`,
+but callers can now provide the build script, executable path, and evidence path:
+
+```yaml
+jobs:
+  cuda-certification:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/cuda-runtime-certification.yml@main
+    with:
+      require_runtime_smoke_build_script: true
+      runtime_smoke_build_script_path: scripts/ci-build-runtime-smoke.sh
+      runtime_smoke_executable_path: build/runtime-smoke/runtime_smoke
+      require_runtime_smoke_evidence: true
 ```
 
 ## Policy

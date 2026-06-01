@@ -2,6 +2,16 @@ name: reusable-baseline-compatibility
 
 on:
   workflow_call:
+    inputs:
+      require_checker:
+        type: boolean
+        default: false
+      require_report_artifact:
+        type: boolean
+        default: false
+      report_artifact_path:
+        type: string
+        default: docs/baseline-compatibility.md
 
 jobs:
   baseline-compatibility:
@@ -20,6 +30,20 @@ jobs:
         run: |
           if [ -f scripts/check-baseline-compatibility.py ]; then
             python3 scripts/check-baseline-compatibility.py
+          elif [ "${{ inputs.require_checker }}" = "true" ]; then
+            echo "Missing baseline compatibility checker: scripts/check-baseline-compatibility.py"
+            exit 1
           else
             echo "No compatibility checker present"
+          fi
+
+      - name: Verify baseline compatibility report
+        run: |
+          if [ -f "${{ inputs.report_artifact_path }}" ]; then
+            echo "Found baseline compatibility report: ${{ inputs.report_artifact_path }}"
+          elif [ "${{ inputs.require_report_artifact }}" = "true" ]; then
+            echo "Missing baseline compatibility report: ${{ inputs.report_artifact_path }}"
+            exit 1
+          else
+            echo "No baseline compatibility report artifact present"
           fi

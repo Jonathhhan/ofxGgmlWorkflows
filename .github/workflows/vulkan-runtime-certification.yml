@@ -2,6 +2,28 @@ name: reusable-vulkan-runtime-certification
 
 on:
   workflow_call:
+    inputs:
+      runtime_smoke_source_path:
+        type: string
+        default: tools/runtime-smoke/runtime_smoke.cpp
+      require_runtime_smoke_source:
+        type: boolean
+        default: true
+      runtime_smoke_build_script_path:
+        type: string
+        default: scripts/ci-build-runtime-smoke.sh
+      require_runtime_smoke_build_script:
+        type: boolean
+        default: false
+      runtime_smoke_executable_path:
+        type: string
+        default: build/runtime-smoke/runtime_smoke
+      require_runtime_smoke_evidence:
+        type: boolean
+        default: false
+      runtime_smoke_evidence_path:
+        type: string
+        default: build/runtime-smoke/vulkan-runtime-smoke.json
 
 jobs:
   vulkan-runtime-certification:
@@ -15,19 +37,65 @@ jobs:
         shell: bash
         run: |
           echo "Runner: $RUNNER_OS"
+          echo "runtime_smoke_source_path=${{ inputs.runtime_smoke_source_path }}"
+          echo "runtime_smoke_build_script_path=${{ inputs.runtime_smoke_build_script_path }}"
+          echo "runtime_smoke_executable_path=${{ inputs.runtime_smoke_executable_path }}"
+          echo "runtime_smoke_evidence_path=${{ inputs.runtime_smoke_evidence_path }}"
           vulkaninfo || true
 
       - name: Verify runtime smoke source exists
         shell: bash
         run: |
-          test -f tools/runtime-smoke/runtime_smoke.cpp
+          if [ -f "${{ inputs.runtime_smoke_source_path }}" ]; then
+            echo "Found runtime smoke source: ${{ inputs.runtime_smoke_source_path }}"
+          elif [ "${{ inputs.require_runtime_smoke_source }}" = "true" ]; then
+            echo "Missing runtime smoke source: ${{ inputs.runtime_smoke_source_path }}"
+            exit 1
+          else
+            echo "No runtime smoke source present"
+          fi
+
+      - name: Build Vulkan runtime smoke
+        shell: bash
+        run: |
+          if [ -f "${{ inputs.runtime_smoke_build_script_path }}" ]; then
+            chmod +x "${{ inputs.runtime_smoke_build_script_path }}"
+            GGML_RUNTIME_BACKEND=vulkan "${{ inputs.runtime_smoke_build_script_path }}"
+          elif [ "${{ inputs.require_runtime_smoke_build_script }}" = "true" ]; then
+            echo "Missing runtime smoke build script: ${{ inputs.runtime_smoke_build_script_path }}"
+            exit 1
+          else
+            echo "No runtime smoke build script present"
+          fi
 
       - name: Vulkan runtime smoke certification
         shell: bash
         run: |
-          if [ -x build/runtime-smoke/runtime_smoke ]; then
-            build/runtime-smoke/runtime_smoke --backend vulkan --require-backend
+          if [ -x "${{ inputs.runtime_smoke_executable_path }}" ]; then
+            "${{ inputs.runtime_smoke_executable_path }}" --backend vulkan --require-backend
           else
-            echo "runtime_smoke executable missing; future Vulkan build step required"
+            echo "runtime_smoke executable missing: ${{ inputs.runtime_smoke_executable_path }}"
             exit 1
           fi
+
+      - name: Verify Vulkan runtime smoke evidence
+        if: always()
+        shell: bash
+        run: |
+          if [ -f "${{ inputs.runtime_smoke_evidence_path }}" ]; then
+            echo "Found Vulkan runtime smoke evidence: ${{ inputs.runtime_smoke_evidence_path }}"
+          elif [ "${{ inputs.require_runtime_smoke_evidence }}" = "true" ]; then
+            echo "Missing Vulkan runtime smoke evidence: ${{ inputs.runtime_smoke_evidence_path }}"
+            exit 1
+          else
+            echo "No Vulkan runtime smoke evidence present"
+          fi
+
+      - name: Upload Vulkan runtime smoke evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: vulkan-runtime-smoke
+          path: ${{ inputs.runtime_smoke_evidence_path }}
+          if-no-files-found: ignore

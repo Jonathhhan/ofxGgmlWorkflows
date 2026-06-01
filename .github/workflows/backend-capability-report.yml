@@ -2,6 +2,16 @@ name: reusable-backend-capability-report
 
 on:
   workflow_call:
+    inputs:
+      require_generator:
+        type: boolean
+        default: false
+      require_report_artifact:
+        type: boolean
+        default: false
+      report_artifact_path:
+        type: string
+        default: docs/backend-capability-report.md
 
 jobs:
   backend-capability-report:
@@ -20,10 +30,20 @@ jobs:
         run: |
           if [ -f scripts/generate-backend-capability-report.py ]; then
             python3 scripts/generate-backend-capability-report.py
+          elif [ "${{ inputs.require_generator }}" = "true" ]; then
+            echo "Missing backend capability report generator: scripts/generate-backend-capability-report.py"
+            exit 1
           else
             echo "No backend capability report generator present"
           fi
 
-      - name: Future artifact upload placeholder
+      - name: Verify backend capability report
         run: |
-          echo "Future runtime capability artifact upload goes here"
+          if [ -f "${{ inputs.report_artifact_path }}" ]; then
+            echo "Found backend capability report: ${{ inputs.report_artifact_path }}"
+          elif [ "${{ inputs.require_report_artifact }}" = "true" ]; then
+            echo "Missing backend capability report: ${{ inputs.report_artifact_path }}"
+            exit 1
+          else
+            echo "No backend capability report artifact present"
+          fi
