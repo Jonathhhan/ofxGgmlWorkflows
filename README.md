@@ -190,10 +190,15 @@ jobs:
       required_backend: cuda
       required_result: pass
       minimum_certification_level: runtime-certified
+      quality_report_path: build/evidence/evidence-quality.md
 ```
 
 See [docs/evidence-schema-v1.md](docs/evidence-schema-v1.md) for the required
-fields, optional certification fields, and ownership split.
+fields, optional certification fields, and ownership split. Both
+`evidence-validation.yml` and `release-gate.yml` use
+`scripts/validate-evidence.py` so advisory checks and release gates share one
+evidence validation implementation. The validator also writes an advisory
+quality report so weak evidence is visible before stricter gates are enabled.
 
 ## Policy
 

@@ -20,6 +20,8 @@ All notable changes to ofxGgmlWorkflows are documented here.
 - CUDA, Metal, and Vulkan runtime certification workflows now accept caller-owned runtime smoke build scripts, executable paths, and evidence paths
 - Added Evidence Schema v1 docs, JSON schema, and `evidence-validation.yml` for advisory-to-required evidence quality and freshness checks
 - `evidence-validation.yml` and `release-gate.yml` can now require matching backend, result, and minimum certification level evidence
+- Added `scripts/validate-evidence.py` so evidence validation and release gates share one implementation
+- Evidence validation can now write an advisory quality report for evidence completeness before stricter gates are enabled
 - Rewrote `scripts/workflow-metadata-extractor.ps1` with proper PowerShell syntax and YAML-aware metadata extraction
 - Added `docs/codex-ecosystem-usage.md` with Codex ecosystem usage patterns and best practices
 - `.gitignore` to prevent accidental commits of generated artifacts, model weights, build output, and IDE metadata

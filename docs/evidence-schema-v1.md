@@ -94,3 +94,13 @@ evidence generator consistently writes commit and timestamp metadata.
 `evidence-validation.yml` can require at least one evidence record matching a
 backend, result, and minimum certification level. `release-gate.yml` exposes the
 same filter for release-facing evidence.
+
+## Quality Reports
+
+`scripts/validate-evidence.py` can write an advisory Markdown quality report.
+The report scores whether evidence includes the fields that make future gates
+trustworthy: schema core fields, current SHA, freshness, backend/result/level
+matches, command, tool versions, device summary, and artifact path.
+
+Quality scores are informational. Use them to improve evidence generators before
+turning on required schema, freshness, or release-gate inputs.

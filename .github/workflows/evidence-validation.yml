@@ -47,6 +47,10 @@ on:
         type: string
         required: false
         default: ""
+      quality_report_path:
+        type: string
+        required: false
+        default: build/evidence/evidence-quality.md
       upload_evidence:
         type: boolean
         required: false
@@ -70,254 +74,21 @@ jobs:
           python-version: '3.x'
 
       - name: Validate evidence schema
-        env:
-          EVIDENCE_PATH: ${{ inputs.evidence_path }}
-          REQUIRE_EVIDENCE_FILE: ${{ inputs.require_evidence_file }}
-          REQUIRE_SCHEMA_VALID: ${{ inputs.require_schema_valid }}
-          ALLOWED_SCHEMA_VERSIONS: ${{ inputs.allowed_schema_versions }}
-          REQUIRE_CURRENT_SHA: ${{ inputs.require_current_sha }}
-          EXPECTED_COMMIT_SHA: ${{ inputs.expected_commit_sha }}
-          GITHUB_SHA: ${{ github.sha }}
-          REQUIRE_FRESHNESS: ${{ inputs.require_freshness }}
-          MAX_EVIDENCE_AGE_HOURS: ${{ inputs.max_evidence_age_hours }}
-          REQUIRED_BACKEND: ${{ inputs.required_backend }}
-          REQUIRED_RESULT: ${{ inputs.required_result }}
-          MINIMUM_CERTIFICATION_LEVEL: ${{ inputs.minimum_certification_level }}
         shell: bash
         run: |
-          python3 - <<'PY'
-          import datetime
-          import glob
-          import json
-          import os
-          import sys
-
-          evidence_path = os.environ["EVIDENCE_PATH"]
-          require_evidence_file = os.environ["REQUIRE_EVIDENCE_FILE"] == "true"
-          require_schema_valid = os.environ["REQUIRE_SCHEMA_VALID"] == "true"
-          require_current_sha = os.environ["REQUIRE_CURRENT_SHA"] == "true"
-          expected_commit_sha = os.environ["EXPECTED_COMMIT_SHA"].strip() or os.environ["GITHUB_SHA"].strip()
-          require_freshness = os.environ["REQUIRE_FRESHNESS"] == "true"
-          required_backend = os.environ["REQUIRED_BACKEND"].strip()
-          required_result = os.environ["REQUIRED_RESULT"].strip()
-          minimum_certification_level = os.environ["MINIMUM_CERTIFICATION_LEVEL"].strip()
-          max_evidence_age_hours_raw = os.environ["MAX_EVIDENCE_AGE_HOURS"].strip()
-          try:
-              max_evidence_age_hours = float(max_evidence_age_hours_raw)
-          except ValueError:
-              print(
-                  f"max_evidence_age_hours must be numeric: {max_evidence_age_hours_raw}",
-                  file=sys.stderr,
-              )
-              sys.exit(1)
-          allowed_versions = {
-              item.strip()
-              for item in os.environ["ALLOWED_SCHEMA_VERSIONS"].split(",")
-              if item.strip()
-          }
-
-          evidence_files = sorted(set(glob.glob(evidence_path, recursive=True)))
-          if not evidence_files and os.path.isfile(evidence_path):
-              evidence_files = [evidence_path]
-
-          if not evidence_files:
-              message = f"No evidence files matched: {evidence_path}"
-              if require_evidence_file:
-                  print(message, file=sys.stderr)
-                  sys.exit(1)
-              print(message)
-              sys.exit(0)
-
-          required_fields = (
-              "schema_version",
-              "repo",
-              "lane",
-              "commit_sha",
-              "workflow_name",
-              "runner_os",
-              "backend",
-              "result",
-              "timestamp",
-              "artifact_path",
-          )
-          valid_results = {"pass", "fail", "skipped", "not_certified"}
-          valid_levels = {
-              "declared",
-              "smoke-built",
-              "runtime-certified",
-              "release-gated",
-          }
-          level_order = {
-              "declared": 0,
-              "smoke-built": 1,
-              "runtime-certified": 2,
-              "release-gated": 3,
-          }
-          errors = []
-          matching_records = 0
-          require_matching_record = any(
-              (required_backend, required_result, minimum_certification_level)
-          )
-
-          if required_result and required_result not in valid_results:
-              errors.append(
-                  f"required_result must be one of: {', '.join(sorted(valid_results))}"
-              )
-          if minimum_certification_level and minimum_certification_level not in valid_levels:
-              errors.append(
-                  f"minimum_certification_level must be one of: {', '.join(sorted(valid_levels))}"
-              )
-
-          def as_records(data):
-              if isinstance(data, list):
-                  return data
-              return [data]
-
-          def non_empty_string(value):
-              return isinstance(value, str) and bool(value.strip())
-
-          def parse_timestamp(value):
-              if not isinstance(value, str) or not value.strip():
-                  return None
-              normalized = value.replace("Z", "+00:00")
-              try:
-                  parsed = datetime.datetime.fromisoformat(normalized)
-              except ValueError:
-                  return None
-              if parsed.tzinfo is None:
-                  parsed = parsed.replace(tzinfo=datetime.timezone.utc)
-              return parsed.astimezone(datetime.timezone.utc)
-
-          def validate_record(path, index, record):
-              global matching_records
-              prefix = f"{path}[{index}]"
-              if not isinstance(record, dict):
-                  errors.append(f"{prefix} must be a JSON object")
-                  return
-
-              for field in required_fields:
-                  if field not in record:
-                      errors.append(f"{prefix} missing required field: {field}")
-
-              version = str(record.get("schema_version", "")).strip()
-              if allowed_versions and version not in allowed_versions:
-                  errors.append(f"{prefix} has unsupported schema_version: {version}")
-
-              for field in (
-                  "repo",
-                  "lane",
-                  "commit_sha",
-                  "workflow_name",
-                  "runner_os",
-                  "backend",
-                  "artifact_path",
-              ):
-                  if field in record and not non_empty_string(record[field]):
-                      errors.append(f"{prefix}.{field} must be a non-empty string")
-
-              if "commit_sha" in record and non_empty_string(record["commit_sha"]):
-                  if len(record["commit_sha"]) < 7:
-                      errors.append(f"{prefix}.commit_sha must be at least 7 characters")
-                  elif require_current_sha and expected_commit_sha:
-                      actual_sha = record["commit_sha"].lower()
-                      expected_sha = expected_commit_sha.lower()
-                      if not (
-                          actual_sha == expected_sha
-                          or actual_sha.startswith(expected_sha)
-                          or expected_sha.startswith(actual_sha)
-                      ):
-                          errors.append(
-                              f"{prefix}.commit_sha {record['commit_sha']} does not match expected {expected_commit_sha}"
-                          )
-
-              result = record.get("result")
-              if result is not None and result not in valid_results:
-                  errors.append(
-                      f"{prefix}.result must be one of: {', '.join(sorted(valid_results))}"
-                  )
-
-              level = record.get("certification_level")
-              if level is not None and level not in valid_levels:
-                  errors.append(
-                      f"{prefix}.certification_level must be one of: {', '.join(sorted(valid_levels))}"
-                  )
-
-              if "timestamp" in record:
-                  parsed_timestamp = parse_timestamp(record["timestamp"])
-                  if parsed_timestamp is None:
-                      errors.append(f"{prefix}.timestamp must be an ISO 8601 date-time")
-                  elif require_freshness:
-                      if max_evidence_age_hours <= 0:
-                          errors.append(
-                              f"{prefix} cannot check freshness without max_evidence_age_hours greater than 0"
-                          )
-                      else:
-                          now = datetime.datetime.now(datetime.timezone.utc)
-                          age_hours = (now - parsed_timestamp).total_seconds() / 3600
-                          if age_hours < 0:
-                              errors.append(f"{prefix}.timestamp is in the future")
-                          elif age_hours > max_evidence_age_hours:
-                              errors.append(
-                                  f"{prefix} evidence is stale: {age_hours:.2f}h old, limit is {max_evidence_age_hours:.2f}h"
-                              )
-
-              tool_versions = record.get("tool_versions")
-              if tool_versions is not None and not isinstance(tool_versions, dict):
-                  errors.append(f"{prefix}.tool_versions must be an object when present")
-
-              if require_matching_record:
-                  backend_matches = (
-                      not required_backend
-                      or str(record.get("backend", "")).strip() == required_backend
-                  )
-                  result_matches = (
-                      not required_result
-                      or str(record.get("result", "")).strip() == required_result
-                  )
-                  level_value = str(record.get("certification_level", "")).strip()
-                  level_matches = (
-                      not minimum_certification_level
-                      or (
-                          level_value in level_order
-                          and level_order[level_value] >= level_order[minimum_certification_level]
-                      )
-                  )
-                  if backend_matches and result_matches and level_matches:
-                      matching_records += 1
-
-          for path in evidence_files:
-              try:
-                  with open(path, "r", encoding="utf-8") as handle:
-                      data = json.load(handle)
-              except Exception as exc:
-                  errors.append(f"{path} could not be parsed as JSON: {exc}")
-                  continue
-
-              records = as_records(data)
-              for index, record in enumerate(records):
-                  validate_record(path, index, record)
-
-          if require_matching_record and matching_records == 0:
-              filters = []
-              if required_backend:
-                  filters.append(f"backend={required_backend}")
-              if required_result:
-                  filters.append(f"result={required_result}")
-              if minimum_certification_level:
-                  filters.append(f"certification_level>={minimum_certification_level}")
-              errors.append(f"No evidence record matched required filters: {', '.join(filters)}")
-
-          if errors:
-              print("Evidence schema validation issues:")
-              for error in errors:
-                  print(f"- {error}")
-              if require_schema_valid or require_current_sha or require_freshness or require_matching_record:
-                  sys.exit(1)
-              print("Evidence issues are advisory because enforcement inputs are false.")
-              sys.exit(0)
-
-          print(f"Validated {len(evidence_files)} evidence file(s).")
-          PY
+          python3 scripts/validate-evidence.py \
+            --evidence-path "${{ inputs.evidence_path }}" \
+            --require-evidence-file "${{ inputs.require_evidence_file }}" \
+            --require-schema-valid "${{ inputs.require_schema_valid }}" \
+            --allowed-schema-versions "${{ inputs.allowed_schema_versions }}" \
+            --require-current-sha "${{ inputs.require_current_sha }}" \
+            --expected-commit-sha "${{ inputs.expected_commit_sha || github.sha }}" \
+            --require-freshness "${{ inputs.require_freshness }}" \
+            --max-evidence-age-hours "${{ inputs.max_evidence_age_hours }}" \
+            --required-backend "${{ inputs.required_backend }}" \
+            --required-result "${{ inputs.required_result }}" \
+            --minimum-certification-level "${{ inputs.minimum_certification_level }}" \
+            --quality-report-path "${{ inputs.quality_report_path }}"
 
       - name: Upload evidence
         if: always() && inputs.upload_evidence
@@ -325,5 +96,7 @@ jobs:
         continue-on-error: true
         with:
           name: ${{ inputs.artifact_name }}
-          path: ${{ inputs.evidence_path }}
+          path: |
+            ${{ inputs.evidence_path }}
+            ${{ inputs.quality_report_path }}
           if-no-files-found: ignore

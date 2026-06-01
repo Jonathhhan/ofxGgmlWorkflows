@@ -200,6 +200,7 @@ jobs:
       require_schema_valid: false
       require_current_sha: false
       minimum_certification_level: ""
+      quality_report_path: build/evidence/evidence-quality.md
 ```
 
 ## Core coordination
@@ -246,6 +247,10 @@ expect workflow callers to stay aligned with these names:
   `commit_sha` and `timestamp` fields.
 - Require backend/result/certification-level filters only after the caller
   produces at least one matching evidence record.
+- Keep evidence policy changes in `scripts/validate-evidence.py` so
+  `evidence-validation.yml` and `release-gate.yml` do not drift.
+- Review the generated evidence quality report before promoting advisory
+  evidence checks into required release gates.
 - Keep reusable policy in `ofxGgmlWorkflows`; keep repository-specific commands
   in the caller repository.
 - Treat backend certification workflows as lane-specific until the relevant

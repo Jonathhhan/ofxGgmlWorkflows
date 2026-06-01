@@ -60,6 +60,7 @@ Assert-Path (Join-Path $repoRoot "docs\codex-qwen3-rtx3090-profile.md") "Codex Q
 Assert-Path (Join-Path $repoRoot "docs\codex-ecosystem-usage.md") "ecosystem usage docs"
 Assert-Path (Join-Path $repoRoot "docs\evidence-schema-v1.md") "evidence schema docs"
 Assert-Path (Join-Path $repoRoot "schemas\evidence-v1.schema.json") "evidence JSON schema"
+Assert-Path (Join-Path $repoRoot "scripts\validate-evidence.py") "evidence validator"
 Assert-Path (Join-Path $repoRoot "scripts\workflow-metadata-extractor.ps1") "workflow metadata extractor"
 Assert-Path (Join-Path $repoRoot "HERMES.md") "Hermes instructions"
 Assert-Path (Join-Path $repoRoot "AGENTS.md") "Codex instructions"
@@ -76,6 +77,7 @@ Assert-NoBom (Join-Path $repoRoot ".github\copilot-instructions.md") "copilot-in
 Assert-NoBom (Join-Path $repoRoot "docs\codex-ecosystem-usage.md") "ecosystem usage docs"
 Assert-NoBom (Join-Path $repoRoot "docs\evidence-schema-v1.md") "evidence schema docs"
 Assert-NoBom (Join-Path $repoRoot "schemas\evidence-v1.schema.json") "evidence JSON schema"
+Assert-NoBom (Join-Path $repoRoot "scripts\validate-evidence.py") "evidence validator"
 Assert-NoBom (Join-Path $repoRoot "scripts\workflow-metadata-extractor.ps1") "workflow metadata extractor"
 
 $workflowFiles = @(Get-ChildItem -LiteralPath $workflowRoot -Filter "*.yml" -File)
@@ -126,6 +128,8 @@ Assert-FileContains (Join-Path $workflowRoot "release-gate.yml") "max_evidence_a
 Assert-FileContains (Join-Path $workflowRoot "release-gate.yml") "required_evidence_backend" "release-gate.yml"
 Assert-FileContains (Join-Path $workflowRoot "release-gate.yml") "required_evidence_result" "release-gate.yml"
 Assert-FileContains (Join-Path $workflowRoot "release-gate.yml") "minimum_certification_level" "release-gate.yml"
+Assert-FileContains (Join-Path $workflowRoot "release-gate.yml") "quality_report_path" "release-gate.yml"
+Assert-FileContains (Join-Path $workflowRoot "release-gate.yml") "scripts/validate-evidence.py" "release-gate.yml"
 Assert-FileContains (Join-Path $workflowRoot "backend-runtime-check.yml") "require_runtime_smoke_source" "backend-runtime-check.yml"
 Assert-FileContains (Join-Path $workflowRoot "backend-runtime-check.yml") "require_linux_runtime_smoke_script" "backend-runtime-check.yml"
 Assert-FileContains (Join-Path $workflowRoot "backend-runtime-check.yml") "require_windows_runtime_smoke_scripts" "backend-runtime-check.yml"
@@ -143,7 +147,9 @@ Assert-FileContains (Join-Path $workflowRoot "evidence-validation.yml") "max_evi
 Assert-FileContains (Join-Path $workflowRoot "evidence-validation.yml") "required_backend" "evidence-validation.yml"
 Assert-FileContains (Join-Path $workflowRoot "evidence-validation.yml") "required_result" "evidence-validation.yml"
 Assert-FileContains (Join-Path $workflowRoot "evidence-validation.yml") "minimum_certification_level" "evidence-validation.yml"
+Assert-FileContains (Join-Path $workflowRoot "evidence-validation.yml") "quality_report_path" "evidence-validation.yml"
 Assert-FileContains (Join-Path $workflowRoot "evidence-validation.yml") "upload_evidence" "evidence-validation.yml"
+Assert-FileContains (Join-Path $workflowRoot "evidence-validation.yml") "scripts/validate-evidence.py" "evidence-validation.yml"
 
 foreach ($reportWorkflow in @(
 	"backend-capability-report.yml",
@@ -209,6 +215,8 @@ Assert-FileContains (Join-Path $repoRoot "README.md") "require_runtime_smoke_bui
 Assert-FileContains (Join-Path $repoRoot "README.md") "require_schema_valid" "README"
 Assert-FileContains (Join-Path $repoRoot "README.md") "require_current_sha" "README"
 Assert-FileContains (Join-Path $repoRoot "README.md") "minimum_certification_level" "README"
+Assert-FileContains (Join-Path $repoRoot "README.md") "validate-evidence.py" "README"
+Assert-FileContains (Join-Path $repoRoot "README.md") "quality_report_path" "README"
 Assert-FileContains (Join-Path $repoRoot "CHANGELOG.md") "require_addon_config" "CHANGELOG"
 
 Write-Step "Checking evidence schema JSON"
@@ -216,6 +224,9 @@ $schemaJson = Get-Content -LiteralPath (Join-Path $repoRoot "schemas\evidence-v1
 if ($schemaJson.title -ne "ofxGgml Evidence v1") {
 	throw "evidence schema returned the wrong title."
 }
+Assert-FileContains (Join-Path $repoRoot "scripts\validate-evidence.py") "VALID_RESULTS" "evidence validator"
+Assert-FileContains (Join-Path $repoRoot "scripts\validate-evidence.py") "minimum_certification_level" "evidence validator"
+Assert-FileContains (Join-Path $repoRoot "scripts\validate-evidence.py") "quality_report_path" "evidence validator"
 
 Write-Step "Checking workflow metadata extractor"
 $metadataJson = & (Join-Path $repoRoot "scripts\workflow-metadata-extractor.ps1") -WorkflowPath (Join-Path $workflowRoot "addon-hygiene.yml")
