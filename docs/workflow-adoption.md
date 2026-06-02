@@ -94,8 +94,11 @@ jobs:
     uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/release-gate.yml@main
     with:
       require_release_readiness_score: true
+      release_readiness_score_path: docs/release-readiness-score.md
       require_metadata_reconciliation_report: true
+      metadata_reconciliation_report_path: docs/metadata-reconciliation-report.md
       require_cross_repo_capability_map: true
+      cross_repo_capability_map_path: docs/cross-repo-capability-map.md
       require_evidence_file: true
       require_evidence_schema_valid: true
       require_current_sha_evidence: true
@@ -226,7 +229,7 @@ expect workflow callers to stay aligned with these names:
   managed addons once their `ofxggml-addon.json` feature list and README
   `## Features` section describe the same public promise.
 - Enable `release-gate.yml` required report inputs only after the caller
-  generates the corresponding report artifacts under `docs/`.
+  generates the corresponding report artifacts at the configured report paths.
 - Enable release evidence gates only after `evidence-validation.yml` has passed
   in advisory mode for the same evidence path.
 - Enable `backend-runtime-check.yml` required smoke inputs only after the

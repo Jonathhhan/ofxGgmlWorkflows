@@ -1,0 +1,44 @@
+{
+  "schema_version": "1",
+  "repo": "ofxGgmlSam",
+  "lane": "companion",
+  "commit_sha": "0123456789abcdef0123456789abcdef01234567",
+  "workflow_name": "of-smoke-build",
+  "runner_os": "Windows",
+  "backend": "cpu",
+  "result": "pass",
+  "timestamp": "2026-06-02T01:30:00Z",
+  "artifact_path": "build/of-smoke/of-smoke-build.json",
+  "command": "scripts/ci-build-of-examples.ps1",
+  "command_exit_code": 0,
+  "started_at": "2026-06-02T01:24:00Z",
+  "completed_at": "2026-06-02T01:30:00Z",
+  "certification_level": "smoke-built",
+  "workflow_run_id": "123456789",
+  "workflow_run_attempt": "1",
+  "workflow_ref": "Jonathhhan/ofxGgmlSam/.github/workflows/of-smoke-build.yml@main",
+  "workflow_sha": "0123456789abcdef0123456789abcdef01234567",
+  "job_name": "of-smoke-build",
+  "matrix_os": "windows-latest",
+  "runner_labels": [
+    "self-hosted",
+    "windows"
+  ],
+  "event_name": "workflow_dispatch",
+  "producer": "of-smoke-evidence",
+  "producer_version": "1.0.0",
+  "tree_state": "clean",
+  "base_commit_sha": "0123456789abcdef0123456789abcdef01234567",
+  "untracked_count": 0,
+  "artifact_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "subject_paths": [
+    "examples/ofxGgmlSamPointExample"
+  ],
+  "tool_versions": {
+    "openframeworks": "0.12.x",
+    "ggml": "local"
+  },
+  "device_summary": {
+    "cpu": "generic"
+  }
+}

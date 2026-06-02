@@ -14,6 +14,12 @@ VALID_LEVELS = {
     "runtime-certified",
     "release-gated",
 }
+VALID_TREE_STATES = {
+    "clean",
+    "dirty",
+    "generated-only",
+    "unknown",
+}
 LEVEL_ORDER = {
     "declared": 0,
     "smoke-built": 1,
@@ -73,6 +79,46 @@ def as_records(data):
 
 def non_empty_string(value):
     return isinstance(value, str) and bool(value.strip())
+
+
+def non_negative_integer(value):
+    return isinstance(value, int) and not isinstance(value, bool) and value >= 0
+
+
+def non_empty_string_or_integer(value):
+    return non_empty_string(value) or isinstance(value, int)
+
+
+def string_list(value):
+    return (
+        isinstance(value, list)
+        and bool(value)
+        and all(non_empty_string(item) for item in value)
+    )
+
+
+def runner_labels_value(value):
+    return non_empty_string(value) or string_list(value)
+
+
+def hex_digest(value, length):
+    if not non_empty_string(value) or len(value.strip()) != length:
+        return False
+    return all(char in "0123456789abcdefABCDEF" for char in value.strip())
+
+
+def has_any(record, fields):
+    return any(record.get(field) not in (None, "", [], {}) for field in fields)
+
+
+def valid_workflow_provenance(record):
+    return (
+        non_empty_string_or_integer(record.get("workflow_run_id"))
+        and non_empty_string_or_integer(record.get("workflow_run_attempt"))
+        and non_empty_string(record.get("workflow_ref"))
+        and non_empty_string(record.get("workflow_sha"))
+        and non_empty_string(record.get("job_name"))
+    )
 
 
 def parse_timestamp(value):
@@ -227,6 +273,65 @@ def main():
         if tool_versions is not None and not isinstance(tool_versions, dict):
             errors.append(f"{prefix}.tool_versions must be an object when present")
 
+        for field in (
+            "workflow_ref",
+            "workflow_sha",
+            "job_name",
+            "matrix_os",
+            "event_name",
+            "producer",
+            "producer_version",
+            "base_commit_sha",
+            "working_tree_patch_hash",
+        ):
+            if field in record and not non_empty_string(record[field]):
+                errors.append(f"{prefix}.{field} must be a non-empty string")
+
+        for field in ("workflow_run_id", "workflow_run_attempt"):
+            if field in record and not non_empty_string_or_integer(record[field]):
+                errors.append(f"{prefix}.{field} must be a non-empty string or integer")
+
+        for field in ("workflow_sha", "base_commit_sha"):
+            if field in record and non_empty_string(record[field]):
+                if len(record[field]) < 7:
+                    errors.append(f"{prefix}.{field} must be at least 7 characters")
+
+        if "runner_labels" in record and not runner_labels_value(record["runner_labels"]):
+            errors.append(f"{prefix}.runner_labels must be a string or string array")
+
+        if "command_exit_code" in record and not isinstance(record["command_exit_code"], int):
+            errors.append(f"{prefix}.command_exit_code must be an integer")
+
+        parsed_started_at = None
+        if "started_at" in record:
+            parsed_started_at = parse_timestamp(record["started_at"])
+            if parsed_started_at is None:
+                errors.append(f"{prefix}.started_at must be an ISO 8601 date-time")
+
+        parsed_completed_at = None
+        if "completed_at" in record:
+            parsed_completed_at = parse_timestamp(record["completed_at"])
+            if parsed_completed_at is None:
+                errors.append(f"{prefix}.completed_at must be an ISO 8601 date-time")
+
+        if parsed_started_at and parsed_completed_at and parsed_completed_at < parsed_started_at:
+            errors.append(f"{prefix}.completed_at must not be before started_at")
+
+        if "tree_state" in record and record["tree_state"] not in VALID_TREE_STATES:
+            errors.append(
+                f"{prefix}.tree_state must be one of: "
+                f"{', '.join(sorted(VALID_TREE_STATES))}"
+            )
+
+        if "untracked_count" in record and not non_negative_integer(record["untracked_count"]):
+            errors.append(f"{prefix}.untracked_count must be a non-negative integer")
+
+        if "artifact_sha256" in record and not hex_digest(record["artifact_sha256"], 64):
+            errors.append(f"{prefix}.artifact_sha256 must be a 64-character hex digest")
+
+        if "subject_paths" in record and not string_list(record["subject_paths"]):
+            errors.append(f"{prefix}.subject_paths must be a non-empty string array")
+
         if require_matching_record:
             backend_matches = (
                 not required_backend
@@ -305,6 +410,28 @@ def main():
                 ),
                 ("device_summary", bool(record.get("device_summary"))),
                 ("artifact_path", non_empty_string(record.get("artifact_path"))),
+                ("workflow_provenance", valid_workflow_provenance(record)),
+                (
+                    "runner_context",
+                    has_any(record, ("matrix_os", "runner_labels", "event_name")),
+                ),
+                (
+                    "producer",
+                    non_empty_string(record.get("producer"))
+                    and non_empty_string(record.get("producer_version")),
+                ),
+                ("command_exit_code", isinstance(record.get("command_exit_code"), int)),
+                (
+                    "timing",
+                    parse_timestamp(record.get("started_at")) is not None
+                    and parse_timestamp(record.get("completed_at")) is not None,
+                ),
+                ("tree_state", record.get("tree_state") in VALID_TREE_STATES),
+                (
+                    "artifact_integrity",
+                    hex_digest(record.get("artifact_sha256"), 64)
+                    or string_list(record.get("subject_paths")),
+                ),
             )
         )
 

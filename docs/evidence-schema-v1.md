@@ -35,6 +35,13 @@ current-SHA and max-age validation.
 | `tool_versions` | Object containing compiler, ggml, openFrameworks, backend, or script versions. |
 | `device_summary` | Redacted or generic device information for hardware-backed runs. |
 | `reason_code` | Reason for `skipped` or `not_certified` evidence. |
+| `workflow_run_id`, `workflow_run_attempt`, `workflow_ref`, `workflow_sha`, `job_name` | Workflow provenance for the run that produced the evidence. |
+| `matrix_os`, `runner_labels`, `event_name` | Runner and event context for interpreting CI evidence. |
+| `producer`, `producer_version` | Evidence generator name and version. |
+| `command_exit_code`, `started_at`, `completed_at` | Command result and timing details. |
+| `tree_state` | One of `clean`, `dirty`, `generated-only`, or `unknown`. |
+| `base_commit_sha`, `working_tree_patch_hash`, `untracked_count` | Optional dirty-tree disclosure for advisory evidence. |
+| `artifact_sha256`, `subject_paths` | Artifact integrity and subject path hints for future trust gates. |
 
 ## Example
 
@@ -51,7 +58,19 @@ current-SHA and max-age validation.
   "timestamp": "2026-06-02T01:30:00Z",
   "artifact_path": "build/of-smoke/of-smoke-build.json",
   "command": "scripts/ci-build-of-examples.sh",
+  "command_exit_code": 0,
+  "started_at": "2026-06-02T01:24:00Z",
+  "completed_at": "2026-06-02T01:30:00Z",
   "certification_level": "smoke-built",
+  "workflow_run_id": "123456789",
+  "workflow_run_attempt": "1",
+  "workflow_ref": "Jonathhhan/ofxGgmlSam/.github/workflows/of-smoke-build.yml@main",
+  "workflow_sha": "0123456789abcdef0123456789abcdef01234567",
+  "job_name": "of-smoke-build",
+  "tree_state": "clean",
+  "subject_paths": [
+    "examples/ofxGgmlSamPointExample"
+  ],
   "tool_versions": {
     "openframeworks": "0.12.x",
     "ggml": "local"
@@ -100,7 +119,9 @@ same filter for release-facing evidence.
 `scripts/validate-evidence.py` can write an advisory Markdown quality report.
 The report scores whether evidence includes the fields that make future gates
 trustworthy: schema core fields, current SHA, freshness, backend/result/level
-matches, command, tool versions, device summary, and artifact path.
+matches, command, tool versions, device summary, artifact path, workflow
+provenance, runner context, producer version, command result, timing,
+tree-state disclosure, and artifact integrity hints.
 
 Quality scores are informational. Use them to improve evidence generators before
 turning on required schema, freshness, or release-gate inputs.

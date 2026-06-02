@@ -7,14 +7,26 @@ on:
         type: boolean
         required: false
         default: false
+      release_readiness_score_path:
+        type: string
+        required: false
+        default: docs/release-readiness-score.md
       require_metadata_reconciliation_report:
         type: boolean
         required: false
         default: false
+      metadata_reconciliation_report_path:
+        type: string
+        required: false
+        default: docs/metadata-reconciliation-report.md
       require_cross_repo_capability_map:
         type: boolean
         required: false
         default: false
+      cross_repo_capability_map_path:
+        type: string
+        required: false
+        default: docs/cross-repo-capability-map.md
       evidence_path:
         type: string
         required: false
@@ -74,13 +86,45 @@ jobs:
           python-version: '3.x'
 
       - name: Gate summary
+        env:
+          RELEASE_READINESS_SCORE_PATH: ${{ inputs.release_readiness_score_path }}
+          METADATA_RECONCILIATION_REPORT_PATH: ${{ inputs.metadata_reconciliation_report_path }}
+          CROSS_REPO_CAPABILITY_MAP_PATH: ${{ inputs.cross_repo_capability_map_path }}
+          EVIDENCE_PATH: ${{ inputs.evidence_path }}
         run: |
           echo "Checking release gate reports"
-          echo "evidence_path=${{ inputs.evidence_path }}"
+          echo "release_readiness_score_path=${RELEASE_READINESS_SCORE_PATH}"
+          echo "metadata_reconciliation_report_path=${METADATA_RECONCILIATION_REPORT_PATH}"
+          echo "cross_repo_capability_map_path=${CROSS_REPO_CAPABILITY_MAP_PATH}"
+          echo "evidence_path=${EVIDENCE_PATH}"
 
       - name: Required reports
+        env:
+          RELEASE_READINESS_SCORE_PATH: ${{ inputs.release_readiness_score_path }}
+          METADATA_RECONCILIATION_REPORT_PATH: ${{ inputs.metadata_reconciliation_report_path }}
+          CROSS_REPO_CAPABILITY_MAP_PATH: ${{ inputs.cross_repo_capability_map_path }}
         run: |
           missing=0
+          invalid=0
+
+          validate_report_path() {
+            local path="$1"
+            local label="$2"
+
+            case "$path" in
+              "")
+                echo "Invalid $label path: path must not be empty"
+                invalid=1
+                return
+                ;;
+              /*|\\*|~*|[A-Za-z]:*|*..*|*$'\n'*|*$'\r'*)
+                echo "Invalid $label path: $path"
+                echo "Report paths must be relative repository paths without parent traversal"
+                invalid=1
+                return
+                ;;
+            esac
+          }
 
           check_report() {
             local path="$1"
@@ -100,9 +144,17 @@ jobs:
             fi
           }
 
-          check_report "docs/release-readiness-score.md" "release readiness score" "${{ inputs.require_release_readiness_score }}"
-          check_report "docs/metadata-reconciliation-report.md" "metadata reconciliation report" "${{ inputs.require_metadata_reconciliation_report }}"
-          check_report "docs/cross-repo-capability-map.md" "cross-repo capability map" "${{ inputs.require_cross_repo_capability_map }}"
+          validate_report_path "$RELEASE_READINESS_SCORE_PATH" "release readiness score"
+          validate_report_path "$METADATA_RECONCILIATION_REPORT_PATH" "metadata reconciliation report"
+          validate_report_path "$CROSS_REPO_CAPABILITY_MAP_PATH" "cross-repo capability map"
+
+          if [ "$invalid" -ne 0 ]; then
+            exit "$invalid"
+          fi
+
+          check_report "$RELEASE_READINESS_SCORE_PATH" "release readiness score" "${{ inputs.require_release_readiness_score }}"
+          check_report "$METADATA_RECONCILIATION_REPORT_PATH" "metadata reconciliation report" "${{ inputs.require_metadata_reconciliation_report }}"
+          check_report "$CROSS_REPO_CAPABILITY_MAP_PATH" "cross-repo capability map" "${{ inputs.require_cross_repo_capability_map }}"
 
           exit "$missing"
 

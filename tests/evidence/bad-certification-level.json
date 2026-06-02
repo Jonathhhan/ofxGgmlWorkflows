@@ -1,0 +1,13 @@
+{
+  "schema_version": "1",
+  "repo": "ofxGgmlSam",
+  "lane": "companion",
+  "commit_sha": "0123456789abcdef0123456789abcdef01234567",
+  "workflow_name": "of-smoke-build",
+  "runner_os": "Windows",
+  "backend": "cpu",
+  "result": "pass",
+  "timestamp": "2026-06-02T01:30:00Z",
+  "artifact_path": "build/of-smoke/of-smoke-build.json",
+  "certification_level": "gold"
+}

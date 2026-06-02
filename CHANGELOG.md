@@ -11,6 +11,7 @@ All notable changes to ofxGgmlWorkflows are documented here.
 - `metadata-validation.yml` now accepts built-in metadata and README feature checks for managed addon feature promises
 - `release-check.yml` now accepts `require_addon_config` input for non-addon repositories
 - `release-gate.yml` now accepts required report inputs so callers can fail when release planning artifacts are missing
+- `release-gate.yml` now accepts configurable report paths for release readiness, metadata reconciliation, and capability map artifacts
 - `release-gate.yml` now accepts evidence schema, current-SHA, and freshness gates for release evidence
 - `backend-runtime-check.yml` now accepts required smoke source, setup script, and evidence inputs for executable CPU runtime checks
 - Generator/report workflows now accept `require_generator`, `require_report_artifact`, and `report_artifact_path` inputs for explicit soft-vs-required rollout
@@ -19,11 +20,14 @@ All notable changes to ofxGgmlWorkflows are documented here.
 - `multi-platform-smoke.yml` and `of-smoke-build.yml` now accept caller-owned script and smoke build evidence requirements
 - CUDA, Metal, and Vulkan runtime certification workflows now accept caller-owned runtime smoke build scripts, executable paths, and evidence paths
 - Added Evidence Schema v1 docs, JSON schema, and `evidence-validation.yml` for advisory-to-required evidence quality and freshness checks
+- Evidence Schema v1 now documents optional workflow provenance, runner context, dirty-tree disclosure, timing, producer, and artifact integrity fields
 - `evidence-validation.yml` and `release-gate.yml` can now require matching backend, result, and minimum certification level evidence
 - Added `scripts/validate-evidence.py` so evidence validation and release gates share one implementation
+- Added fixture-based evidence validator contract tests for valid records, invalid optional fields, freshness, SHA, certification, and array records
 - Evidence validation can now write an advisory quality report for evidence completeness before stricter gates are enabled
 - Rewrote `scripts/workflow-metadata-extractor.ps1` with proper PowerShell syntax and YAML-aware metadata extraction
 - Added `docs/codex-ecosystem-usage.md` with Codex ecosystem usage patterns and best practices
+- Added `docs/future-ecosystem-roadmap.md` with the pilot-first ecosystem roadmap from agent review
 - `.gitignore` to prevent accidental commits of generated artifacts, model weights, build output, and IDE metadata
 - Expanded README with full workflow catalog organized by adoption tier
 - `CHANGELOG.md` to satisfy `release-check.yml` requirements

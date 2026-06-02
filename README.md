@@ -7,6 +7,8 @@ This repository centralizes lightweight automation for openFrameworks addons in 
 ## Workflows
 
 All workflows are reusable via `workflow_call`. See [`docs/workflow-adoption.md`](docs/workflow-adoption.md) for adoption tiers, caller patterns, and Core coordination notes.
+See [`docs/future-ecosystem-roadmap.md`](docs/future-ecosystem-roadmap.md) for
+the current pilot-first ecosystem roadmap.
 
 ### Agent baseline
 
@@ -109,8 +111,11 @@ jobs:
     uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/release-gate.yml@main
     with:
       require_release_readiness_score: true
+      release_readiness_score_path: docs/release-readiness-score.md
       require_metadata_reconciliation_report: true
+      metadata_reconciliation_report_path: docs/metadata-reconciliation-report.md
       require_cross_repo_capability_map: true
+      cross_repo_capability_map_path: docs/cross-repo-capability-map.md
       require_evidence_file: true
       require_evidence_schema_valid: true
       require_current_sha_evidence: true
@@ -132,7 +137,9 @@ jobs:
 ```
 
 Generator/report workflows can also move from advisory to required once the
-caller owns the generator script and output artifact:
+caller owns the generator script and output artifact. The release gate uses
+matching configurable report paths so callers can keep generated docs in their
+own stable locations:
 
 ```yaml
 jobs:
