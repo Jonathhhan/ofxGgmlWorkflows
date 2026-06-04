@@ -36,6 +36,8 @@ files should remain self-contained, but they should mirror these principles.
 - Use `docs\hermes-openframeworks-ggml-skills.md` as the shared learning loop
   for openFrameworks addon shape, ggml runtime ownership, evidence honesty, and
   generated artifact hygiene.
+- Use `docs\hermes-ecosystem-learning-plan.md` as the instruction, RAG/memory,
+  skill, and evaluation plan before fine-tuning or broad Hermes automation.
 
 ## Agent Skills
 

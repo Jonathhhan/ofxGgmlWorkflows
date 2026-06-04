@@ -23,6 +23,9 @@ Hermes/Codex/Copilot baseline that local instruction files should mirror.
 Use [`docs/hermes-openframeworks-ggml-skills.md`](docs/hermes-openframeworks-ggml-skills.md)
 to teach Hermes and sibling agents the openFrameworks addon loop, ggml runtime
 ownership split, evidence expectations, and generated artifact hygiene.
+Use [`docs/hermes-ecosystem-learning-plan.md`](docs/hermes-ecosystem-learning-plan.md)
+for Hermes instruction, RAG/memory, skill, and evaluation layers before
+fine-tuning or broad agent automation.
 
 ### Agent baseline
 

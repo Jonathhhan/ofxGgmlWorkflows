@@ -14,6 +14,7 @@
     { "path": "docs/evidence-schema-v1.md", "label": "evidence schema docs" },
     { "path": "docs/evidence-promotion-playbook.md", "label": "evidence promotion playbook" },
     { "path": "docs/future-ecosystem-roadmap.md", "label": "future ecosystem roadmap" },
+    { "path": "docs/hermes-ecosystem-learning-plan.md", "label": "Hermes ecosystem learning plan" },
     { "path": "docs/hermes-openframeworks-ggml-skills.md", "label": "Hermes openFrameworks and ggml skills" },
     { "path": "docs/managed-addon-rollout.md", "label": "managed addon rollout matrix" },
     { "path": "docs/sam-evidence-pilot-handoff.md", "label": "Sam evidence pilot handoff" },
@@ -46,6 +47,7 @@
     "docs/evidence-schema-v1.md",
     "docs/evidence-promotion-playbook.md",
     "docs/future-ecosystem-roadmap.md",
+    "docs/hermes-ecosystem-learning-plan.md",
     "docs/hermes-openframeworks-ggml-skills.md",
     "docs/managed-addon-rollout.md",
     "docs/sam-evidence-pilot-handoff.md",
@@ -171,6 +173,7 @@
         "evidence-promotion-playbook.md",
         "agent-handoff-contract.md",
         "agent-baseline.md",
+        "hermes-ecosystem-learning-plan.md",
         "hermes-openframeworks-ggml-skills.md",
         "coding-agent-instructions.yml",
         "addon-hygiene.yml",
@@ -205,10 +208,30 @@
         "ofxGgmlWorkflows",
         "ofxGgmlCore",
         "agent-handoff-contract.md",
+        "hermes-ecosystem-learning-plan.md",
         "hermes-openframeworks-ggml-skills.md",
         "openFrameworks",
         "ggml",
         "Evidence Schema v1"
+      ]
+    },
+    {
+      "path": "docs/hermes-ecosystem-learning-plan.md",
+      "label": "Hermes ecosystem learning plan",
+      "patterns": [
+        "Instruction Layer",
+        "RAG And Memory Layer",
+        "Skill Layer",
+        "Evaluation Layer",
+        "openFrameworks project layout",
+        "ofLogNotice",
+        "ggml/Core provider rules",
+        "Core owns shared runtime",
+        "companion addons own model UX",
+        "openframeworks-addon-layout",
+        "ggml-runtime-provider",
+        "release-readiness-evidence",
+        "plan-release-readiness.ps1 -Json"
       ]
     },
     {
@@ -217,6 +240,7 @@
       "patterns": [
         "openFrameworks Skill Loop",
         "ggml Skill Loop",
+        "hermes-ecosystem-learning-plan.md",
         "addon_config.mk",
         "ofLogNotice",
         "projectGenerator",

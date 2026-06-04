@@ -8,6 +8,8 @@ boundaries or inventing unstable runtime policy.
 
 - Learn the local openFrameworks addon shape before editing behavior.
 - Learn the ggml runtime split before moving shared code or evidence policy.
+- Use `docs\hermes-ecosystem-learning-plan.md` when a task asks how Hermes
+  should learn, retrieve, evaluate, or practice ecosystem work.
 - Prefer documentation, validation, workflow, and planning changes when the
   requested improvement is about agents or ecosystem coordination.
 - Keep model-specific UX and runtime behavior in companion addons unless the
