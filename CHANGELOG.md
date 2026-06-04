@@ -32,6 +32,7 @@ All notable changes to ofxGgmlWorkflows are documented here.
 - Strengthened reusable workflow caller fixture validation to assert advisory-vs-required input semantics
 - Added `docs/agent-handoff-contract.md` for cross-repo workflow rollout, evidence promotion, release planning, and companion PR fanout handoffs
 - Added `docs/agent-baseline.md` as the shared Hermes, Codex, and Copilot operating baseline
+- Added `docs/hermes-openframeworks-ggml-skills.md` to teach agents the openFrameworks addon loop, ggml runtime ownership split, evidence expectations, and generated artifact hygiene
 - Added `docs/managed-addon-rollout.md` with the current ready/dirty repository matrix and advisory-first all-addon rollout queue
 - Added `docs/sam-evidence-pilot-handoff.md` to define the Sam CPU evidence wrapper contract before advisory caller rollout
 - Added `docs/evidence-promotion-playbook.md` with the advisory-visible to release-gated promotion ladder

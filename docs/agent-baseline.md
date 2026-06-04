@@ -33,6 +33,24 @@ files should remain self-contained, but they should mirror these principles.
   runtime, and evidence generation commands in caller repositories.
 - Move shared helpers into `ofxGgmlCore` only after they are stable,
   domain-neutral, dependency-light, and covered by focused tests.
+- Use `docs\hermes-openframeworks-ggml-skills.md` as the shared learning loop
+  for openFrameworks addon shape, ggml runtime ownership, evidence honesty, and
+  generated artifact hygiene.
+
+## Agent Skills
+
+- For openFrameworks work, learn `addon_config.mk`, `src`, examples, docs,
+  scripts, tests, logging conventions, projectGenerator lifecycle, and generated
+  artifact boundaries before editing behavior.
+- For ggml work, keep Core as the shared runtime base, keep model-specific UX
+  and setup in companion addons, avoid reverse Core dependencies, and promote
+  shared code only after it is stable, neutral, light, and tested.
+- For runtime and backend claims, use Evidence Schema v1 and reusable workflow
+  validators so evidence includes backend, runner/device context, provenance,
+  commit SHA, tree state, timing, producer, and artifact integrity.
+- For handoff, report the Core planning/readiness command, dirty-repo stop
+  conditions, local validation, and any evidence profile or workflow_call
+  contract touched.
 
 ## Hygiene
 

@@ -20,6 +20,9 @@ passing cross-repo rollout, evidence promotion, release planning, or companion
 PR fanout work between agents.
 Use [`docs/agent-baseline.md`](docs/agent-baseline.md) as the canonical
 Hermes/Codex/Copilot baseline that local instruction files should mirror.
+Use [`docs/hermes-openframeworks-ggml-skills.md`](docs/hermes-openframeworks-ggml-skills.md)
+to teach Hermes and sibling agents the openFrameworks addon loop, ggml runtime
+ownership split, evidence expectations, and generated artifact hygiene.
 
 ### Agent baseline
 

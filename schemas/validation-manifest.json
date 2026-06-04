@@ -14,6 +14,7 @@
     { "path": "docs/evidence-schema-v1.md", "label": "evidence schema docs" },
     { "path": "docs/evidence-promotion-playbook.md", "label": "evidence promotion playbook" },
     { "path": "docs/future-ecosystem-roadmap.md", "label": "future ecosystem roadmap" },
+    { "path": "docs/hermes-openframeworks-ggml-skills.md", "label": "Hermes openFrameworks and ggml skills" },
     { "path": "docs/managed-addon-rollout.md", "label": "managed addon rollout matrix" },
     { "path": "docs/sam-evidence-pilot-handoff.md", "label": "Sam evidence pilot handoff" },
     { "path": "docs/workflow-adoption.md", "label": "workflow adoption docs" },
@@ -45,6 +46,7 @@
     "docs/evidence-schema-v1.md",
     "docs/evidence-promotion-playbook.md",
     "docs/future-ecosystem-roadmap.md",
+    "docs/hermes-openframeworks-ggml-skills.md",
     "docs/managed-addon-rollout.md",
     "docs/sam-evidence-pilot-handoff.md",
     "schemas/evidence-v1.schema.json",
@@ -169,6 +171,7 @@
         "evidence-promotion-playbook.md",
         "agent-handoff-contract.md",
         "agent-baseline.md",
+        "hermes-openframeworks-ggml-skills.md",
         "coding-agent-instructions.yml",
         "addon-hygiene.yml",
         "metadata-validation.yml",
@@ -201,7 +204,26 @@
       "patterns": [
         "ofxGgmlWorkflows",
         "ofxGgmlCore",
-        "agent-handoff-contract.md"
+        "agent-handoff-contract.md",
+        "hermes-openframeworks-ggml-skills.md",
+        "openFrameworks",
+        "ggml",
+        "Evidence Schema v1"
+      ]
+    },
+    {
+      "path": "docs/hermes-openframeworks-ggml-skills.md",
+      "label": "Hermes openFrameworks and ggml skills",
+      "patterns": [
+        "openFrameworks Skill Loop",
+        "ggml Skill Loop",
+        "addon_config.mk",
+        "ofLogNotice",
+        "projectGenerator",
+        "ofxGgmlCore",
+        "workflow_call",
+        "Evidence Schema v1",
+        "artifact integrity"
       ]
     },
     {
@@ -270,7 +292,8 @@
         "ofxGgmlWorkflows",
         "workflow_call",
         "agent-handoff-contract.md",
-        "agent-baseline.md"
+        "agent-baseline.md",
+        "hermes-openframeworks-ggml-skills.md"
       ]
     },
     {
@@ -280,7 +303,8 @@
         "ofxGgmlWorkflows",
         "workflow_call",
         "agent-handoff-contract.md",
-        "agent-baseline.md"
+        "agent-baseline.md",
+        "hermes-openframeworks-ggml-skills.md"
       ]
     },
     {
@@ -290,7 +314,8 @@
         "ofxGgmlWorkflows",
         "workflow_call",
         "agent-handoff-contract.md",
-        "agent-baseline.md"
+        "agent-baseline.md",
+        "hermes-openframeworks-ggml-skills.md"
       ]
     },
     {
@@ -300,7 +325,8 @@
         "ofxGgmlWorkflows",
         "check-ecosystem-readiness",
         "agent-handoff-contract.md",
-        "agent-baseline.md"
+        "agent-baseline.md",
+        "hermes-openframeworks-ggml-skills.md"
       ]
     },
     {
