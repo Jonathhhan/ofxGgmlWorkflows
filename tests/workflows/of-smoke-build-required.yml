@@ -1,0 +1,17 @@
+name: of-smoke-build-required
+
+on:
+  pull_request:
+
+jobs:
+  smoke:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/of-smoke-build.yml@main
+    with:
+      require_examples: true
+      require_project_generator_script: true
+      project_generator_script_path: scripts/ci-generate-of-projects.sh
+      require_example_build_script: true
+      example_build_script_path: scripts/ci-build-of-examples.sh
+      require_smoke_build_evidence: true
+      smoke_build_evidence_path: build/of-smoke/of-smoke-build.json
+

@@ -21,6 +21,12 @@ Companion repositories should keep caller workflows small. The reusable
 workflow should own the policy; the addon repository should only decide when
 to run it and which inputs apply.
 
+The agent baseline check verifies that `HERMES.md`, `AGENTS.md`, Copilot
+repository instructions, and the Copilot ecosystem instruction file carry
+lane/scope language, Core planning or shared-base ownership, companion addon
+boundaries, generated artifact hygiene, validation guidance, and cross-repo
+handoff guidance.
+
 ```yaml
 name: coding-agent-instructions
 
@@ -93,15 +99,11 @@ jobs:
   release-gate:
     uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/release-gate.yml@main
     with:
-      require_release_readiness_score: true
+      release_profile: release
       release_readiness_score_path: docs/release-readiness-score.md
-      require_metadata_reconciliation_report: true
       metadata_reconciliation_report_path: docs/metadata-reconciliation-report.md
-      require_cross_repo_capability_map: true
       cross_repo_capability_map_path: docs/cross-repo-capability-map.md
-      require_evidence_file: true
-      require_evidence_schema_valid: true
-      require_current_sha_evidence: true
+      max_evidence_age_hours: "24"
 ```
 
 For backend CPU runtime smoke, keep the reusable workflow advisory until the
@@ -199,12 +201,24 @@ jobs:
     uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/evidence-validation.yml@main
     with:
       evidence_path: build/**/*.json
-      require_evidence_file: false
-      require_schema_valid: false
-      require_current_sha: false
+      evidence_profile: advisory
       minimum_certification_level: ""
       quality_report_path: build/evidence/evidence-quality.md
 ```
+
+Use `custom` profiles when a caller needs exact boolean control. Otherwise use
+profiles to state rollout intent:
+
+| Workflow | Profile | Enforcement |
+| --- | --- | --- |
+| `evidence-validation.yml` | `advisory` | Upload quality report without required evidence gates. |
+| `evidence-validation.yml` | `schema` | Require an evidence file and schema-valid records. |
+| `evidence-validation.yml` | `current-sha` | Require schema-valid records for the current commit. |
+| `evidence-validation.yml` | `fresh-current-sha`, `certification`, `release` | Require schema-valid, current, fresh evidence; backend/result/certification filters stay caller-owned. |
+| `release-gate.yml` | `advisory` | Require no reports or evidence gates. |
+| `release-gate.yml` | `reports` | Require generated release reports while leaving evidence booleans caller-owned. |
+| `release-gate.yml` | `evidence` | Require schema-valid current-SHA release evidence while leaving report booleans caller-owned. |
+| `release-gate.yml` | `release` | Require generated reports plus schema-valid, current, fresh release evidence. |
 
 ## Core coordination
 

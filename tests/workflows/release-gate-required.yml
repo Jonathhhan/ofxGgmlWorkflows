@@ -1,0 +1,19 @@
+name: release-gate-required
+
+on:
+  pull_request:
+
+jobs:
+  release-gate:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/release-gate.yml@main
+    with:
+      release_profile: release
+      release_readiness_score_path: docs/release-readiness-score.md
+      metadata_reconciliation_report_path: docs/metadata-reconciliation-report.md
+      cross_repo_capability_map_path: docs/cross-repo-capability-map.md
+      evidence_path: build/release/*.json
+      max_evidence_age_hours: "24"
+      required_evidence_backend: release
+      required_evidence_result: pass
+      minimum_certification_level: release-gated
+      quality_report_path: build/release/release-evidence-quality.md

@@ -39,6 +39,8 @@ scripts\plan-ecosystem.ps1
 - Identify workflow template needs
 - Ensure consistency across companions
 - Validate governance patterns
+- Produce an agent handoff from `docs\agent-handoff-contract.md` before
+  companion PR fanout or evidence promotion
 
 ### Pattern 2: Workflow Template Development
 **When to use:** Creating reusable GitHub Actions workflows
@@ -96,7 +98,8 @@ jobs:
 ## Best Practices
 
 ### 1. Start with Context
-Always read HERMES.md and AGENTS.md before making changes.
+Always read HERMES.md, AGENTS.md, and `docs\agent-baseline.md` before making
+changes.
 
 ### 2. Validate Before Committing
 Run scripts\validate-local.ps1 to ensure repository integrity.
@@ -119,6 +122,12 @@ For cross-repo work, use planning tools from Core:
 ### 6. Avoid Reverse Dependencies
 - Companions may depend on Core
 - Core must NOT depend on companions
+
+### 7. Use Handoffs For Fanout
+- Use `docs\agent-handoff-contract.md` before cross-repo workflow rollout,
+  evidence promotion, release planning, or companion PR fanout.
+- Include dirty-repo caveats and stop conditions so the receiving agent knows
+  when to pause instead of widening changes.
 
 ## Common Workflows
 

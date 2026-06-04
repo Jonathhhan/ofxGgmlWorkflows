@@ -7,6 +7,10 @@ on:
         type: boolean
         required: false
         default: false
+      release_profile:
+        type: string
+        required: false
+        default: custom
       release_readiness_score_path:
         type: string
         required: false
@@ -77,8 +81,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout caller repository
         uses: actions/checkout@v4
+
+      - name: Checkout workflow tools
+        uses: actions/checkout@v4
+        with:
+          repository: Jonathhhan/ofxGgmlWorkflows
+          ref: ${{ github.workflow_sha }}
+          path: .ofxggml-workflows
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -87,12 +98,14 @@ jobs:
 
       - name: Gate summary
         env:
+          RELEASE_PROFILE: ${{ inputs.release_profile }}
           RELEASE_READINESS_SCORE_PATH: ${{ inputs.release_readiness_score_path }}
           METADATA_RECONCILIATION_REPORT_PATH: ${{ inputs.metadata_reconciliation_report_path }}
           CROSS_REPO_CAPABILITY_MAP_PATH: ${{ inputs.cross_repo_capability_map_path }}
           EVIDENCE_PATH: ${{ inputs.evidence_path }}
         run: |
           echo "Checking release gate reports"
+          echo "release_profile=${RELEASE_PROFILE}"
           echo "release_readiness_score_path=${RELEASE_READINESS_SCORE_PATH}"
           echo "metadata_reconciliation_report_path=${METADATA_RECONCILIATION_REPORT_PATH}"
           echo "cross_repo_capability_map_path=${CROSS_REPO_CAPABILITY_MAP_PATH}"
@@ -100,12 +113,40 @@ jobs:
 
       - name: Required reports
         env:
+          RELEASE_PROFILE: ${{ inputs.release_profile }}
           RELEASE_READINESS_SCORE_PATH: ${{ inputs.release_readiness_score_path }}
           METADATA_RECONCILIATION_REPORT_PATH: ${{ inputs.metadata_reconciliation_report_path }}
           CROSS_REPO_CAPABILITY_MAP_PATH: ${{ inputs.cross_repo_capability_map_path }}
         run: |
           missing=0
           invalid=0
+          require_release_readiness_score="${{ inputs.require_release_readiness_score }}"
+          require_metadata_reconciliation_report="${{ inputs.require_metadata_reconciliation_report }}"
+          require_cross_repo_capability_map="${{ inputs.require_cross_repo_capability_map }}"
+
+          case "${RELEASE_PROFILE}" in
+            custom|evidence)
+              ;;
+            advisory)
+              require_release_readiness_score=false
+              require_metadata_reconciliation_report=false
+              require_cross_repo_capability_map=false
+              ;;
+            reports|release)
+              require_release_readiness_score=true
+              require_metadata_reconciliation_report=true
+              require_cross_repo_capability_map=true
+              ;;
+            *)
+              echo "Unsupported release_profile: ${RELEASE_PROFILE}"
+              echo "Allowed values: custom, advisory, reports, evidence, release"
+              exit 1
+              ;;
+          esac
+
+          echo "resolved_require_release_readiness_score=${require_release_readiness_score}"
+          echo "resolved_require_metadata_reconciliation_report=${require_metadata_reconciliation_report}"
+          echo "resolved_require_cross_repo_capability_map=${require_cross_repo_capability_map}"
 
           validate_report_path() {
             local path="$1"
@@ -152,22 +193,60 @@ jobs:
             exit "$invalid"
           fi
 
-          check_report "$RELEASE_READINESS_SCORE_PATH" "release readiness score" "${{ inputs.require_release_readiness_score }}"
-          check_report "$METADATA_RECONCILIATION_REPORT_PATH" "metadata reconciliation report" "${{ inputs.require_metadata_reconciliation_report }}"
-          check_report "$CROSS_REPO_CAPABILITY_MAP_PATH" "cross-repo capability map" "${{ inputs.require_cross_repo_capability_map }}"
+          check_report "$RELEASE_READINESS_SCORE_PATH" "release readiness score" "${require_release_readiness_score}"
+          check_report "$METADATA_RECONCILIATION_REPORT_PATH" "metadata reconciliation report" "${require_metadata_reconciliation_report}"
+          check_report "$CROSS_REPO_CAPABILITY_MAP_PATH" "cross-repo capability map" "${require_cross_repo_capability_map}"
 
           exit "$missing"
 
       - name: Evidence gate
         shell: bash
         run: |
-          python3 scripts/validate-evidence.py \
+          require_evidence_file="${{ inputs.require_evidence_file }}"
+          require_evidence_schema_valid="${{ inputs.require_evidence_schema_valid }}"
+          require_current_sha_evidence="${{ inputs.require_current_sha_evidence }}"
+          require_fresh_evidence="${{ inputs.require_fresh_evidence }}"
+
+          case "${{ inputs.release_profile }}" in
+            custom|reports)
+              ;;
+            advisory)
+              require_evidence_file=false
+              require_evidence_schema_valid=false
+              require_current_sha_evidence=false
+              require_fresh_evidence=false
+              ;;
+            evidence)
+              require_evidence_file=true
+              require_evidence_schema_valid=true
+              require_current_sha_evidence=true
+              require_fresh_evidence=false
+              ;;
+            release)
+              require_evidence_file=true
+              require_evidence_schema_valid=true
+              require_current_sha_evidence=true
+              require_fresh_evidence=true
+              ;;
+            *)
+              echo "Unsupported release_profile: ${{ inputs.release_profile }}"
+              echo "Allowed values: custom, advisory, reports, evidence, release"
+              exit 1
+              ;;
+          esac
+
+          echo "resolved_require_evidence_file=${require_evidence_file}"
+          echo "resolved_require_evidence_schema_valid=${require_evidence_schema_valid}"
+          echo "resolved_require_current_sha_evidence=${require_current_sha_evidence}"
+          echo "resolved_require_fresh_evidence=${require_fresh_evidence}"
+
+          python3 .ofxggml-workflows/scripts/validate-evidence.py \
             --evidence-path "${{ inputs.evidence_path }}" \
-            --require-evidence-file "${{ inputs.require_evidence_file }}" \
-            --require-schema-valid "${{ inputs.require_evidence_schema_valid }}" \
-            --require-current-sha "${{ inputs.require_current_sha_evidence }}" \
+            --require-evidence-file "${require_evidence_file}" \
+            --require-schema-valid "${require_evidence_schema_valid}" \
+            --require-current-sha "${require_current_sha_evidence}" \
             --expected-commit-sha "${{ inputs.expected_commit_sha || github.sha }}" \
-            --require-freshness "${{ inputs.require_fresh_evidence }}" \
+            --require-freshness "${require_fresh_evidence}" \
             --max-evidence-age-hours "${{ inputs.max_evidence_age_hours }}" \
             --required-backend "${{ inputs.required_evidence_backend }}" \
             --required-result "${{ inputs.required_evidence_result }}" \

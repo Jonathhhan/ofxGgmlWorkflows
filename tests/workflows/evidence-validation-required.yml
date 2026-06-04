@@ -1,0 +1,19 @@
+name: evidence-validation-required
+
+on:
+  pull_request:
+
+jobs:
+  evidence:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/evidence-validation.yml@main
+    with:
+      evidence_path: build/of-smoke/of-smoke-build.json
+      evidence_profile: fresh-current-sha
+      allowed_schema_versions: "1"
+      max_evidence_age_hours: "24"
+      required_backend: cpu
+      required_result: pass
+      minimum_certification_level: smoke-built
+      quality_report_path: build/evidence/evidence-quality.md
+      upload_evidence: true
+      artifact_name: ofxggml-sam-smoke-evidence

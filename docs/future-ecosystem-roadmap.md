@@ -4,10 +4,14 @@ This roadmap captures the current Hermes-style ecosystem review for
 ofxGgmlWorkflows. It is a planning artifact, not permission to edit companion
 addon source.
 
+For the concrete current repository queue, see
+`docs\managed-addon-rollout.md`.
+
 ## Current Status
 
-- `ofxGgmlWorkflows` is clean and owns reusable `workflow_call` contracts,
-  policy checks, evidence validation, and automation docs.
+- `ofxGgmlWorkflows` owns reusable `workflow_call` contracts, policy checks,
+  evidence validation, and automation docs. It is currently dirty with local
+  workflow/validation improvements in progress.
 - `ofxGgmlCore` remains the shared base and ecosystem planning/dashboard
   control plane.
 - Companion addons own backend-specific scripts, model-specific UX, and
@@ -15,7 +19,32 @@ addon source.
 - Core planning currently recommends making one backend lane genuinely useful
   before broadening automation across all companions.
 - Dirty managed repositories should be reviewed before fanout enforcement:
-  `ofxGgmlCore`, `ofxGgmlVideo`, `ofxGgmlStableDiffusion`, and `ofxGgmlRag`.
+  `ofxGgmlAudio`, `ofxGgmlMusic`, `ofxGgmlVideo`, `ofxGgmlRag`,
+  `ofxGgmlAgents`, and `ofxGgmlWorkflows`.
+- Ready managed repositories are `ofxGgmlCore`, `ofxGgmlLlama`,
+  `ofxGgmlSam`, `ofxGgmlVision`, and `ofxGgmlStableDiffusion`.
+- Classified legacy/reference siblings should stay out of managed automation
+  unless explicitly promoted: `ofxGgml`, `ofxGgml##`, `ofxGgml___`,
+  `ofxGgml______________`, `ofxGgml_X`, `ofxGgmlAAAA`,
+  `ofxGgmlDiffusion`, and `ofxGgmlXXX`.
+
+## All-Addon Improvement Queue
+
+Use this queue when the goal is to improve the whole managed family without
+editing addon runtime behavior.
+
+| Stage | Target | Action | Stop condition |
+| --- | --- | --- | --- |
+| 1 | `ofxGgmlCore` | Run planning/readiness commands and publish the current queue. | Core validation or planning failure. |
+| 2 | `ofxGgmlWorkflows` | Land reusable policy, fixtures, manifest checks, and caller examples. | Local workflow validation failure. |
+| 3 | `ofxGgmlSam` | Pilot CPU smoke evidence for `ofxGgmlSamPointExample` in advisory mode. | Missing evidence producer or dirty target repo. |
+| 4 | `ofxGgmlLlama`, `ofxGgmlVision`, `ofxGgmlStableDiffusion` | Add advisory workflow callers only after the Sam pilot is stable. | Missing caller scripts or stale Core plan. |
+| 5 | Dirty managed repos | Review unrelated work before rollout: Audio, Music, Video, Rag, Agents, Workflows. | Any unresolved dirty tree. |
+| 6 | Accelerator lanes | Add CUDA, Metal, or Vulkan certification only for repos with real self-hosted runner evidence. | No runner, no executable smoke, or stale evidence. |
+
+The queue is intentionally conservative: improve shared policy first, prove one
+CPU lane, then fan out advisory callers to clean companions before requiring
+evidence or release gates.
 
 ## Recommended Pilot
 
@@ -34,14 +63,16 @@ Reasons:
 
 1. Use Core planning to select the pilot target and expected artifact paths.
 2. Add advisory Evidence Schema v1 JSON generation in the companion.
-3. Enable `evidence-validation.yml` in advisory mode for the pilot path.
-4. Promote `of-smoke-build.yml` required script and evidence inputs only after
+3. Follow `docs\sam-evidence-pilot-handoff.md` for the Sam pilot evidence
+   wrapper before enabling the caller.
+4. Enable `evidence-validation.yml` in advisory mode for the pilot path.
+5. Promote `of-smoke-build.yml` required script and evidence inputs only after
    the pilot generator is stable.
-5. Let Core ingest the pilot evidence for dashboard and registry visibility.
-6. Add CPU `backend-runtime-check.yml` evidence after platform-native scripts
+6. Let Core ingest the pilot evidence for dashboard and registry visibility.
+7. Add CPU `backend-runtime-check.yml` evidence after platform-native scripts
    are stable.
-7. Run `release-gate.yml` in advisory mode with evidence quality reporting.
-8. Promote current-SHA, schema-valid, freshness, and certification filters only
+8. Run `release-gate.yml` in advisory mode with evidence quality reporting.
+9. Promote current-SHA, schema-valid, freshness, and certification filters only
    after repeated clean pilot runs.
 
 ## Future Feature Ideas
@@ -49,14 +80,16 @@ Reasons:
 - Generate an adoption matrix that shows each managed addon's workflow
   coverage, advisory or required gate state, evidence artifacts, and next
   recommended promotion.
-- Add workflow fixture tests for advisory versus required modes.
+- Keep workflow fixture tests for advisory versus required modes aligned with
+  the manifest-owned fixture pairs.
 - Promote optional evidence provenance, dirty-tree disclosure, and artifact
   integrity hints into stricter gates only after advisory pilot evidence is
   stable.
-- Add validator/schema consistency checks so Evidence Schema v1 and
+- Keep validator/schema consistency checks so Evidence Schema v1 and
   `scripts/validate-evidence.py` do not drift.
-- Add policy profiles such as `advisory`, `pr`, `certification`, and `release`
-  to reduce caller YAML complexity while preserving explicit inputs.
+- Keep policy profiles such as `advisory`, `schema`, `current-sha`,
+  `fresh-current-sha`, `reports`, `evidence`, and `release` manifest-owned to
+  reduce caller YAML complexity while preserving explicit inputs.
 - Maintain a runner capability registry for self-hosted accelerator lanes.
 - Add a release train simulator in Core that combines readiness, metadata,
   evidence freshness, and capability reports into a dry-run decision.

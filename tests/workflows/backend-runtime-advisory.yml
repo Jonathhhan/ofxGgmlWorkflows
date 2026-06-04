@@ -1,0 +1,16 @@
+name: backend-runtime-advisory
+
+on:
+  pull_request:
+
+jobs:
+  backend-runtime:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/backend-runtime-check.yml@main
+    with:
+      require_runtime_smoke_source: false
+      require_linux_runtime_smoke_script: false
+      require_windows_runtime_smoke_scripts: false
+      require_macos_runtime_smoke_script: false
+      require_backend_runtime_smoke_evidence: false
+      backend_runtime_smoke_evidence_path: build/runtime-smoke/backend-runtime-smoke.json
+

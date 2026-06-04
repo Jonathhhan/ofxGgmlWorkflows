@@ -1,0 +1,17 @@
+name: of-smoke-build-advisory
+
+on:
+  pull_request:
+
+jobs:
+  smoke:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/of-smoke-build.yml@main
+    with:
+      require_examples: false
+      require_project_generator_script: false
+      project_generator_script_path: scripts/ci-generate-of-projects.sh
+      require_example_build_script: false
+      example_build_script_path: scripts/ci-build-of-examples.sh
+      require_smoke_build_evidence: false
+      smoke_build_evidence_path: build/of-smoke/of-smoke-build.json
+

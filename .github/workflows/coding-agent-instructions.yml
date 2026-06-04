@@ -50,6 +50,44 @@ jobs:
             exit 1
           fi
 
+      - name: Verify ecosystem guardrails
+        run: |
+          check_pattern() {
+            local file="$1"
+            local pattern="$2"
+            local label="$3"
+
+            if ! grep -Eiq "$pattern" "$file"; then
+              echo "$file must mention $label"
+              exit 1
+            fi
+          }
+
+          check_pattern HERMES.md "lane|scope|role" "repository lane or scope"
+          check_pattern AGENTS.md "lane|scope|role" "repository lane or scope"
+          check_pattern .github/copilot-instructions.md "lane|scope|role" "repository lane or scope"
+          check_pattern .github/instructions/ofxggml-ecosystem.instructions.md "lane|scope|role" "repository lane or scope"
+
+          check_pattern HERMES.md "ofxGgmlCore|Core" "Core planning/shared-base ownership"
+          check_pattern AGENTS.md "ofxGgmlCore|Core" "Core planning/shared-base ownership"
+          check_pattern .github/copilot-instructions.md "ofxGgmlCore|Core" "Core planning/shared-base ownership"
+          check_pattern .github/instructions/ofxggml-ecosystem.instructions.md "ofxGgmlCore|Core" "Core planning/shared-base ownership"
+
+          check_pattern HERMES.md "companion" "companion addon boundary"
+          check_pattern AGENTS.md "companion" "companion addon boundary"
+          check_pattern .github/copilot-instructions.md "companion" "companion addon boundary"
+          check_pattern .github/instructions/ofxggml-ecosystem.instructions.md "companion" "companion addon boundary"
+
+          check_pattern HERMES.md "generated|binaries|model|runtime|cache" "generated artifact hygiene"
+          check_pattern AGENTS.md "generated|binaries|model|runtime|cache" "generated artifact hygiene"
+          check_pattern .github/copilot-instructions.md "generated|binaries|model|runtime|cache" "generated artifact hygiene"
+          check_pattern .github/instructions/ofxggml-ecosystem.instructions.md "generated|binaries|model|runtime|cache" "generated artifact hygiene"
+
+          check_pattern HERMES.md "handoff|agent-handoff-contract|plan-ecosystem" "cross-repo handoff or planning guidance"
+          check_pattern AGENTS.md "handoff|agent-handoff-contract|plan-ecosystem" "cross-repo handoff or planning guidance"
+          check_pattern .github/copilot-instructions.md "handoff|agent-handoff-contract|plan-ecosystem" "cross-repo handoff or planning guidance"
+          check_pattern .github/instructions/ofxggml-ecosystem.instructions.md "handoff|agent-handoff-contract|plan-ecosystem" "cross-repo handoff or planning guidance"
+
       - name: Verify addon repository shape
         if: inputs.require_addon_config
         run: |

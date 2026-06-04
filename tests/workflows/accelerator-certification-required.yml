@@ -1,0 +1,17 @@
+name: accelerator-certification-required
+
+on:
+  workflow_dispatch:
+
+jobs:
+  cuda:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/cuda-runtime-certification.yml@main
+    with:
+      runtime_smoke_source_path: tools/runtime-smoke/runtime_smoke.cpp
+      require_runtime_smoke_source: true
+      runtime_smoke_build_script_path: scripts/ci-build-runtime-smoke.sh
+      require_runtime_smoke_build_script: true
+      runtime_smoke_executable_path: build/runtime-smoke/runtime_smoke
+      require_runtime_smoke_evidence: true
+      runtime_smoke_evidence_path: build/runtime-smoke/cuda-runtime-smoke.json
+

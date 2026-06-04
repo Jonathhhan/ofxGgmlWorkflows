@@ -1,0 +1,12 @@
+name: evidence-validation-advisory
+
+on:
+  pull_request:
+
+jobs:
+  evidence:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/evidence-validation.yml@main
+    with:
+      evidence_path: build/of-smoke/*.json
+      evidence_profile: advisory
+      quality_report_path: build/evidence/evidence-quality.md

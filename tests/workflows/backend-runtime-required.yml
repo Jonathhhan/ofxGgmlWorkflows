@@ -1,0 +1,16 @@
+name: backend-runtime-required
+
+on:
+  pull_request:
+
+jobs:
+  backend-runtime:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/backend-runtime-check.yml@main
+    with:
+      require_runtime_smoke_source: true
+      require_linux_runtime_smoke_script: true
+      require_windows_runtime_smoke_scripts: true
+      require_macos_runtime_smoke_script: true
+      require_backend_runtime_smoke_evidence: true
+      backend_runtime_smoke_evidence_path: build/runtime-smoke/backend-runtime-smoke.json
+

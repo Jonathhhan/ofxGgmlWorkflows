@@ -7,6 +7,10 @@ on:
         type: string
         required: false
         default: build/**/*.json
+      evidence_profile:
+        type: string
+        required: false
+        default: custom
       require_evidence_file:
         type: boolean
         required: false
@@ -65,8 +69,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout caller repository
         uses: actions/checkout@v4
+
+      - name: Checkout workflow tools
+        uses: actions/checkout@v4
+        with:
+          repository: Jonathhhan/ofxGgmlWorkflows
+          ref: ${{ github.workflow_sha }}
+          path: .ofxggml-workflows
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -76,14 +87,59 @@ jobs:
       - name: Validate evidence schema
         shell: bash
         run: |
-          python3 scripts/validate-evidence.py \
+          require_evidence_file="${{ inputs.require_evidence_file }}"
+          require_schema_valid="${{ inputs.require_schema_valid }}"
+          require_current_sha="${{ inputs.require_current_sha }}"
+          require_freshness="${{ inputs.require_freshness }}"
+
+          case "${{ inputs.evidence_profile }}" in
+            custom)
+              ;;
+            advisory)
+              require_evidence_file=false
+              require_schema_valid=false
+              require_current_sha=false
+              require_freshness=false
+              ;;
+            schema)
+              require_evidence_file=true
+              require_schema_valid=true
+              require_current_sha=false
+              require_freshness=false
+              ;;
+            current-sha)
+              require_evidence_file=true
+              require_schema_valid=true
+              require_current_sha=true
+              require_freshness=false
+              ;;
+            fresh-current-sha|certification|release)
+              require_evidence_file=true
+              require_schema_valid=true
+              require_current_sha=true
+              require_freshness=true
+              ;;
+            *)
+              echo "Unsupported evidence_profile: ${{ inputs.evidence_profile }}"
+              echo "Allowed values: custom, advisory, schema, current-sha, fresh-current-sha, certification, release"
+              exit 1
+              ;;
+          esac
+
+          echo "evidence_profile=${{ inputs.evidence_profile }}"
+          echo "resolved_require_evidence_file=${require_evidence_file}"
+          echo "resolved_require_schema_valid=${require_schema_valid}"
+          echo "resolved_require_current_sha=${require_current_sha}"
+          echo "resolved_require_freshness=${require_freshness}"
+
+          python3 .ofxggml-workflows/scripts/validate-evidence.py \
             --evidence-path "${{ inputs.evidence_path }}" \
-            --require-evidence-file "${{ inputs.require_evidence_file }}" \
-            --require-schema-valid "${{ inputs.require_schema_valid }}" \
+            --require-evidence-file "${require_evidence_file}" \
+            --require-schema-valid "${require_schema_valid}" \
             --allowed-schema-versions "${{ inputs.allowed_schema_versions }}" \
-            --require-current-sha "${{ inputs.require_current_sha }}" \
+            --require-current-sha "${require_current_sha}" \
             --expected-commit-sha "${{ inputs.expected_commit_sha || github.sha }}" \
-            --require-freshness "${{ inputs.require_freshness }}" \
+            --require-freshness "${require_freshness}" \
             --max-evidence-age-hours "${{ inputs.max_evidence_age_hours }}" \
             --required-backend "${{ inputs.required_backend }}" \
             --required-result "${{ inputs.required_result }}" \

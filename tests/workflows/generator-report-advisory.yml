@@ -1,0 +1,13 @@
+name: generator-report-advisory
+
+on:
+  pull_request:
+
+jobs:
+  readiness:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/release-readiness-score.yml@main
+    with:
+      require_generator: false
+      require_report_artifact: false
+      report_artifact_path: docs/release-readiness-score.md
+

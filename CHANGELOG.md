@@ -22,8 +22,20 @@ All notable changes to ofxGgmlWorkflows are documented here.
 - Added Evidence Schema v1 docs, JSON schema, and `evidence-validation.yml` for advisory-to-required evidence quality and freshness checks
 - Evidence Schema v1 now documents optional workflow provenance, runner context, dirty-tree disclosure, timing, producer, and artifact integrity fields
 - `evidence-validation.yml` and `release-gate.yml` can now require matching backend, result, and minimum certification level evidence
+- `evidence-validation.yml` now accepts `evidence_profile` and `release-gate.yml` now accepts `release_profile` for common advisory-to-required rollout modes
 - Added `scripts/validate-evidence.py` so evidence validation and release gates share one implementation
+- Added schema drift checks so Evidence Schema v1 and `scripts/validate-evidence.py` keep required fields and enums aligned
+- Added `schemas/validation-manifest.json` and manifest checks for expected files, workflow inventory, evidence fixture inventory, workflow fixture inventory, advisory-vs-required fixture pairs, rollout profile allowlists, docs coverage, validator capability tokens, instruction hooks, self-validation hooks, and shared workflow pattern groups
+- Added rollout profile checks so profile allowlists, fixture usage, and docs stay aligned
 - Added fixture-based evidence validator contract tests for valid records, invalid optional fields, freshness, SHA, certification, and array records
+- Added reusable workflow caller fixtures for advisory and required rollout modes, plus local fixture contract validation
+- Strengthened reusable workflow caller fixture validation to assert advisory-vs-required input semantics
+- Added `docs/agent-handoff-contract.md` for cross-repo workflow rollout, evidence promotion, release planning, and companion PR fanout handoffs
+- Added `docs/agent-baseline.md` as the shared Hermes, Codex, and Copilot operating baseline
+- Added `docs/managed-addon-rollout.md` with the current ready/dirty repository matrix and advisory-first all-addon rollout queue
+- Added `docs/sam-evidence-pilot-handoff.md` to define the Sam CPU evidence wrapper contract before advisory caller rollout
+- Updated the ecosystem roadmap with the current all-addon improvement queue, ready repositories, dirty-repo stop conditions, and reference-repo exclusions
+- Strengthened `coding-agent-instructions.yml` to verify lane, Core planning, companion-boundary, artifact-hygiene, validation, and handoff guardrails
 - Evidence validation can now write an advisory quality report for evidence completeness before stricter gates are enabled
 - Rewrote `scripts/workflow-metadata-extractor.ps1` with proper PowerShell syntax and YAML-aware metadata extraction
 - Added `docs/codex-ecosystem-usage.md` with Codex ecosystem usage patterns and best practices
@@ -35,4 +47,5 @@ All notable changes to ofxGgmlWorkflows are documented here.
 ### Changed
 
 - README now lists all 25 workflows grouped by adoption tier (agent baseline, addon hygiene, operational visibility, compatibility/release planning, runtime certification, self-validation)
+- `evidence-validation.yml` and `release-gate.yml` now run `validate-evidence.py` from a pinned `ofxGgmlWorkflows` tools checkout instead of requiring caller repositories to carry the validator script
 - Local validation now checks every workflow file for UTF-8 BOMs

@@ -9,6 +9,15 @@ This repository centralizes lightweight automation for openFrameworks addons in 
 All workflows are reusable via `workflow_call`. See [`docs/workflow-adoption.md`](docs/workflow-adoption.md) for adoption tiers, caller patterns, and Core coordination notes.
 See [`docs/future-ecosystem-roadmap.md`](docs/future-ecosystem-roadmap.md) for
 the current pilot-first ecosystem roadmap.
+See [`docs/managed-addon-rollout.md`](docs/managed-addon-rollout.md) for the
+current ready/dirty repository matrix and all-addon rollout queue.
+Use [`docs/sam-evidence-pilot-handoff.md`](docs/sam-evidence-pilot-handoff.md)
+for the first Evidence Schema v1 companion rollout contract.
+Use [`docs/agent-handoff-contract.md`](docs/agent-handoff-contract.md) when
+passing cross-repo rollout, evidence promotion, release planning, or companion
+PR fanout work between agents.
+Use [`docs/agent-baseline.md`](docs/agent-baseline.md) as the canonical
+Hermes/Codex/Copilot baseline that local instruction files should mirror.
 
 ### Agent baseline
 
@@ -110,15 +119,11 @@ jobs:
   release-gate:
     uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/release-gate.yml@main
     with:
-      require_release_readiness_score: true
+      release_profile: release
       release_readiness_score_path: docs/release-readiness-score.md
-      require_metadata_reconciliation_report: true
       metadata_reconciliation_report_path: docs/metadata-reconciliation-report.md
-      require_cross_repo_capability_map: true
       cross_repo_capability_map_path: docs/cross-repo-capability-map.md
-      require_evidence_file: true
-      require_evidence_schema_valid: true
-      require_current_sha_evidence: true
+      max_evidence_age_hours: "24"
 ```
 
 To make backend CPU runtime smoke checks executable instead of advisory, require
@@ -191,21 +196,29 @@ jobs:
     uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/evidence-validation.yml@main
     with:
       evidence_path: build/**/*.json
-      require_evidence_file: true
-      require_schema_valid: true
-      require_current_sha: true
+      evidence_profile: current-sha
       required_backend: cuda
       required_result: pass
       minimum_certification_level: runtime-certified
       quality_report_path: build/evidence/evidence-quality.md
 ```
 
+`evidence_profile` accepts `custom`, `advisory`, `schema`, `current-sha`,
+`fresh-current-sha`, `certification`, and `release`. `release_profile` accepts
+`custom`, `advisory`, `reports`, `evidence`, and `release`. The workflows print
+the resolved enforcement inputs before running checks; `custom` preserves the
+individual boolean inputs for callers that need exact control, including
+`require_release_readiness_score`, `require_evidence_schema_valid`,
+`require_schema_valid`, and `require_current_sha`.
+
 See [docs/evidence-schema-v1.md](docs/evidence-schema-v1.md) for the required
 fields, optional certification fields, and ownership split. Both
 `evidence-validation.yml` and `release-gate.yml` use
-`scripts/validate-evidence.py` so advisory checks and release gates share one
-evidence validation implementation. The validator also writes an advisory
-quality report so weak evidence is visible before stricter gates are enabled.
+`scripts/validate-evidence.py` from this workflow repository checkout so caller
+repositories do not need to vendor policy scripts. Advisory checks and release
+gates share one evidence validation implementation. The validator also writes
+an advisory quality report so weak evidence is visible before stricter gates
+are enabled.
 
 ## Policy
 
@@ -215,7 +228,10 @@ The workflows enforce basic addon structure, artifact hygiene, and release readi
 Hermes Agent `HERMES.md` project context, Codex-style `AGENTS.md` guidance, and
 GitHub Copilot repository instructions plus
 `.github/instructions/ofxggml-ecosystem.instructions.md` for focused Copilot
-cloud agent and code review guardrails.
+cloud agent and code review guardrails. The reusable check also verifies core
+ecosystem concepts: lane ownership, Core planning/shared-base ownership,
+companion boundaries, generated artifact hygiene, validation, and handoff
+guidance.
 
 `workflow-repo-validation.yml` validates this repository's reusable workflow
 templates on push and pull request.
@@ -236,6 +252,16 @@ templates on push and pull request.
 ```powershell
 scripts\validate-local.bat
 ```
+
+Local validation includes Evidence Schema v1 drift checks, evidence validator
+fixtures, validation manifest checks, rollout profile checks, and reusable
+workflow caller fixtures under `tests/workflows/` so representative advisory
+and required caller YAML stays aligned with the reusable workflow inputs. The
+manifest in `schemas/validation-manifest.json` owns inventory-style validation
+such as expected files, workflow files, evidence fixture files, workflow fixture
+files, advisory-vs-required fixture pairs, rollout profile allowlists, docs
+coverage tokens, validator capability tokens, instruction hooks,
+self-validation hooks, and shared workflow pattern groups.
 
 On macOS/Linux:
 

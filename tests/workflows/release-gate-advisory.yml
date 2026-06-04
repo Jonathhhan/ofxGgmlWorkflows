@@ -1,0 +1,12 @@
+name: release-gate-advisory
+
+on:
+  pull_request:
+
+jobs:
+  release-gate:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/release-gate.yml@main
+    with:
+      release_profile: advisory
+      evidence_path: build/**/*.json
+      quality_report_path: build/release/release-evidence-quality.md

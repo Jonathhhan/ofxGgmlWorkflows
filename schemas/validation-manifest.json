@@ -1,0 +1,423 @@
+{
+  "required_paths": [
+    { "path": "README.md", "label": "README" },
+    { "path": "CHANGELOG.md", "label": "CHANGELOG" },
+    { "path": ".gitignore", "label": ".gitignore" },
+    { "path": "HERMES.md", "label": "Hermes instructions" },
+    { "path": "AGENTS.md", "label": "Codex instructions" },
+    { "path": ".github/copilot-instructions.md", "label": "Copilot instructions" },
+    { "path": ".github/instructions/ofxggml-ecosystem.instructions.md", "label": "Copilot ecosystem instructions" },
+    { "path": "docs/agent-baseline.md", "label": "agent baseline" },
+    { "path": "docs/agent-handoff-contract.md", "label": "agent handoff contract" },
+    { "path": "docs/codex-ecosystem-usage.md", "label": "ecosystem usage docs" },
+    { "path": "docs/codex-qwen3-rtx3090-profile.md", "label": "Codex Qwen RTX 3090 profile" },
+    { "path": "docs/evidence-schema-v1.md", "label": "evidence schema docs" },
+    { "path": "docs/future-ecosystem-roadmap.md", "label": "future ecosystem roadmap" },
+    { "path": "docs/managed-addon-rollout.md", "label": "managed addon rollout matrix" },
+    { "path": "docs/sam-evidence-pilot-handoff.md", "label": "Sam evidence pilot handoff" },
+    { "path": "docs/workflow-adoption.md", "label": "workflow adoption docs" },
+    { "path": "schemas/evidence-v1.schema.json", "label": "evidence JSON schema" },
+    { "path": "schemas/validation-manifest.json", "label": "validation manifest" },
+    { "path": "scripts/test-evidence-schema-drift.ps1", "label": "evidence schema drift tests" },
+    { "path": "scripts/test-evidence-validator.ps1", "label": "evidence validator tests" },
+    { "path": "scripts/test-validation-manifest.ps1", "label": "validation manifest tests" },
+    { "path": "scripts/test-workflow-profiles.ps1", "label": "workflow profile tests" },
+    { "path": "scripts/test-workflow-fixtures.ps1", "label": "workflow fixture tests" },
+    { "path": "scripts/validate-evidence.py", "label": "evidence validator" },
+    { "path": "scripts/validate-local.ps1", "label": "local validation" },
+    { "path": "scripts/workflow-metadata-extractor.ps1", "label": "workflow metadata extractor" },
+    { "path": "tests/evidence/full-quality.json", "label": "full-quality evidence fixture" },
+    { "path": "tests/evidence/invalid-optional-fields.json", "label": "invalid optional fields evidence fixture" },
+    { "path": "tests/workflows/evidence-validation-advisory.yml", "label": "advisory workflow fixture" },
+    { "path": "tests/workflows/release-gate-required.yml", "label": "required workflow fixture" }
+  ],
+  "no_bom_paths": [
+    "README.md",
+    "CHANGELOG.md",
+    ".gitignore",
+    ".github/copilot-instructions.md",
+    "docs/agent-baseline.md",
+    "docs/agent-handoff-contract.md",
+    "docs/codex-ecosystem-usage.md",
+    "docs/evidence-schema-v1.md",
+    "docs/future-ecosystem-roadmap.md",
+    "docs/managed-addon-rollout.md",
+    "docs/sam-evidence-pilot-handoff.md",
+    "schemas/evidence-v1.schema.json",
+    "schemas/validation-manifest.json",
+    "scripts/test-evidence-schema-drift.ps1",
+    "scripts/test-evidence-validator.ps1",
+    "scripts/test-validation-manifest.ps1",
+    "scripts/test-workflow-profiles.ps1",
+    "scripts/test-workflow-fixtures.ps1",
+    "scripts/validate-evidence.py",
+    "scripts/validate-local.ps1",
+    "scripts/workflow-metadata-extractor.ps1"
+  ],
+  "workflow_files": [
+    "addon-hygiene.yml",
+    "backend-capability-report.yml",
+    "backend-runtime-check.yml",
+    "baseline-compatibility.yml",
+    "coding-agent-instructions.yml",
+    "compatibility-matrix.yml",
+    "cross-repo-capability-map.yml",
+    "cuda-runtime-certification.yml",
+    "ecosystem-docs.yml",
+    "ecosystem-health-report.yml",
+    "ecosystem-health.yml",
+    "evidence-validation.yml",
+    "live-workflow-status.yml",
+    "metadata-reconciliation.yml",
+    "metadata-validation.yml",
+    "metal-runtime-certification.yml",
+    "multi-platform-smoke.yml",
+    "of-smoke-build.yml",
+    "release-check.yml",
+    "release-gate.yml",
+    "release-plan.yml",
+    "release-readiness-score.yml",
+    "vulkan-runtime-certification.yml",
+    "workflow-repo-validation.yml",
+    "workflow-status-plan.yml"
+  ],
+  "evidence_fixture_files": [
+    "array-records.json",
+    "bad-certification-level.json",
+    "full-quality.json",
+    "invalid-optional-fields.json",
+    "minimal-quality.json",
+    "mismatched-sha.json",
+    "stale-evidence.json"
+  ],
+  "workflow_fixture_files": [
+    "accelerator-certification-advisory.yml",
+    "accelerator-certification-required.yml",
+    "backend-runtime-advisory.yml",
+    "backend-runtime-required.yml",
+    "evidence-validation-advisory.yml",
+    "evidence-validation-required.yml",
+    "generator-report-advisory.yml",
+    "generator-report-required.yml",
+    "of-smoke-build-advisory.yml",
+    "of-smoke-build-required.yml",
+    "release-gate-advisory.yml",
+    "release-gate-required.yml"
+  ],
+  "workflow_fixture_pairs": [
+    {
+      "advisory_fixture": "accelerator-certification-advisory.yml",
+      "required_fixture": "accelerator-certification-required.yml",
+      "workflow": "cuda-runtime-certification.yml",
+      "required_inputs": [
+        "require_runtime_smoke_source",
+        "require_runtime_smoke_build_script",
+        "require_runtime_smoke_evidence"
+      ]
+    },
+    {
+      "advisory_fixture": "backend-runtime-advisory.yml",
+      "required_fixture": "backend-runtime-required.yml",
+      "workflow": "backend-runtime-check.yml",
+      "required_inputs": [
+        "require_runtime_smoke_source",
+        "require_linux_runtime_smoke_script",
+        "require_windows_runtime_smoke_scripts",
+        "require_macos_runtime_smoke_script",
+        "require_backend_runtime_smoke_evidence"
+      ]
+    },
+    {
+      "advisory_fixture": "generator-report-advisory.yml",
+      "required_fixture": "generator-report-required.yml",
+      "workflow": "release-readiness-score.yml",
+      "required_inputs": [
+        "require_generator",
+        "require_report_artifact"
+      ]
+    },
+    {
+      "advisory_fixture": "of-smoke-build-advisory.yml",
+      "required_fixture": "of-smoke-build-required.yml",
+      "workflow": "of-smoke-build.yml",
+      "required_inputs": [
+        "require_examples",
+        "require_project_generator_script",
+        "require_example_build_script",
+        "require_smoke_build_evidence"
+      ]
+    }
+  ],
+  "coverage_checks": [
+    {
+      "path": "README.md",
+      "label": "README",
+      "patterns": [
+        "workflow_call",
+        "workflow-adoption.md",
+        "future-ecosystem-roadmap.md",
+        "managed-addon-rollout.md",
+        "sam-evidence-pilot-handoff.md",
+        "agent-handoff-contract.md",
+        "agent-baseline.md",
+        "coding-agent-instructions.yml",
+        "addon-hygiene.yml",
+        "metadata-validation.yml",
+        "release-check.yml",
+        "ecosystem-health.yml",
+        "evidence-validation.yml",
+        "release-gate.yml",
+        "validate-evidence.py",
+        "quality_report_path"
+      ]
+    },
+    {
+      "path": "docs/workflow-adoption.md",
+      "label": "workflow adoption docs",
+      "patterns": [
+        "coding-agent-instructions.yml",
+        "evidence-validation.yml",
+        "check-ecosystem-readiness.bat",
+        "workflow_call",
+        "release_profile",
+        "evidence_profile"
+      ]
+    },
+    {
+      "path": "docs/agent-baseline.md",
+      "label": "agent baseline",
+      "patterns": [
+        "ofxGgmlWorkflows",
+        "ofxGgmlCore",
+        "agent-handoff-contract.md"
+      ]
+    },
+    {
+      "path": "docs/agent-handoff-contract.md",
+      "label": "agent handoff contract",
+      "patterns": [
+        "Core planning command",
+        "Dirty-repo caveats",
+        "Rollout profile"
+      ]
+    },
+    {
+      "path": "docs/managed-addon-rollout.md",
+      "label": "managed addon rollout matrix",
+      "patterns": [
+        "Ready managed repositories",
+        "Dirty managed repositories",
+        "ofxGgmlSam",
+        "evidence_profile=advisory",
+        "sam-evidence-pilot-handoff.md",
+        "Reference Repositories",
+        "Promotion Rules"
+      ]
+    },
+    {
+      "path": "docs/sam-evidence-pilot-handoff.md",
+      "label": "Sam evidence pilot handoff",
+      "patterns": [
+        "ofxGgmlSam",
+        "Evidence Schema v1",
+        "build/evidence/sam3-runtime-evidence.json",
+        "evidence_profile=advisory",
+        "evidence-validation.yml",
+        "schema_version",
+        "commit_sha"
+      ]
+    },
+    {
+      "path": "HERMES.md",
+      "label": "Hermes instructions",
+      "patterns": [
+        "ofxGgmlWorkflows",
+        "workflow_call",
+        "agent-handoff-contract.md",
+        "agent-baseline.md"
+      ]
+    },
+    {
+      "path": "AGENTS.md",
+      "label": "Codex instructions",
+      "patterns": [
+        "ofxGgmlWorkflows",
+        "workflow_call",
+        "agent-handoff-contract.md",
+        "agent-baseline.md"
+      ]
+    },
+    {
+      "path": ".github/copilot-instructions.md",
+      "label": "Copilot instructions",
+      "patterns": [
+        "ofxGgmlWorkflows",
+        "workflow_call",
+        "agent-handoff-contract.md",
+        "agent-baseline.md"
+      ]
+    },
+    {
+      "path": ".github/instructions/ofxggml-ecosystem.instructions.md",
+      "label": "Copilot ecosystem instructions",
+      "patterns": [
+        "ofxGgmlWorkflows",
+        "check-ecosystem-readiness",
+        "agent-handoff-contract.md",
+        "agent-baseline.md"
+      ]
+    },
+    {
+      "path": ".github/workflows/coding-agent-instructions.yml",
+      "label": "coding-agent-instructions.yml",
+      "patterns": [
+        "ofxggml-ecosystem.instructions.md",
+        "Verify ecosystem guardrails",
+        "companion addon boundary",
+        "generated artifact hygiene"
+      ]
+    },
+    {
+      "path": ".github/workflows/workflow-repo-validation.yml",
+      "label": "workflow-repo-validation.yml",
+      "patterns": [
+        "scripts/validate-local.ps1"
+      ]
+    },
+    {
+      "path": "scripts/validate-evidence.py",
+      "label": "evidence validator",
+      "patterns": [
+        "VALID_RESULTS",
+        "minimum_certification_level",
+        "quality_report_path",
+        "VALID_TREE_STATES",
+        "artifact_integrity"
+      ]
+    }
+  ],
+  "workflow_profiles": {
+    "evidence_profile": {
+      "workflow": "evidence-validation.yml",
+      "profiles": [
+        "custom",
+        "advisory",
+        "schema",
+        "current-sha",
+        "fresh-current-sha",
+        "certification",
+        "release"
+      ],
+      "fixture_profiles": [
+        {
+          "fixture": "evidence-validation-advisory.yml",
+          "profile": "advisory"
+        },
+        {
+          "fixture": "evidence-validation-required.yml",
+          "profile": "fresh-current-sha"
+        }
+      ]
+    },
+    "release_profile": {
+      "workflow": "release-gate.yml",
+      "profiles": [
+        "custom",
+        "advisory",
+        "reports",
+        "evidence",
+        "release"
+      ],
+      "fixture_profiles": [
+        {
+          "fixture": "release-gate-advisory.yml",
+          "profile": "advisory"
+        },
+        {
+          "fixture": "release-gate-required.yml",
+          "profile": "release"
+        }
+      ]
+    }
+  },
+  "workflow_patterns": {
+    "addon-hygiene.yml": [
+      "require_addon_config",
+      "require_src",
+      "require_examples"
+    ],
+    "release-gate.yml": [
+      "release_profile",
+      "require_release_readiness_score",
+      "release_readiness_score_path",
+      "require_evidence_file",
+      "require_evidence_schema_valid",
+      "require_current_sha_evidence",
+      "require_fresh_evidence",
+      "quality_report_path",
+      ".ofxggml-workflows/scripts/validate-evidence.py"
+    ],
+    "evidence-validation.yml": [
+      "evidence_profile",
+      "require_evidence_file",
+      "require_schema_valid",
+      "require_current_sha",
+      "require_freshness",
+      "quality_report_path",
+      ".ofxggml-workflows/scripts/validate-evidence.py"
+    ],
+    "backend-runtime-check.yml": [
+      "require_runtime_smoke_source",
+      "require_linux_runtime_smoke_script",
+      "require_windows_runtime_smoke_scripts",
+      "require_macos_runtime_smoke_script",
+      "require_backend_runtime_smoke_evidence"
+    ],
+    "metadata-validation.yml": [
+      "require_feature_metadata",
+      "require_readme_features"
+    ],
+    "coding-agent-instructions.yml": [
+      "Verify ecosystem guardrails",
+      "companion addon boundary",
+      "generated artifact hygiene"
+    ]
+  },
+  "report_workflows": [
+    "backend-capability-report.yml",
+    "compatibility-matrix.yml",
+    "cross-repo-capability-map.yml",
+    "ecosystem-health-report.yml",
+    "metadata-reconciliation.yml",
+    "release-plan.yml",
+    "release-readiness-score.yml",
+    "workflow-status-plan.yml"
+  ],
+  "report_workflow_patterns": [
+    "require_generator",
+    "require_report_artifact",
+    "report_artifact_path"
+  ],
+  "runtime_workflows": [
+    "cuda-runtime-certification.yml",
+    "metal-runtime-certification.yml",
+    "vulkan-runtime-certification.yml"
+  ],
+  "runtime_workflow_patterns": [
+    "runtime_smoke_source_path",
+    "require_runtime_smoke_source",
+    "runtime_smoke_build_script_path",
+    "require_runtime_smoke_build_script",
+    "runtime_smoke_executable_path",
+    "require_runtime_smoke_evidence",
+    "runtime_smoke_evidence_path"
+  ],
+  "required_reusable_workflows": [
+    "addon-hygiene.yml",
+    "coding-agent-instructions.yml",
+    "release-check.yml"
+  ],
+  "required_reusable_workflow_patterns": [
+    "workflow_call"
+  ]
+}
