@@ -12,6 +12,7 @@
     { "path": "docs/codex-ecosystem-usage.md", "label": "ecosystem usage docs" },
     { "path": "docs/codex-qwen3-rtx3090-profile.md", "label": "Codex Qwen RTX 3090 profile" },
     { "path": "docs/evidence-schema-v1.md", "label": "evidence schema docs" },
+    { "path": "docs/evidence-promotion-playbook.md", "label": "evidence promotion playbook" },
     { "path": "docs/future-ecosystem-roadmap.md", "label": "future ecosystem roadmap" },
     { "path": "docs/managed-addon-rollout.md", "label": "managed addon rollout matrix" },
     { "path": "docs/sam-evidence-pilot-handoff.md", "label": "Sam evidence pilot handoff" },
@@ -19,10 +20,12 @@
     { "path": "schemas/evidence-v1.schema.json", "label": "evidence JSON schema" },
     { "path": "schemas/validation-manifest.json", "label": "validation manifest" },
     { "path": "scripts/test-evidence-schema-drift.ps1", "label": "evidence schema drift tests" },
+    { "path": "scripts/test-evidence-promotion-advisor.ps1", "label": "evidence promotion advisor tests" },
     { "path": "scripts/test-evidence-validator.ps1", "label": "evidence validator tests" },
     { "path": "scripts/test-validation-manifest.ps1", "label": "validation manifest tests" },
     { "path": "scripts/test-workflow-profiles.ps1", "label": "workflow profile tests" },
     { "path": "scripts/test-workflow-fixtures.ps1", "label": "workflow fixture tests" },
+    { "path": "scripts/write-evidence-promotion-advice.ps1", "label": "evidence promotion advisor" },
     { "path": "scripts/validate-evidence.py", "label": "evidence validator" },
     { "path": "scripts/validate-local.ps1", "label": "local validation" },
     { "path": "scripts/workflow-metadata-extractor.ps1", "label": "workflow metadata extractor" },
@@ -40,16 +43,19 @@
     "docs/agent-handoff-contract.md",
     "docs/codex-ecosystem-usage.md",
     "docs/evidence-schema-v1.md",
+    "docs/evidence-promotion-playbook.md",
     "docs/future-ecosystem-roadmap.md",
     "docs/managed-addon-rollout.md",
     "docs/sam-evidence-pilot-handoff.md",
     "schemas/evidence-v1.schema.json",
     "schemas/validation-manifest.json",
     "scripts/test-evidence-schema-drift.ps1",
+    "scripts/test-evidence-promotion-advisor.ps1",
     "scripts/test-evidence-validator.ps1",
     "scripts/test-validation-manifest.ps1",
     "scripts/test-workflow-profiles.ps1",
     "scripts/test-workflow-fixtures.ps1",
+    "scripts/write-evidence-promotion-advice.ps1",
     "scripts/validate-evidence.py",
     "scripts/validate-local.ps1",
     "scripts/workflow-metadata-extractor.ps1"
@@ -66,6 +72,7 @@
     "ecosystem-docs.yml",
     "ecosystem-health-report.yml",
     "ecosystem-health.yml",
+    "evidence-promotion-advisor.yml",
     "evidence-validation.yml",
     "live-workflow-status.yml",
     "metadata-reconciliation.yml",
@@ -95,6 +102,7 @@
     "accelerator-certification-required.yml",
     "backend-runtime-advisory.yml",
     "backend-runtime-required.yml",
+    "evidence-promotion-advisory.yml",
     "evidence-validation-advisory.yml",
     "evidence-validation-required.yml",
     "generator-report-advisory.yml",
@@ -158,6 +166,7 @@
         "future-ecosystem-roadmap.md",
         "managed-addon-rollout.md",
         "sam-evidence-pilot-handoff.md",
+        "evidence-promotion-playbook.md",
         "agent-handoff-contract.md",
         "agent-baseline.md",
         "coding-agent-instructions.yml",
@@ -166,6 +175,7 @@
         "release-check.yml",
         "ecosystem-health.yml",
         "evidence-validation.yml",
+        "evidence-promotion-advisor.yml",
         "release-gate.yml",
         "validate-evidence.py",
         "quality_report_path"
@@ -177,8 +187,10 @@
       "patterns": [
         "coding-agent-instructions.yml",
         "evidence-validation.yml",
+        "evidence-promotion-advisor.yml",
         "check-ecosystem-readiness.bat",
         "workflow_call",
+        "evidence-promotion-playbook.md",
         "release_profile",
         "evidence_profile"
       ]
@@ -225,6 +237,30 @@
         "evidence-validation.yml",
         "schema_version",
         "commit_sha"
+      ]
+    },
+    {
+      "path": "docs/evidence-promotion-playbook.md",
+      "label": "evidence promotion playbook",
+      "patterns": [
+        "advisory-visible",
+        "schema-required",
+        "current-sha-required",
+        "fresh-current-sha-required",
+        "release-gated",
+        "evidence-promotion-advisor.yml",
+        "Evidence Schema v1"
+      ]
+    },
+    {
+      "path": "scripts/write-evidence-promotion-advice.ps1",
+      "label": "evidence promotion advisor",
+      "patterns": [
+        "MinimumQualityScore",
+        "ObservedCleanRuns",
+        "CandidateProfile",
+        "recommendation",
+        "ready for release-gate"
       ]
     },
     {
@@ -365,6 +401,14 @@
       "require_freshness",
       "quality_report_path",
       ".ofxggml-workflows/scripts/validate-evidence.py"
+    ],
+    "evidence-promotion-advisor.yml": [
+      "current_profile",
+      "candidate_profile",
+      "required_clean_runs",
+      "observed_clean_runs",
+      "minimum_quality_score",
+      ".ofxggml-workflows/scripts/write-evidence-promotion-advice.ps1"
     ],
     "backend-runtime-check.yml": [
       "require_runtime_smoke_source",

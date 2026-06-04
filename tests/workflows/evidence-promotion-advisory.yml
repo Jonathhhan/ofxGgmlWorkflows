@@ -1,0 +1,18 @@
+name: evidence-promotion-advisory
+
+on:
+  workflow_dispatch:
+
+jobs:
+  evidence-promotion:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/evidence-promotion-advisor.yml@main
+    with:
+      evidence_path: build/evidence/sam3-runtime-evidence.json
+      current_profile: advisory
+      candidate_profile: schema
+      required_clean_runs: "3"
+      observed_clean_runs: "0"
+      minimum_quality_score: "85"
+      required_backend: cpu
+      required_result: pass
+      minimum_certification_level: smoke-built

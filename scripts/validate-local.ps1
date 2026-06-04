@@ -60,6 +60,7 @@ if ($schemaJson.title -ne "ofxGgml Evidence v1") {
 
 & (Join-Path $repoRoot "scripts\test-evidence-schema-drift.ps1")
 & (Join-Path $repoRoot "scripts\test-evidence-validator.ps1")
+& (Join-Path $repoRoot "scripts\test-evidence-promotion-advisor.ps1")
 & (Join-Path $repoRoot "scripts\test-workflow-profiles.ps1")
 & (Join-Path $repoRoot "scripts\test-workflow-fixtures.ps1")
 

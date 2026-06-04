@@ -1,0 +1,109 @@
+name: reusable-evidence-promotion-advisor
+
+on:
+  workflow_call:
+    inputs:
+      evidence_path:
+        type: string
+        required: false
+        default: build/evidence/*.json
+      current_profile:
+        type: string
+        required: false
+        default: advisory
+      candidate_profile:
+        type: string
+        required: false
+        default: schema
+      required_clean_runs:
+        type: string
+        required: false
+        default: "3"
+      observed_clean_runs:
+        type: string
+        required: false
+        default: "0"
+      minimum_quality_score:
+        type: string
+        required: false
+        default: "85"
+      required_backend:
+        type: string
+        required: false
+        default: ""
+      required_result:
+        type: string
+        required: false
+        default: ""
+      minimum_certification_level:
+        type: string
+        required: false
+        default: ""
+      expected_commit_sha:
+        type: string
+        required: false
+        default: ""
+      max_evidence_age_hours:
+        type: string
+        required: false
+        default: "0"
+      promotion_report_path:
+        type: string
+        required: false
+        default: build/evidence/evidence-promotion.md
+      promotion_json_path:
+        type: string
+        required: false
+        default: build/evidence/evidence-promotion.json
+      upload_report:
+        type: boolean
+        required: false
+        default: true
+      artifact_name:
+        type: string
+        required: false
+        default: ofxggml-evidence-promotion
+
+jobs:
+  evidence-promotion-advisor:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout caller repository
+        uses: actions/checkout@v4
+
+      - name: Checkout workflow tools
+        uses: actions/checkout@v4
+        with:
+          repository: Jonathhhan/ofxGgmlWorkflows
+          ref: ${{ github.workflow_sha }}
+          path: .ofxggml-workflows
+
+      - name: Write evidence promotion advice
+        shell: pwsh
+        run: |
+          .ofxggml-workflows/scripts/write-evidence-promotion-advice.ps1 `
+            -EvidencePath "${{ inputs.evidence_path }}" `
+            -CurrentProfile "${{ inputs.current_profile }}" `
+            -CandidateProfile "${{ inputs.candidate_profile }}" `
+            -RequiredCleanRuns ([int]"${{ inputs.required_clean_runs }}") `
+            -ObservedCleanRuns ([int]"${{ inputs.observed_clean_runs }}") `
+            -MinimumQualityScore ([double]"${{ inputs.minimum_quality_score }}") `
+            -RequiredBackend "${{ inputs.required_backend }}" `
+            -RequiredResult "${{ inputs.required_result }}" `
+            -MinimumCertificationLevel "${{ inputs.minimum_certification_level }}" `
+            -ExpectedCommitSha "${{ inputs.expected_commit_sha || github.sha }}" `
+            -MaxEvidenceAgeHours ([double]"${{ inputs.max_evidence_age_hours }}") `
+            -ReportPath "${{ inputs.promotion_report_path }}" `
+            -JsonPath "${{ inputs.promotion_json_path }}"
+
+      - name: Upload promotion advice
+        if: always() && inputs.upload_report
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: ${{ inputs.artifact_name }}
+          path: |
+            ${{ inputs.promotion_report_path }}
+            ${{ inputs.promotion_json_path }}
+          if-no-files-found: ignore

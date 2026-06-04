@@ -13,6 +13,8 @@ See [`docs/managed-addon-rollout.md`](docs/managed-addon-rollout.md) for the
 current ready/dirty repository matrix and all-addon rollout queue.
 Use [`docs/sam-evidence-pilot-handoff.md`](docs/sam-evidence-pilot-handoff.md)
 for the first Evidence Schema v1 companion rollout contract.
+Use [`docs/evidence-promotion-playbook.md`](docs/evidence-promotion-playbook.md)
+for the advisory-to-release evidence promotion ladder.
 Use [`docs/agent-handoff-contract.md`](docs/agent-handoff-contract.md) when
 passing cross-repo rollout, evidence promotion, release planning, or companion
 PR fanout work between agents.
@@ -48,6 +50,7 @@ Hermes/Codex/Copilot baseline that local instruction files should mirror.
 ### Runtime certification
 
 - `.github/workflows/evidence-validation.yml` - validate neutral evidence JSON artifacts against Evidence Schema v1
+- `.github/workflows/evidence-promotion-advisor.yml` - recommend advisory-to-required evidence promotion from evidence quality and clean-run inputs
 - `.github/workflows/backend-runtime-check.yml` - CPU runtime smoke across Linux, Windows, macOS
 - `.github/workflows/backend-capability-report.yml` - generate backend capability report
 - `.github/workflows/cross-repo-capability-map.yml` - generate cross-repo capability map
@@ -254,9 +257,10 @@ scripts\validate-local.bat
 ```
 
 Local validation includes Evidence Schema v1 drift checks, evidence validator
-fixtures, validation manifest checks, rollout profile checks, and reusable
-workflow caller fixtures under `tests/workflows/` so representative advisory
-and required caller YAML stays aligned with the reusable workflow inputs. The
+fixtures, evidence promotion advisor tests, validation manifest checks, rollout
+profile checks, and reusable workflow caller fixtures under `tests/workflows/`
+so representative advisory and required caller YAML stays aligned with the
+reusable workflow inputs. The
 manifest in `schemas/validation-manifest.json` owns inventory-style validation
 such as expected files, workflow files, evidence fixture files, workflow fixture
 files, advisory-vs-required fixture pairs, rollout profile allowlists, docs

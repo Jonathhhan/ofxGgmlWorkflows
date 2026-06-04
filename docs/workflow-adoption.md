@@ -220,6 +220,25 @@ profiles to state rollout intent:
 | `release-gate.yml` | `evidence` | Require schema-valid current-SHA release evidence while leaving report booleans caller-owned. |
 | `release-gate.yml` | `release` | Require generated reports plus schema-valid, current, fresh release evidence. |
 
+Use `docs/evidence-promotion-playbook.md` for the named promotion ladder and
+stop conditions before moving a companion from advisory evidence to required
+release gates.
+
+To make that decision visible without enforcing it, add the promotion advisor:
+
+```yaml
+jobs:
+  evidence-promotion:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/evidence-promotion-advisor.yml@main
+    with:
+      evidence_path: build/evidence/sam3-runtime-evidence.json
+      current_profile: advisory
+      candidate_profile: schema
+      required_clean_runs: "3"
+      observed_clean_runs: "0"
+      minimum_quality_score: "85"
+```
+
 ## Core coordination
 
 `ofxGgmlCore` is the control-plane consumer for ecosystem planning. Core tools

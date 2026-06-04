@@ -34,6 +34,8 @@ All notable changes to ofxGgmlWorkflows are documented here.
 - Added `docs/agent-baseline.md` as the shared Hermes, Codex, and Copilot operating baseline
 - Added `docs/managed-addon-rollout.md` with the current ready/dirty repository matrix and advisory-first all-addon rollout queue
 - Added `docs/sam-evidence-pilot-handoff.md` to define the Sam CPU evidence wrapper contract before advisory caller rollout
+- Added `docs/evidence-promotion-playbook.md` with the advisory-visible to release-gated promotion ladder
+- Added `evidence-promotion-advisor.yml` and local advisor tests for advisory evidence promotion reports
 - Updated the ecosystem roadmap with the current all-addon improvement queue, ready repositories, dirty-repo stop conditions, and reference-repo exclusions
 - Strengthened `coding-agent-instructions.yml` to verify lane, Core planning, companion-boundary, artifact-hygiene, validation, and handoff guardrails
 - Evidence validation can now write an advisory quality report for evidence completeness before stricter gates are enabled
@@ -46,6 +48,6 @@ All notable changes to ofxGgmlWorkflows are documented here.
 
 ### Changed
 
-- README now lists all 25 workflows grouped by adoption tier (agent baseline, addon hygiene, operational visibility, compatibility/release planning, runtime certification, self-validation)
+- README now lists all 26 workflows grouped by adoption tier (agent baseline, addon hygiene, operational visibility, compatibility/release planning, runtime certification, self-validation)
 - `evidence-validation.yml` and `release-gate.yml` now run `validate-evidence.py` from a pinned `ofxGgmlWorkflows` tools checkout instead of requiring caller repositories to carry the validator script
 - Local validation now checks every workflow file for UTF-8 BOMs
