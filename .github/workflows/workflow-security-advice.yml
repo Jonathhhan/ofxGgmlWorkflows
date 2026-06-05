@@ -18,6 +18,12 @@ on:
       recommended_consumer_ref:
         type: string
         default: v1
+      require_explicit_permissions:
+        type: boolean
+        default: false
+      require_pinned_actions:
+        type: boolean
+        default: false
       upload_report:
         type: boolean
         default: true
@@ -58,7 +64,9 @@ jobs:
               -WorkflowRoot ".github/workflows" `
               -ReportPath "${{ inputs.report_artifact_path }}" `
               -JsonPath "${{ inputs.report_json_path }}" `
-              -RecommendedConsumerRef "${{ inputs.recommended_consumer_ref }}"
+              -RecommendedConsumerRef "${{ inputs.recommended_consumer_ref }}" `
+              -RequireExplicitPermissions:([System.Convert]::ToBoolean("${{ inputs.require_explicit_permissions }}")) `
+              -RequirePinnedActions:([System.Convert]::ToBoolean("${{ inputs.require_pinned_actions }}"))
           } elseif ("${{ inputs.require_generator }}" -eq "true") {
             Write-Error "Missing workflow security advice generator: $scriptPath"
           } else {

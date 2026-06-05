@@ -198,6 +198,8 @@ jobs:
     with:
       recommended_consumer_ref: v1
       report_artifact_path: docs/workflow-security-advice.md
+      require_explicit_permissions: true
+      require_pinned_actions: false
 ```
 
 `ecosystem-docs.yml` exposes per-document requirements so callers can harden

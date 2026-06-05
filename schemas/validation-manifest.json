@@ -201,6 +201,8 @@
         "artifact_digest",
         "artifact-digest",
         "recommended_consumer_ref",
+        "require_explicit_permissions",
+        "require_pinned_actions",
         "workflow-release-policy.md",
         ".github/dependabot.yml"
       ]
@@ -222,6 +224,8 @@
         "artifact-digest",
         "workflow-security-advice.yml",
         "recommended_consumer_ref",
+        "require_explicit_permissions",
+        "require_pinned_actions",
         "workflow-release-policy.md",
         ".github/dependabot.yml"
       ]
@@ -435,6 +439,8 @@
         "missing_permissions_count",
         "unpinned_action_count",
         "recommended_consumer_ref",
+        "RequireExplicitPermissions",
+        "RequirePinnedActions",
         "External actions not pinned to full SHA"
       ]
     },
@@ -560,6 +566,8 @@
     ],
     "workflow-security-advice.yml": [
       "recommended_consumer_ref",
+      "require_explicit_permissions",
+      "require_pinned_actions",
       "artifact_digest",
       "upload-workflow-security-advice",
       "artifact-digest"

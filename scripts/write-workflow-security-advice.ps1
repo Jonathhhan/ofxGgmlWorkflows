@@ -2,7 +2,9 @@ param(
 	[string]$WorkflowRoot = ".github/workflows",
 	[string]$ReportPath = "docs/workflow-security-advice.md",
 	[string]$JsonPath = "",
-	[string]$RecommendedConsumerRef = "v1"
+	[string]$RecommendedConsumerRef = "v1",
+	[switch]$RequireExplicitPermissions,
+	[switch]$RequirePinnedActions
 )
 
 $ErrorActionPreference = "Stop"
@@ -142,7 +144,7 @@ if ($reportDir) {
 $lines = New-Object System.Collections.Generic.List[string]
 $lines.Add("# Workflow Security Advice")
 $lines.Add("")
-$lines.Add("Report-only guidance for reusable workflow hardening. Use it before making SHA pinning or least-privilege permissions required.")
+$lines.Add("Advisory guidance and optional enforcement for reusable workflow hardening. Use it before making SHA pinning or least-privilege permissions required.")
 $lines.Add("")
 $lines.Add("## Summary")
 $lines.Add("")
@@ -154,6 +156,8 @@ $lines.Add("| Jobs missing explicit permissions | $($summary.missing_permissions
 $lines.Add("| External actions not pinned to full SHA | $($summary.unpinned_action_count) |")
 $lines.Add("")
 $lines.Add("Recommended stable consumer ref: ``$RecommendedConsumerRef``.")
+$lines.Add("")
+$lines.Add("Enforcement: explicit permissions = `$($RequireExplicitPermissions.IsPresent)`; full-SHA action refs = `$($RequirePinnedActions.IsPresent)`.")
 $lines.Add("")
 $lines.Add("## Missing Job Permissions")
 $lines.Add("")
@@ -201,3 +205,15 @@ if (![string]::IsNullOrWhiteSpace($JsonPath)) {
 }
 
 Write-Host "Workflow security advice: $($summary.missing_permissions_count) missing permissions, $($summary.unpinned_action_count) non-SHA action refs."
+
+$violations = New-Object System.Collections.Generic.List[string]
+if ($RequireExplicitPermissions -and $missingPermissions.Count -gt 0) {
+	$violations.Add("Explicit job permissions are required, but $($missingPermissions.Count) job(s) are missing permissions.")
+}
+if ($RequirePinnedActions -and $unpinnedActions.Count -gt 0) {
+	$violations.Add("Full-SHA external action refs are required, but $($unpinnedActions.Count) action reference(s) are not pinned.")
+}
+
+if ($violations.Count -gt 0) {
+	throw ($violations -join " ")
+}

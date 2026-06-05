@@ -173,7 +173,9 @@ required. The report inventories jobs missing explicit `permissions:` and
 external actions that are not pinned to full commit SHAs. Keep this advisory
 until consumers have Dependabot coverage and a versioned workflow ref such as
 `v1`. This repository owns `.github/dependabot.yml` for weekly GitHub Actions
-update PRs.
+update PRs. Once explicit permissions are clean, set
+`require_explicit_permissions: true`; keep `require_pinned_actions: false`
+until action refs have reviewed full-SHA pins.
 
 ```yaml
 name: workflow-security-advice
@@ -188,6 +190,8 @@ jobs:
     with:
       recommended_consumer_ref: v1
       report_artifact_path: docs/workflow-security-advice.md
+      require_explicit_permissions: true
+      require_pinned_actions: false
 ```
 
 For build smoke workflows, keep reusable logic generic and require caller-owned

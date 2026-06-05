@@ -12,6 +12,10 @@ $repoRoot = Split-Path -Parent $scriptRoot
 $reportDir = Join-Path $env:TEMP ("ofxggml-workflow-security-" + [System.Guid]::NewGuid().ToString("N"))
 $reportPath = Join-Path $reportDir "workflow-security-advice.md"
 $jsonPath = Join-Path $reportDir "workflow-security-advice.json"
+$permissionsReportPath = Join-Path $reportDir "workflow-security-permissions.md"
+$permissionsJsonPath = Join-Path $reportDir "workflow-security-permissions.json"
+$pinnedReportPath = Join-Path $reportDir "workflow-security-pinned.md"
+$pinnedJsonPath = Join-Path $reportDir "workflow-security-pinned.json"
 
 Write-Step "Checking workflow security advice report"
 
@@ -49,6 +53,29 @@ if ([int]$json.missing_permissions_count -ne 0) {
 }
 if ([int]$json.unpinned_action_count -le 0) {
 	throw "Workflow security advice JSON should report non-SHA action refs during advisory rollout."
+}
+
+& (Join-Path $repoRoot "scripts\write-workflow-security-advice.ps1") `
+	-WorkflowRoot (Join-Path $repoRoot ".github\workflows") `
+	-ReportPath $permissionsReportPath `
+	-JsonPath $permissionsJsonPath `
+	-RecommendedConsumerRef "v1" `
+	-RequireExplicitPermissions
+
+$pinnedError = ""
+try {
+	& (Join-Path $repoRoot "scripts\write-workflow-security-advice.ps1") `
+		-WorkflowRoot (Join-Path $repoRoot ".github\workflows") `
+		-ReportPath $pinnedReportPath `
+		-JsonPath $pinnedJsonPath `
+		-RecommendedConsumerRef "v1" `
+		-RequirePinnedActions
+	throw "Workflow security advice should fail when full-SHA action refs are required while tag refs remain."
+} catch {
+	$pinnedError = $_.Exception.Message
+}
+if ($pinnedError -notmatch "Full-SHA external action refs are required") {
+	throw "Pinned action enforcement did not report the expected failure."
 }
 
 Write-Step "Workflow security advice checks passed"
