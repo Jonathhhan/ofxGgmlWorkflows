@@ -75,6 +75,9 @@ must yield to current repository files.
 
 Use `scripts\plan-hermes-source-learning.ps1 -Json` when Hermes needs a
 machine-readable retrieval packet for upstream source learning.
+Use `scripts\plan-hermes-agent-improvement.ps1 -Json` when Hermes needs
+subagents or sibling agents to review agent instructions, memory, evals, or
+operating-loop behavior.
 
 ## Skill Layer
 
@@ -92,6 +95,9 @@ model:
   folders for the requested lane.
 - `ofxggml-ecosystem-planning`: run Core planning/readiness first, classify
   dirty repos, choose one lane, and write a handoff before cross-repo edits.
+- `multi-agent-improvement`: use bounded read-only reviewers by default,
+  assign exactly one integration owner, avoid duplicate write scopes, and
+  report accepted and rejected outputs before validation.
 - `windows-vs-openframeworks-build`: use Visual Studio/openFrameworks build
   wrappers, projectGenerator preflight/postflight, and generated-project repair
   planners without committing generated files.
@@ -141,7 +147,9 @@ Evaluation should score:
 3. Retrieve the instruction layer and relevant lane docs.
 4. Refresh or verify the Hermes memory index, then check readiness when the
    task is cross-repo, release-facing, or agent-improvement work.
-5. Select the smallest applicable skill.
-6. Execute only inside the chosen lane.
-7. Validate locally.
-8. Report commands, dirty-repo caveats, evidence gaps, and next action.
+5. Use the multi-agent improvement planner when delegating agent-improvement
+   reviews.
+6. Select the smallest applicable skill.
+7. Execute only inside the chosen lane.
+8. Validate locally.
+9. Report commands, dirty-repo caveats, evidence gaps, and next action.

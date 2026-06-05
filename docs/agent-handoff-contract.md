@@ -17,6 +17,12 @@ source, generated projects, model files, downloaded runtimes, or build output.
 | Repositories touched | Exact repositories changed or proposed. Include `none` for planning-only work. |
 | Core planning command | Core command used before cross-repo work, usually `scripts\plan-ecosystem.ps1 -Json -SummaryOnly`; include result summary. |
 | Dirty-repo caveats | Managed repositories with unrelated dirty changes that should block or pause fanout. |
+| Dirty-state table | Repo, files/count, relevance, owner/unknown, generated-artifact flag, and action: stop, pause fanout, or proceed read-only. |
+| Delegation roles | Subagents or sibling agents used, their scopes, and whether they were read-only or had disjoint write scopes. |
+| Integration owner | The single agent responsible for reconciling delegated outputs before validation. |
+| Accepted outputs | Delegated findings or patches integrated into the final change. |
+| Rejected/unused outputs | Delegated findings that were useful but out of scope, conflicting, or unsafe. |
+| Final validation owner | Agent responsible for final validation result and handoff accuracy. |
 | Workflow tier | Adoption tier from `docs\workflow-adoption.md`, or `none`. |
 | Caller workflows changed | Caller workflow files added or changed, or `none`. |
 | Rollout profile | `evidence_profile`, `release_profile`, advisory/required mode, or `custom` boolean inputs. |
@@ -37,6 +43,12 @@ source, generated projects, model files, downloaded runtimes, or build output.
 - Core planning command:
 - Core planning summary:
 - Dirty-repo caveats:
+- Dirty-state table:
+- Delegation roles:
+- Integration owner:
+- Accepted outputs:
+- Rejected/unused outputs:
+- Final validation owner:
 - Workflow tier:
 - Caller workflows changed:
 - Rollout profile:
@@ -58,6 +70,12 @@ source, generated projects, model files, downloaded runtimes, or build output.
 - Core planning command: scripts\plan-ecosystem.ps1 -Json -SummaryOnly
 - Core planning summary: ofxGgmlSam is present, clean, and ready; dirty repos are not part of this pilot.
 - Dirty-repo caveats: pause fanout to ofxGgmlVideo, ofxGgmlStableDiffusion, and ofxGgmlRag until unrelated changes are reviewed.
+- Dirty-state table: ofxGgmlSam clean/proceed; unrelated dirty repos pause fanout.
+- Delegation roles: none.
+- Integration owner: main agent.
+- Accepted outputs: none.
+- Rejected/unused outputs: none.
+- Final validation owner: main agent.
 - Workflow tier: Runtime certification, advisory evidence validation
 - Caller workflows changed: .github/workflows/evidence-validation.yml
 - Rollout profile: evidence_profile=advisory

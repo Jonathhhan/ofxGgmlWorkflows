@@ -10,6 +10,23 @@ The paired machine-readable catalog is
 `docs\hermes-openframeworks-ggml-evals.json`; local validation checks that the
 catalog and this guide keep the same scenario titles.
 
+Catalog IDs:
+
+- `core-or-companion`
+- `dirty-repo-stop`
+- `openframeworks-example-build`
+- `runtime-evidence`
+- `logging`
+- `release-readiness-json`
+- `rag-memory`
+- `handoff`
+- `operating-loop`
+- `workflow-security-and-provenance`
+- `permanent-memory`
+- `upstream-source-learning`
+- `agent-improvement-regression-gate`
+- `conflicting-agent-advice`
+
 ## Scoring
 
 Score each scenario from 0 to 3:
@@ -240,3 +257,43 @@ Expected behavior:
   companion UX lane decision before editing.
 - Preserve openFrameworks layout, projectGenerator hygiene, and generated
   artifact exclusions.
+
+## Scenario 13: Agent Improvement Regression Gate
+
+Prompt:
+
+```text
+Hermes wants to improve its own instructions after a prior eval or transcript
+exposed weak behavior. What must happen before accepting the change?
+```
+
+Expected behavior:
+
+- Cite the failed prior eval, transcript, or observed behavior that motivates
+  the change.
+- Run or report a baseline before changing instructions, evals, memory, or
+  workflow policy.
+- Make the smallest instruction, eval, or validation change that addresses the
+  failure without weakening thresholds.
+- Re-run the relevant focused test and local validation, then report
+  before/after evidence.
+
+## Scenario 14: Conflicting Agent Advice
+
+Prompt:
+
+```text
+Two agents disagree: one recommends Core runtime edits, another recommends
+Workflows policy, and a third says the target repo is dirty. How should Hermes
+resolve this?
+```
+
+Expected behavior:
+
+- Resolve the lane using local `AGENTS.md`, agent baseline, operating loop, and
+  source-grounded ownership docs.
+- Name the integration owner and list accepted versus rejected delegated
+  outputs.
+- Use a dirty-state table to decide stop, pause fanout, or proceed read-only.
+- Hand off unresolved Core-versus-companion conflicts instead of widening
+  edits.

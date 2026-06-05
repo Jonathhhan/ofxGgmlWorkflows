@@ -18,6 +18,7 @@
     { "path": "docs/hermes-agent-operating-loop.md", "label": "Hermes agent operating loop" },
     { "path": "docs/hermes-ecosystem-learning-plan.md", "label": "Hermes ecosystem learning plan" },
     { "path": "docs/hermes-memory-contract.md", "label": "Hermes memory contract" },
+    { "path": "docs/hermes-multi-agent-improvement.md", "label": "Hermes multi-agent improvement guide" },
     { "path": "docs/hermes-openframeworks-ggml-skills.md", "label": "Hermes openFrameworks and ggml skills" },
     { "path": "docs/hermes-source-learning-map.md", "label": "Hermes source learning map" },
     { "path": "docs/managed-addon-rollout.md", "label": "managed addon rollout matrix" },
@@ -31,6 +32,7 @@
     { "path": "scripts/test-evidence-promotion-advisor.ps1", "label": "evidence promotion advisor tests" },
     { "path": "scripts/test-evidence-validator.ps1", "label": "evidence validator tests" },
     { "path": "scripts/test-dependabot-actions.ps1", "label": "Dependabot GitHub Actions tests" },
+    { "path": "scripts/test-hermes-agent-improvement-plan.ps1", "label": "Hermes agent-improvement planner tests" },
     { "path": "scripts/test-hermes-memory-index.ps1", "label": "Hermes memory index tests" },
     { "path": "scripts/test-hermes-memory-readiness.ps1", "label": "Hermes memory readiness tests" },
     { "path": "scripts/test-hermes-source-learning-plan.ps1", "label": "Hermes source-learning planner tests" },
@@ -39,6 +41,7 @@
     { "path": "scripts/test-workflow-profiles.ps1", "label": "workflow profile tests" },
     { "path": "scripts/test-workflow-fixtures.ps1", "label": "workflow fixture tests" },
     { "path": "scripts/check-hermes-memory-index.ps1", "label": "Hermes memory readiness checker" },
+    { "path": "scripts/plan-hermes-agent-improvement.ps1", "label": "Hermes agent-improvement planner" },
     { "path": "scripts/plan-hermes-source-learning.ps1", "label": "Hermes source-learning planner" },
     { "path": "scripts/write-evidence-promotion-advice.ps1", "label": "evidence promotion advisor" },
     { "path": "scripts/write-hermes-memory-index.ps1", "label": "Hermes memory index writer" },
@@ -66,6 +69,7 @@
     "docs/hermes-agent-operating-loop.md",
     "docs/hermes-ecosystem-learning-plan.md",
     "docs/hermes-memory-contract.md",
+    "docs/hermes-multi-agent-improvement.md",
     "docs/hermes-openframeworks-ggml-skills.md",
     "docs/hermes-source-learning-map.md",
     "docs/managed-addon-rollout.md",
@@ -78,6 +82,7 @@
     "scripts/test-evidence-promotion-advisor.ps1",
     "scripts/test-evidence-validator.ps1",
     "scripts/test-dependabot-actions.ps1",
+    "scripts/test-hermes-agent-improvement-plan.ps1",
     "scripts/test-hermes-memory-index.ps1",
     "scripts/test-hermes-memory-readiness.ps1",
     "scripts/test-hermes-source-learning-plan.ps1",
@@ -86,6 +91,7 @@
     "scripts/test-workflow-profiles.ps1",
     "scripts/test-workflow-fixtures.ps1",
     "scripts/check-hermes-memory-index.ps1",
+    "scripts/plan-hermes-agent-improvement.ps1",
     "scripts/plan-hermes-source-learning.ps1",
     "scripts/write-evidence-promotion-advice.ps1",
     "scripts/write-hermes-memory-index.ps1",
@@ -206,6 +212,9 @@
         "agent-baseline.md",
         "hermes-agent-operating-loop.md",
         "hermes-ecosystem-learning-plan.md",
+        "hermes-multi-agent-improvement.md",
+        "plan-hermes-agent-improvement.ps1",
+        "addon-fanout",
         "hermes-memory-contract.md",
         "write-hermes-memory-index.ps1",
         "check-hermes-memory-index.ps1",
@@ -230,6 +239,7 @@
         "artifact_digest",
         "artifact-digest",
         "Hermes memory index and readiness checks",
+        "Hermes agent and",
         "source-learning retrieval packet",
         "recommended_consumer_ref",
         "require_explicit_permissions",
@@ -306,7 +316,10 @@
         "hermes-openframeworks-ggml-skills.md",
         "openFrameworks",
         "ggml",
-        "Evidence Schema v1"
+        "Evidence Schema v1",
+        "dirty-state table",
+        "delegation roles",
+        "integration owner"
       ]
     },
     {
@@ -330,6 +343,8 @@
         "hermes-memory-contract.md",
         "write-hermes-memory-index.ps1",
         "check-hermes-memory-index.ps1",
+        "plan-hermes-agent-improvement.ps1",
+        "multi-agent-improvement",
         "hermes-source-learning-map.md",
         "upstream-source-learning",
         "plan-hermes-source-learning.ps1"
@@ -345,12 +360,35 @@
         "hermes-memory-contract.md",
         "check-hermes-memory-index.ps1",
         "plan-hermes-source-learning.ps1",
+        "plan-hermes-agent-improvement.ps1",
+        "Multi-agent improvement",
         "Upstream source learning",
         "Stop Conditions",
         "Agent Output Shape",
         "workflow-security-advice.yml",
         "artifact digest",
         "validate"
+      ]
+    },
+    {
+      "path": "docs/hermes-multi-agent-improvement.md",
+      "label": "Hermes multi-agent improvement guide",
+      "patterns": [
+        "Delegation Rules",
+        "Addon Fanout",
+        "one agent per addon",
+        "Authority Model",
+        "coordinator",
+        "retriever",
+        "reviewer",
+        "integrator",
+        "Integration owner",
+        "Accepted outputs",
+        "Rejected or unused outputs",
+        "dirty-state table",
+        "pause fanout",
+        "anti-duplication",
+        "Final validation owner"
       ]
     },
     {
@@ -413,7 +451,9 @@
         "write-hermes-memory-index.ps1",
         "check-hermes-memory-index.ps1",
         "generated",
-        "stale"
+        "stale",
+        "-Strict",
+        "freshness"
       ]
     },
     {
@@ -473,8 +513,27 @@
         "source_sha256",
         "source_modified_at",
         "changed_source_count",
+        "freshness",
         "retrieval_tags",
         "Strict"
+      ]
+    },
+    {
+      "path": "scripts/plan-hermes-agent-improvement.ps1",
+      "label": "Hermes agent-improvement planner",
+      "patterns": [
+        "memory-reviewer",
+        "eval-reviewer",
+        "operating-loop-reviewer",
+        "source-learning-reviewer",
+        "addon-fanout",
+        "addon_review_targets",
+        "addon_fanout_rules",
+        "ofxGgmlStableDiffusion",
+        "ofxGgmlRag",
+        "authority_model",
+        "dirty_state_table_columns",
+        "integration_rules"
       ]
     },
     {
@@ -506,6 +565,19 @@
       ]
     },
     {
+      "path": "scripts/test-hermes-agent-improvement-plan.ps1",
+      "label": "Hermes agent-improvement planner tests",
+      "patterns": [
+        "plan-hermes-agent-improvement.ps1",
+        "memory-reviewer",
+        "eval-reviewer",
+        "dirty_state_table_columns",
+        "addon_review_targets",
+        "addon_fanout_rules",
+        "main agent owns edits"
+      ]
+    },
+    {
       "path": "scripts/test-hermes-source-learning-plan.ps1",
       "label": "Hermes source-learning planner tests",
       "patterns": [
@@ -523,7 +595,13 @@
       "patterns": [
         "Core planning command",
         "Dirty-repo caveats",
-        "Rollout profile"
+        "Rollout profile",
+        "Delegation roles",
+        "Integration owner",
+        "Accepted outputs",
+        "Rejected/unused outputs",
+        "Final validation owner",
+        "Dirty-state table"
       ]
     },
     {

@@ -27,8 +27,8 @@ if (@($catalog.score_scale).Count -ne 4) {
 }
 
 $scenarios = @($catalog.scenarios)
-if ($scenarios.Count -ne 12) {
-	throw "Hermes eval catalog should contain 12 scenarios."
+if ($scenarios.Count -lt 14) {
+	throw "Hermes eval catalog should contain at least 14 scenarios."
 }
 
 $ids = @{}
@@ -53,10 +53,32 @@ foreach ($scenario in $scenarios) {
 	if (@($scenario.unsafe_failures).Count -eq 0) {
 		throw "Hermes eval scenario $id is missing unsafe failure examples."
 	}
+	if ($scenario.PSObject.Properties.Name -contains "tags") {
+		if (@($scenario.tags).Count -eq 0) {
+			throw "Hermes eval scenario $id has an empty tags array."
+		}
+	}
+	if (@($scenario.tags) -contains "agent_improvement") {
+		foreach ($property in @("agent_roles", "measurement_signal", "required_validations", "anti_gaming_failures")) {
+			if (!($scenario.PSObject.Properties.Name -contains $property) -or @($scenario.$property).Count -eq 0) {
+				throw "Hermes agent-improvement scenario $id is missing $property."
+			}
+		}
+	}
+}
+
+$allTags = @($scenarios | ForEach-Object { @($_.tags) })
+foreach ($requiredTag in @("agent_improvement", "multi_agent")) {
+	if ($requiredTag -notin $allTags) {
+		throw "Hermes eval catalog is missing required tag: $requiredTag"
+	}
 }
 
 $markdown = Get-Content -LiteralPath $markdownPath -Raw
 foreach ($scenario in $scenarios) {
+	if ($markdown -notmatch [regex]::Escape([string]$scenario.id)) {
+		throw "Hermes eval markdown guide does not mention scenario id: $($scenario.id)"
+	}
 	if ($markdown -notmatch [regex]::Escape([string]$scenario.title)) {
 		throw "Hermes eval markdown guide does not mention scenario title: $($scenario.title)"
 	}

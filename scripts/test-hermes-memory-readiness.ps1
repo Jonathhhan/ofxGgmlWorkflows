@@ -17,6 +17,7 @@ New-Item -ItemType Directory -Path $tempRoot -Force | Out-Null
 $indexPath = Join-Path $tempRoot "hermes-memory-index.json"
 $stalePath = Join-Path $tempRoot "stale-memory-index.json"
 $changedSourcePath = Join-Path $tempRoot "changed-source-memory-index.json"
+$badFreshnessPath = Join-Path $tempRoot "bad-freshness-memory-index.json"
 
 try {
 	& $writerPath -OutputPath $indexPath | Out-Null
@@ -59,6 +60,18 @@ try {
 	}
 	if (@($changedSourceReport.issues | Where-Object { $_ -match "source_sha256" }).Count -eq 0) {
 		throw "Changed-source Hermes memory index report should include a source_sha256 issue."
+	}
+
+	$index = Get-Content -LiteralPath $indexPath -Raw | ConvertFrom-Json
+	$index.records[0].freshness = "not-a-date"
+	$index | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $badFreshnessPath -Encoding UTF8
+
+	$badFreshnessReport = (& $checkerPath -IndexPath $badFreshnessPath -MaxAgeHours 24 -Json) | ConvertFrom-Json
+	if ([string]$badFreshnessReport.status -ne "refresh_required") {
+		throw "Bad-freshness Hermes memory index should require refresh, got: $($badFreshnessReport.status)"
+	}
+	if (@($badFreshnessReport.issues | Where-Object { $_ -match "freshness" }).Count -eq 0) {
+		throw "Bad-freshness Hermes memory index report should include a freshness issue."
 	}
 
 	$missingReport = (& $checkerPath -IndexPath (Join-Path $tempRoot "missing.json") -Json) | ConvertFrom-Json

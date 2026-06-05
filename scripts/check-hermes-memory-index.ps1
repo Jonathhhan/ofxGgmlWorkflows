@@ -136,6 +136,18 @@ if (!(Test-Path -LiteralPath $resolvedIndexPath -PathType Leaf)) {
 				}
 			}
 
+			if (![string]::IsNullOrWhiteSpace([string]$record.freshness)) {
+				try {
+					$recordFreshness = [DateTimeOffset]::Parse([string]$record.freshness)
+					$recordAgeHours = [Math]::Round(([DateTimeOffset]::UtcNow - $recordFreshness.ToUniversalTime()).TotalHours, 2)
+					if ($recordAgeHours -gt $MaxAgeHours) {
+						Add-Issue "Memory record $id freshness is stale: $recordAgeHours hours old, limit is $MaxAgeHours hours."
+					}
+				} catch {
+					Add-Issue "Memory record $id freshness is not a valid timestamp: $($record.freshness)"
+				}
+			}
+
 			$tags = @($record.retrieval_tags)
 			if ($tags.Count -eq 0) {
 				Add-Issue "Memory record $id is missing retrieval_tags."

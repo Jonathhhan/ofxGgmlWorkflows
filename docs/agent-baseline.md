@@ -27,6 +27,9 @@ files should remain self-contained, but they should mirror these principles.
 
 - Work in instruction, documentation, workflow, validation, or planning files
   first when the goal is better agent or ecosystem behavior.
+- Search existing canonical docs, scripts, schemas, and workflow inputs before
+  adding new agent artifacts; update the canonical source when possible and
+  explain when a new artifact is necessary.
 - Do not edit addon runtime behavior unless the user explicitly asks for addon
   behavior.
 - Keep reusable policy in `ofxGgmlWorkflows`; keep repository-specific build,
@@ -58,6 +61,8 @@ files should remain self-contained, but they should mirror these principles.
 - For handoff, report the Core planning/readiness command, dirty-repo stop
   conditions, local validation, and any evidence profile or workflow_call
   contract touched.
+- For multi-agent work, report delegation roles, integration owner, accepted
+  outputs, rejected or unused outputs, and final validation owner.
 
 ## Hygiene
 
@@ -78,3 +83,6 @@ files should remain self-contained, but they should mirror these principles.
   validation commands that passed.
 - Treat failed validation, stale planning output, missing caller scripts, or
   dirty target repositories as stop conditions until reviewed.
+- Use a dirty-state table when Core planning reports dirty managed
+  repositories, including repo, files/count, relevance, owner or unknown,
+  generated-artifact flag, and action.

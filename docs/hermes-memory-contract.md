@@ -28,7 +28,7 @@ scripts\write-hermes-memory-index.ps1 -OutputPath build\hermes-memory\hermes-mem
 Check a generated index before relying on it:
 
 ```powershell
-scripts\check-hermes-memory-index.ps1 -IndexPath build\hermes-memory\hermes-memory-index.json -Json
+scripts\check-hermes-memory-index.ps1 -IndexPath build\hermes-memory\hermes-memory-index.json -Json -Strict
 ```
 
 ## Source Types
@@ -46,6 +46,10 @@ Regenerate the index before Hermes starts a cross-repo task, release-facing
 task, or agent-improvement task. If `tree_state` is `dirty`, Hermes may still
 use the index for orientation, but it must also read the touched files directly
 and report dirty-repo caveats in the handoff.
+
+`freshness` is the timestamp when the record summary was produced. The checker
+parses record freshness and should treat stale records as refresh-required when
+they exceed the allowed memory age for the task.
 
 Stop and refresh memory when:
 

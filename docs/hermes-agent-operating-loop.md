@@ -14,11 +14,16 @@ rewriter. Use this loop before touching managed ofxGgml repositories.
    cross-repo, release-facing, or agent-improvement work.
 4. Use `scripts\plan-hermes-source-learning.ps1` when the task asks Hermes to
    learn from upstream code before editing.
-5. Retrieve the smallest packet of local facts for that lane.
-6. Choose one named skill from `docs\hermes-ecosystem-learning-plan.md`.
-7. Edit only files owned by the chosen lane.
-8. Validate locally with the touched repository's validation command.
-9. Report dirty-repo caveats, files changed, validation result, evidence gaps,
+5. Use `scripts\plan-hermes-agent-improvement.ps1` and
+   `docs\hermes-multi-agent-improvement.md` when the task asks agents to
+   improve agents.
+6. Retrieve the smallest packet of local facts for that lane.
+7. Choose one named skill from `docs\hermes-ecosystem-learning-plan.md`.
+8. Search canonical docs, scripts, schemas, and workflows before adding new
+   agent artifacts.
+9. Edit only files owned by the chosen lane.
+10. Validate locally with the touched repository's validation command.
+11. Report dirty-repo caveats, files changed, validation result, evidence gaps,
    and one focused next action.
 
 ## Retrieval Packets
@@ -29,6 +34,7 @@ rewriter. Use this loop before touching managed ofxGgml repositories.
 | Workflows policy | `ofxGgmlWorkflows\AGENTS.md`, `docs\agent-baseline.md`, `docs\workflow-adoption.md`, `docs\evidence-schema-v1.md`, relevant reusable workflow |
 | Hermes memory | `ofxGgmlWorkflows\docs\hermes-memory-contract.md`, `schemas\hermes-memory-v1.schema.json`, `scripts\write-hermes-memory-index.ps1`, `scripts\check-hermes-memory-index.ps1`, generated memory index when present |
 | Upstream source learning | `ofxGgmlWorkflows\docs\hermes-source-learning-map.md`, `scripts\plan-hermes-source-learning.ps1`, local lane docs, selected upstream source folders |
+| Multi-agent improvement | `ofxGgmlWorkflows\docs\hermes-multi-agent-improvement.md`, `scripts\plan-hermes-agent-improvement.ps1`, agent baseline, handoff contract, eval catalog |
 | Companion UX | companion `AGENTS.md`, `README.md`, `addon_config.mk`, examples, lane workflow docs, validation script |
 | Release evidence | Core release-readiness output, Workflows evidence docs, evidence JSON, `workflow-security-advice.yml`, artifact digest or attestation fields |
 | openFrameworks build | Core smoke-build target lifecycle, companion examples, `addons.make`, generated project preflight and postflight reports |
@@ -39,6 +45,8 @@ Stop and ask for a narrower handoff when:
 
 - Core planning reports dirty managed repositories that are relevant to the
   task.
+- Dirty-state table classifies the current repo or target repo as relevant,
+  generated, or owner-unknown in a way that could affect the change.
 - The requested change crosses from companion UX into Core runtime without a
   stable, domain-neutral contract.
 - The task requires committing generated project files, model weights, runtime
@@ -55,6 +63,8 @@ Stop and ask for a narrower handoff when:
 Hermes handoffs should include:
 
 - Task lane and selected skill.
+- Agents used, delegation roles, integration owner, accepted outputs, and
+  rejected or unused outputs.
 - Local files retrieved.
 - Planning or readiness command used.
 - Files changed.
