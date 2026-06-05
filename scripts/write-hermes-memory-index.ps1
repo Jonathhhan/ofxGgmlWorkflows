@@ -44,9 +44,18 @@ function New-MemoryRecord {
 		[string]$Freshness
 	)
 
+	$sourceFile = Join-Path $repoRoot ($SourcePath -replace '/', '\')
+	if (!(Test-Path -LiteralPath $sourceFile -PathType Leaf)) {
+		throw "Memory source path does not exist: $SourcePath"
+	}
+	$sourceItem = Get-Item -LiteralPath $sourceFile
+	$sourceHash = (Get-FileHash -LiteralPath $sourceFile -Algorithm SHA256).Hash.ToLowerInvariant()
+
 	return [ordered]@{
 		id = $Id
 		source_path = $SourcePath
+		source_sha256 = $sourceHash
+		source_modified_at = $sourceItem.LastWriteTimeUtc.ToString("o")
 		repo = $RepoName
 		lane = $Lane
 		source_type = $SourceType

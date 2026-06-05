@@ -209,6 +209,7 @@
         "hermes-memory-contract.md",
         "write-hermes-memory-index.ps1",
         "check-hermes-memory-index.ps1",
+        "file hashes and timestamps",
         "hermes-openframeworks-ggml-skills.md",
         "hermes-source-learning-map.md",
         "plan-hermes-source-learning.ps1",
@@ -404,6 +405,8 @@
       "patterns": [
         "schema_version",
         "source_path",
+        "source_sha256",
+        "source_modified_at",
         "commit_sha",
         "freshness",
         "retrieval_tags",
@@ -422,6 +425,8 @@
         "commit_sha",
         "tree_state",
         "records",
+        "source_sha256",
+        "source_modified_at",
         "retrieval_tags"
       ]
     },
@@ -434,6 +439,9 @@
         "tree_state",
         "retrieval_tags",
         "source_path",
+        "source_sha256",
+        "source_modified_at",
+        "Get-FileHash",
         "source-learning-map",
         "plan-hermes-source-learning.ps1",
         "stable-diffusion.cpp",
@@ -462,6 +470,9 @@
         "refresh_required",
         "current_commit_sha",
         "source_path",
+        "source_sha256",
+        "source_modified_at",
+        "changed_source_count",
         "retrieval_tags",
         "Strict"
       ]
@@ -473,6 +484,8 @@
         "Hermes Memory Index v1",
         "schema_version",
         "source_path",
+        "source_sha256",
+        "source_modified_at",
         "retrieval_tags",
         "operating-loop",
         "memory-contract"
@@ -485,6 +498,9 @@
         "check-hermes-memory-index.ps1",
         "refresh_required",
         "stale",
+        "changed-source",
+        "changed_source_count",
+        "source_sha256",
         "missing",
         "MaxAgeHours"
       ]

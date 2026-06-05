@@ -55,7 +55,7 @@ try {
 	$ids = @{}
 	$allTags = @()
 	foreach ($record in $records) {
-		foreach ($property in @("id", "source_path", "repo", "lane", "source_type", "freshness", "summary")) {
+		foreach ($property in @("id", "source_path", "source_sha256", "source_modified_at", "repo", "lane", "source_type", "freshness", "summary")) {
 			Assert-NonEmptyString ([string]$record.$property) "record.$property"
 		}
 
@@ -68,6 +68,18 @@ try {
 		$sourcePath = Join-Path $repoRoot ([string]$record.source_path -replace '/', '\')
 		if (!(Test-Path -LiteralPath $sourcePath -PathType Leaf)) {
 			throw "Hermes memory record source_path does not exist: $($record.source_path)"
+		}
+		$currentHash = (Get-FileHash -LiteralPath $sourcePath -Algorithm SHA256).Hash.ToLowerInvariant()
+		if ($currentHash -ne ([string]$record.source_sha256).ToLowerInvariant()) {
+			throw "Hermes memory record $id source_sha256 does not match current source file."
+		}
+		if ([string]$record.source_sha256 -notmatch "^[A-Fa-f0-9]{64}$") {
+			throw "Hermes memory record $id source_sha256 must be a 64-character hex digest."
+		}
+		try {
+			[DateTimeOffset]::Parse([string]$record.source_modified_at) | Out-Null
+		} catch {
+			throw "Hermes memory record $id source_modified_at must be a valid timestamp."
 		}
 
 		if ([string]$record.source_type -notin @("instruction", "workflow", "runtime", "evidence", "validation", "planning", "release", "security", "example", "memory")) {

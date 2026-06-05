@@ -40,8 +40,8 @@ conditions, validation, and handoff shape.
 Use [`docs/hermes-memory-contract.md`](docs/hermes-memory-contract.md)
 with `scripts\write-hermes-memory-index.ps1` and
 `scripts\check-hermes-memory-index.ps1` when Hermes needs durable,
-source-grounded memory that can be refreshed, checked, and validated before
-repository work.
+source-grounded memory with file hashes and timestamps that can be refreshed,
+checked, and validated before repository work.
 Use [`docs/hermes-openframeworks-ggml-evals.md`](docs/hermes-openframeworks-ggml-evals.md)
 as the prompt-only eval pack before giving Hermes broader repository authority.
 Use [`docs/hermes-openframeworks-ggml-evals.json`](docs/hermes-openframeworks-ggml-evals.json)

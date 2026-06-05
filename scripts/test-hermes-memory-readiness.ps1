@@ -16,6 +16,7 @@ $tempRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("ofxggml-hermes-memory-
 New-Item -ItemType Directory -Path $tempRoot -Force | Out-Null
 $indexPath = Join-Path $tempRoot "hermes-memory-index.json"
 $stalePath = Join-Path $tempRoot "stale-memory-index.json"
+$changedSourcePath = Join-Path $tempRoot "changed-source-memory-index.json"
 
 try {
 	& $writerPath -OutputPath $indexPath | Out-Null
@@ -43,6 +44,21 @@ try {
 	}
 	if (@($staleReport.issues | Where-Object { $_ -match "stale" }).Count -eq 0) {
 		throw "Stale Hermes memory index report should include a stale issue."
+	}
+
+	$index = Get-Content -LiteralPath $indexPath -Raw | ConvertFrom-Json
+	$index.records[0].source_sha256 = "0000000000000000000000000000000000000000000000000000000000000000"
+	$index | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $changedSourcePath -Encoding UTF8
+
+	$changedSourceReport = (& $checkerPath -IndexPath $changedSourcePath -MaxAgeHours 24 -Json) | ConvertFrom-Json
+	if ([string]$changedSourceReport.status -ne "refresh_required") {
+		throw "Changed-source Hermes memory index should require refresh, got: $($changedSourceReport.status)"
+	}
+	if ([int]$changedSourceReport.changed_source_count -lt 1) {
+		throw "Changed-source Hermes memory index should report changed_source_count."
+	}
+	if (@($changedSourceReport.issues | Where-Object { $_ -match "source_sha256" }).Count -eq 0) {
+		throw "Changed-source Hermes memory index report should include a source_sha256 issue."
 	}
 
 	$missingReport = (& $checkerPath -IndexPath (Join-Path $tempRoot "missing.json") -Json) | ConvertFrom-Json

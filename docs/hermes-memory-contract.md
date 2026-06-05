@@ -13,8 +13,8 @@ A Hermes memory index must:
 - Store the repository name, current `commit_sha`, `tree_state`, and
   `generated_at` timestamp.
 - Store one record per source-grounded fact packet.
-- Include `source_path`, `repo`, `lane`, `source_type`, `freshness`, `summary`,
-  and `retrieval_tags` for every record.
+- Include `source_path`, `source_sha256`, `source_modified_at`, `repo`, `lane`,
+  `source_type`, `freshness`, `summary`, and `retrieval_tags` for every record.
 - Prefer current source files when the index commit or freshness is stale.
 - Stay generated. Do not commit memory indexes, vector stores, embedding
   caches, model weights, downloaded runtimes, or sample media dumps.
@@ -51,6 +51,9 @@ Stop and refresh memory when:
 
 - The index `commit_sha` does not match the current checkout.
 - A retrieved `source_path` no longer exists.
+- A retrieved file's current SHA-256 digest no longer matches the record's
+  `source_sha256`.
+- A retrieved file was modified after the record's `source_modified_at`.
 - A task depends on release evidence, workflow policy, or runtime ownership and
   the index was generated before those files changed.
 - Memory disagrees with `AGENTS.md`, `HERMES.md`, or the current lane docs.
@@ -59,7 +62,8 @@ Stop and refresh memory when:
 
 `scripts\test-hermes-memory-index.ps1` generates a temporary index, checks the
 schema title, verifies required record fields, confirms record IDs are unique,
-and ensures every `source_path` exists. `scripts\test-hermes-memory-readiness.ps1`
-checks the readiness reporter against fresh, stale, and missing indexes.
+ensures every `source_path` exists, and checks each `source_sha256` against the
+current file content. `scripts\test-hermes-memory-readiness.ps1` checks the
+readiness reporter against fresh, stale, changed-source, and missing indexes.
 `scripts\validate-local.ps1` runs those tests before the Hermes eval catalog so
 permanent-memory drift is visible early.

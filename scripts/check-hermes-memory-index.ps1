@@ -62,6 +62,7 @@ $currentTreeState = Get-GitTreeState
 $issues = @()
 $warnings = @()
 $recordCount = 0
+$changedSourceCount = 0
 $ageHours = $null
 $indexCommitSha = ""
 $indexTreeState = ""
@@ -129,7 +130,7 @@ if (!(Test-Path -LiteralPath $resolvedIndexPath -PathType Leaf)) {
 				$ids[$id] = $true
 			}
 
-			foreach ($property in @("source_path", "repo", "lane", "source_type", "freshness", "summary")) {
+			foreach ($property in @("source_path", "source_sha256", "source_modified_at", "repo", "lane", "source_type", "freshness", "summary")) {
 				if ([string]::IsNullOrWhiteSpace([string]$record.$property)) {
 					Add-Issue "Memory record $id is missing $property."
 				}
@@ -144,6 +145,26 @@ if (!(Test-Path -LiteralPath $resolvedIndexPath -PathType Leaf)) {
 				$sourcePath = Resolve-RepoPath ([string]$record.source_path -replace '/', '\')
 				if (!(Test-Path -LiteralPath $sourcePath -PathType Leaf)) {
 					Add-Issue "Memory record $id source_path does not exist: $($record.source_path)"
+				} else {
+					if (![string]::IsNullOrWhiteSpace([string]$record.source_sha256)) {
+						$currentHash = (Get-FileHash -LiteralPath $sourcePath -Algorithm SHA256).Hash.ToLowerInvariant()
+						if ($currentHash -ne ([string]$record.source_sha256).ToLowerInvariant()) {
+							$changedSourceCount += 1
+							Add-Issue "Memory record $id source_sha256 does not match current source file."
+						}
+					}
+
+					if (![string]::IsNullOrWhiteSpace([string]$record.source_modified_at)) {
+						try {
+							$recordModifiedAt = [DateTimeOffset]::Parse([string]$record.source_modified_at)
+							$currentModifiedAt = (Get-Item -LiteralPath $sourcePath).LastWriteTimeUtc
+							if ($currentModifiedAt -gt $recordModifiedAt.UtcDateTime.AddSeconds(1)) {
+								Add-Issue "Memory record $id source file was modified after the index record."
+							}
+						} catch {
+							Add-Issue "Memory record $id source_modified_at is not a valid timestamp: $($record.source_modified_at)"
+						}
+					}
 				}
 			}
 		}
@@ -169,6 +190,7 @@ $report = [ordered]@{
 	index_tree_state = $indexTreeState
 	current_tree_state = $currentTreeState
 	record_count = $recordCount
+	changed_source_count = $changedSourceCount
 	issues = @($issues)
 	warnings = @($warnings)
 }

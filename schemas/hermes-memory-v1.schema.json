@@ -52,6 +52,8 @@
       "required": [
         "id",
         "source_path",
+        "source_sha256",
+        "source_modified_at",
         "repo",
         "lane",
         "source_type",
@@ -67,6 +69,14 @@
         "source_path": {
           "type": "string",
           "minLength": 1
+        },
+        "source_sha256": {
+          "type": "string",
+          "pattern": "^[A-Fa-f0-9]{64}$"
+        },
+        "source_modified_at": {
+          "type": "string",
+          "format": "date-time"
         },
         "repo": {
           "type": "string",
