@@ -64,6 +64,9 @@ if ($schemaJson.title -ne "ofxGgml Evidence v1") {
 & (Join-Path $repoRoot "scripts\test-workflow-profiles.ps1")
 & (Join-Path $repoRoot "scripts\test-workflow-fixtures.ps1")
 
+Write-Step "Checking Hermes eval catalog"
+& (Join-Path $repoRoot "scripts\test-hermes-eval-catalog.ps1")
+
 Write-Step "Checking workflow metadata extractor"
 $metadataJson = & (Join-Path $repoRoot "scripts\workflow-metadata-extractor.ps1") -WorkflowPath (Join-Path $workflowRoot "addon-hygiene.yml")
 $metadata = $metadataJson | ConvertFrom-Json

@@ -28,6 +28,8 @@ for Hermes instruction, RAG/memory, skill, and evaluation layers before
 fine-tuning or broad agent automation.
 Use [`docs/hermes-openframeworks-ggml-evals.md`](docs/hermes-openframeworks-ggml-evals.md)
 as the prompt-only eval pack before giving Hermes broader repository authority.
+Use [`docs/hermes-openframeworks-ggml-evals.json`](docs/hermes-openframeworks-ggml-evals.json)
+when an agent or dashboard needs the same scenarios in machine-readable form.
 
 ### Agent baseline
 

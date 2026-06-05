@@ -6,6 +6,10 @@ Run these as prompt-only evaluations first. Do not use them as fine-tuning data
 until the instruction, RAG/memory, skill, and validation layers from
 `docs\hermes-ecosystem-learning-plan.md` are stable.
 
+The paired machine-readable catalog is
+`docs\hermes-openframeworks-ggml-evals.json`; local validation checks that the
+catalog and this guide keep the same scenario titles.
+
 ## Scoring
 
 Score each scenario from 0 to 3:
