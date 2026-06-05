@@ -25,6 +25,12 @@ The default generated output is:
 scripts\write-hermes-memory-index.ps1 -OutputPath build\hermes-memory\hermes-memory-index.json
 ```
 
+Check a generated index before relying on it:
+
+```powershell
+scripts\check-hermes-memory-index.ps1 -IndexPath build\hermes-memory\hermes-memory-index.json -Json
+```
+
 ## Source Types
 
 Use `instruction` for agent rules, `workflow` for reusable workflow contracts,
@@ -53,5 +59,7 @@ Stop and refresh memory when:
 
 `scripts\test-hermes-memory-index.ps1` generates a temporary index, checks the
 schema title, verifies required record fields, confirms record IDs are unique,
-and ensures every `source_path` exists. `scripts\validate-local.ps1` runs that
-test before the Hermes eval catalog so permanent-memory drift is visible early.
+and ensures every `source_path` exists. `scripts\test-hermes-memory-readiness.ps1`
+checks the readiness reporter against fresh, stale, and missing indexes.
+`scripts\validate-local.ps1` runs those tests before the Hermes eval catalog so
+permanent-memory drift is visible early.

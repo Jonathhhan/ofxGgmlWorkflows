@@ -12,6 +12,9 @@ boundaries or inventing unstable runtime policy.
   should learn, retrieve, evaluate, or practice ecosystem work.
 - Use `docs\hermes-agent-operating-loop.md` when a task asks Hermes to act,
   improve agents, perform cross-repo planning, or choose an edit lane.
+- Use `docs\hermes-source-learning-map.md` when Hermes should learn from
+  upstream code such as `ggml-org`, `stable-diffusion.cpp`, or
+  `openFrameworks`.
 - Prefer documentation, validation, workflow, and planning changes when the
   requested improvement is about agents or ecosystem coordination.
 - Keep model-specific UX and runtime behavior in companion addons unless the
@@ -19,6 +22,13 @@ boundaries or inventing unstable runtime policy.
 
 ## openFrameworks Skill Loop
 
+- Treat upstream openFrameworks as the C++ creative-coding toolkit that defines
+  the local addon and example shape.
+- When learning from upstream openFrameworks, inspect `addons`, `apps`, `docs`,
+  `examples`, `libs`, `scripts`, and `projectGenerator` before translating the
+  lesson into ofxGgml addon behavior.
+- Keep openFrameworks releases self-contained. Do not mix generated projects,
+  libraries, examples, or paths across different OF release directories.
 - Read `addon_config.mk`, `README.md`, `src`, example folders, docs, scripts,
   and local tests before changing public behavior.
 - Preserve openFrameworks-style public names, example naming, and addon layout.
@@ -37,6 +47,9 @@ boundaries or inventing unstable runtime policy.
 
 - Treat `ofxGgmlCore` as the shared ggml/runtime base and planning/control
   plane for companion addons.
+- Learn upstream ggml, llama.cpp, whisper.cpp, stable-diffusion.cpp, and
+  openFrameworks implementation patterns through
+  `docs\hermes-source-learning-map.md` before changing provider contracts.
 - Do not add reverse dependencies from Core to companion addons.
 - Keep model-specific runtime setup, prompts, UI, scripts, sample assets, and
   generated evidence in the companion addon that owns that model lane.

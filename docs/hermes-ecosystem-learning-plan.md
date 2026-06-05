@@ -44,11 +44,14 @@ Priority documents:
 - each managed addon's `AGENTS.md`, `README.md`, and `docs\*WORKFLOWS.md`
 - `ofxGgmlWorkflows\docs\agent-baseline.md`
 - `ofxGgmlWorkflows\docs\hermes-openframeworks-ggml-skills.md`
+- `ofxGgmlWorkflows\docs\hermes-source-learning-map.md`
 - `ofxGgmlWorkflows\docs\hermes-agent-operating-loop.md`
 - `ofxGgmlWorkflows\docs\evidence-schema-v1.md`
 - selected openFrameworks docs and examples that explain addon layout,
   `addons.make`, projectGenerator, Visual Studio builds, and example structure
 - selected ggml headers and docs plus Core runtime/provider docs
+- official source references for `ggml-org`, `stable-diffusion.cpp`, and
+  `openFrameworks` when learning upstream implementation and layout patterns
 
 Priority scripts:
 
@@ -65,9 +68,10 @@ Memory records should store source path, commit SHA when available, repository
 lane, freshness timestamp, and whether the source is instruction, workflow,
 runtime, evidence, validation, planning, release, security, memory, or example
 material. Use `docs\hermes-memory-contract.md` and
-`scripts\write-hermes-memory-index.ps1` for the Workflows lane memory index.
-The generated index is a build artifact, not committed source, and stale
-records must yield to current repository files.
+`scripts\write-hermes-memory-index.ps1` for the Workflows lane memory index,
+then use `scripts\check-hermes-memory-index.ps1` before relying on it. The
+generated index is a build artifact, not committed source, and stale records
+must yield to current repository files.
 
 ## Skill Layer
 
@@ -78,6 +82,10 @@ model:
   artifact hygiene, logging conventions, and validation entrypoints.
 - `ggml-runtime-provider`: check Core provider rules, backend declarations,
   setup scripts, optional runtime artifacts, and reverse dependency risks.
+- `upstream-source-learning`: inspect upstream `ggml`, `llama.cpp`,
+  `whisper.cpp`, `stable-diffusion.cpp`, and `openFrameworks` patterns, then
+  translate the lesson into a Core, Workflows, or companion lane decision before
+  editing.
 - `ofxggml-ecosystem-planning`: run Core planning/readiness first, classify
   dirty repos, choose one lane, and write a handoff before cross-repo edits.
 - `windows-vs-openframeworks-build`: use Visual Studio/openFrameworks build
@@ -127,8 +135,8 @@ Evaluation should score:
 2. Use `docs\hermes-agent-operating-loop.md` to classify the lane, retrieval
    packet, stop conditions, and handoff shape.
 3. Retrieve the instruction layer and relevant lane docs.
-4. Refresh or verify the Hermes memory index when the task is cross-repo,
-   release-facing, or agent-improvement work.
+4. Refresh or verify the Hermes memory index, then check readiness when the
+   task is cross-repo, release-facing, or agent-improvement work.
 5. Select the smallest applicable skill.
 6. Execute only inside the chosen lane.
 7. Validate locally.

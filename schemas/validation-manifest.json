@@ -19,6 +19,7 @@
     { "path": "docs/hermes-ecosystem-learning-plan.md", "label": "Hermes ecosystem learning plan" },
     { "path": "docs/hermes-memory-contract.md", "label": "Hermes memory contract" },
     { "path": "docs/hermes-openframeworks-ggml-skills.md", "label": "Hermes openFrameworks and ggml skills" },
+    { "path": "docs/hermes-source-learning-map.md", "label": "Hermes source learning map" },
     { "path": "docs/managed-addon-rollout.md", "label": "managed addon rollout matrix" },
     { "path": "docs/sam-evidence-pilot-handoff.md", "label": "Sam evidence pilot handoff" },
     { "path": "docs/workflow-release-policy.md", "label": "workflow release policy" },
@@ -31,10 +32,12 @@
     { "path": "scripts/test-evidence-validator.ps1", "label": "evidence validator tests" },
     { "path": "scripts/test-dependabot-actions.ps1", "label": "Dependabot GitHub Actions tests" },
     { "path": "scripts/test-hermes-memory-index.ps1", "label": "Hermes memory index tests" },
+    { "path": "scripts/test-hermes-memory-readiness.ps1", "label": "Hermes memory readiness tests" },
     { "path": "scripts/test-validation-manifest.ps1", "label": "validation manifest tests" },
     { "path": "scripts/test-workflow-security-advice.ps1", "label": "workflow security advice tests" },
     { "path": "scripts/test-workflow-profiles.ps1", "label": "workflow profile tests" },
     { "path": "scripts/test-workflow-fixtures.ps1", "label": "workflow fixture tests" },
+    { "path": "scripts/check-hermes-memory-index.ps1", "label": "Hermes memory readiness checker" },
     { "path": "scripts/write-evidence-promotion-advice.ps1", "label": "evidence promotion advisor" },
     { "path": "scripts/write-hermes-memory-index.ps1", "label": "Hermes memory index writer" },
     { "path": "scripts/write-workflow-security-advice.ps1", "label": "workflow security advisor" },
@@ -62,6 +65,7 @@
     "docs/hermes-ecosystem-learning-plan.md",
     "docs/hermes-memory-contract.md",
     "docs/hermes-openframeworks-ggml-skills.md",
+    "docs/hermes-source-learning-map.md",
     "docs/managed-addon-rollout.md",
     "docs/sam-evidence-pilot-handoff.md",
     "docs/workflow-release-policy.md",
@@ -73,10 +77,12 @@
     "scripts/test-evidence-validator.ps1",
     "scripts/test-dependabot-actions.ps1",
     "scripts/test-hermes-memory-index.ps1",
+    "scripts/test-hermes-memory-readiness.ps1",
     "scripts/test-validation-manifest.ps1",
     "scripts/test-workflow-security-advice.ps1",
     "scripts/test-workflow-profiles.ps1",
     "scripts/test-workflow-fixtures.ps1",
+    "scripts/check-hermes-memory-index.ps1",
     "scripts/write-evidence-promotion-advice.ps1",
     "scripts/write-hermes-memory-index.ps1",
     "scripts/write-workflow-security-advice.ps1",
@@ -198,7 +204,11 @@
         "hermes-ecosystem-learning-plan.md",
         "hermes-memory-contract.md",
         "write-hermes-memory-index.ps1",
+        "check-hermes-memory-index.ps1",
         "hermes-openframeworks-ggml-skills.md",
+        "hermes-source-learning-map.md",
+        "stable-diffusion.cpp",
+        "openFrameworks",
         "coding-agent-instructions.yml",
         "addon-hygiene.yml",
         "metadata-validation.yml",
@@ -213,7 +223,7 @@
         "reject_generated_project_files",
         "artifact_digest",
         "artifact-digest",
-        "Hermes memory index checks",
+        "Hermes memory index and readiness checks",
         "recommended_consumer_ref",
         "require_explicit_permissions",
         "require_pinned_actions",
@@ -311,7 +321,10 @@
         "release-readiness-evidence",
         "plan-release-readiness.ps1 -Json",
         "hermes-memory-contract.md",
-        "write-hermes-memory-index.ps1"
+        "write-hermes-memory-index.ps1",
+        "check-hermes-memory-index.ps1",
+        "hermes-source-learning-map.md",
+        "upstream-source-learning"
       ]
     },
     {
@@ -322,6 +335,7 @@
         "Retrieval Packets",
         "Hermes memory",
         "hermes-memory-contract.md",
+        "check-hermes-memory-index.ps1",
         "Stop Conditions",
         "Agent Output Shape",
         "workflow-security-advice.yml",
@@ -345,7 +359,33 @@
         "Evidence Schema v1",
         "artifact integrity",
         "memory indexes",
-        "stale records"
+        "stale records",
+        "hermes-source-learning-map.md",
+        "stable-diffusion.cpp",
+        "openFrameworks",
+        "creative-coding",
+        "self-contained",
+        "Do not mix",
+        "apps"
+      ]
+    },
+    {
+      "path": "docs/hermes-source-learning-map.md",
+      "label": "Hermes source learning map",
+      "patterns": [
+        "ggml-org",
+        "stable-diffusion.cpp",
+        "openFrameworks",
+        "llama.cpp",
+        "whisper.cpp",
+        "creative-coding",
+        "self-contained",
+        "Do not mix",
+        "apps",
+        "projectGenerator",
+        "Core runtime",
+        "companion UX",
+        "Stop Conditions"
       ]
     },
     {
@@ -358,6 +398,7 @@
         "freshness",
         "retrieval_tags",
         "write-hermes-memory-index.ps1",
+        "check-hermes-memory-index.ps1",
         "generated",
         "stale"
       ]
@@ -382,7 +423,22 @@
         "commit_sha",
         "tree_state",
         "retrieval_tags",
-        "source_path"
+        "source_path",
+        "source-learning-map",
+        "stable-diffusion.cpp",
+        "openFrameworks"
+      ]
+    },
+    {
+      "path": "scripts/check-hermes-memory-index.ps1",
+      "label": "Hermes memory readiness checker",
+      "patterns": [
+        "MaxAgeHours",
+        "refresh_required",
+        "current_commit_sha",
+        "source_path",
+        "retrieval_tags",
+        "Strict"
       ]
     },
     {
@@ -395,6 +451,17 @@
         "retrieval_tags",
         "operating-loop",
         "memory-contract"
+      ]
+    },
+    {
+      "path": "scripts/test-hermes-memory-readiness.ps1",
+      "label": "Hermes memory readiness tests",
+      "patterns": [
+        "check-hermes-memory-index.ps1",
+        "refresh_required",
+        "stale",
+        "missing",
+        "MaxAgeHours"
       ]
     },
     {

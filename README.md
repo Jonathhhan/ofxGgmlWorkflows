@@ -25,6 +25,10 @@ Hermes/Codex/Copilot baseline that local instruction files should mirror.
 Use [`docs/hermes-openframeworks-ggml-skills.md`](docs/hermes-openframeworks-ggml-skills.md)
 to teach Hermes and sibling agents the openFrameworks addon loop, ggml runtime
 ownership split, evidence expectations, and generated artifact hygiene.
+Use [`docs/hermes-source-learning-map.md`](docs/hermes-source-learning-map.md)
+when Hermes should learn from upstream sources such as `ggml-org`,
+`stable-diffusion.cpp`, and `openFrameworks` before changing local provider,
+companion, or addon-layout contracts.
 Use [`docs/hermes-ecosystem-learning-plan.md`](docs/hermes-ecosystem-learning-plan.md)
 for Hermes instruction, RAG/memory, skill, and evaluation layers before
 fine-tuning or broad agent automation.
@@ -32,9 +36,10 @@ Use [`docs/hermes-agent-operating-loop.md`](docs/hermes-agent-operating-loop.md)
 as the action loop for lane classification, retrieval packets, stop
 conditions, validation, and handoff shape.
 Use [`docs/hermes-memory-contract.md`](docs/hermes-memory-contract.md)
-with `scripts\write-hermes-memory-index.ps1` when Hermes needs durable,
-source-grounded memory that can be refreshed and validated before repository
-work.
+with `scripts\write-hermes-memory-index.ps1` and
+`scripts\check-hermes-memory-index.ps1` when Hermes needs durable,
+source-grounded memory that can be refreshed, checked, and validated before
+repository work.
 Use [`docs/hermes-openframeworks-ggml-evals.md`](docs/hermes-openframeworks-ggml-evals.md)
 as the prompt-only eval pack before giving Hermes broader repository authority.
 Use [`docs/hermes-openframeworks-ggml-evals.json`](docs/hermes-openframeworks-ggml-evals.json)
@@ -321,11 +326,12 @@ scripts\validate-local.bat
 
 Local validation includes Evidence Schema v1 drift checks, evidence validator
 fixtures, evidence promotion advisor tests, validation manifest checks, rollout
-profile checks, Hermes memory index checks, and reusable workflow caller
-fixtures under `tests/workflows/` so representative advisory and required
-caller YAML stays aligned with the reusable workflow inputs. Local validation
-also checks Dependabot GitHub Actions coverage and the workflow security advice
-report generator. The manifest in `schemas/validation-manifest.json` owns
+profile checks, Hermes memory index and readiness checks, and reusable workflow
+caller fixtures under `tests/workflows/` so representative advisory and
+required caller YAML stays aligned with the reusable workflow inputs. Local
+validation also checks Dependabot GitHub Actions coverage and the workflow
+security advice report generator. The manifest in
+`schemas/validation-manifest.json` owns
 inventory-style validation such as expected files, workflow files, evidence
 fixture files, workflow fixture files, advisory-vs-required fixture pairs,
 rollout profile allowlists, docs coverage tokens, validator capability tokens,

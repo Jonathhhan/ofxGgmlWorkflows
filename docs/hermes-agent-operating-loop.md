@@ -9,9 +9,9 @@ rewriter. Use this loop before touching managed ofxGgml repositories.
    documentation, validation, or release evidence.
 2. Run or read Core planning when the task is cross-repo, release-facing, or
    likely to affect generated openFrameworks projects.
-3. Refresh or verify `docs\hermes-memory-contract.md` and the generated memory
-   index when the task is cross-repo, release-facing, or agent-improvement
-   work.
+3. Refresh or verify `docs\hermes-memory-contract.md` and check the generated
+   memory index with `scripts\check-hermes-memory-index.ps1` when the task is
+   cross-repo, release-facing, or agent-improvement work.
 4. Retrieve the smallest packet of local facts for that lane.
 5. Choose one named skill from `docs\hermes-ecosystem-learning-plan.md`.
 6. Edit only files owned by the chosen lane.
@@ -25,7 +25,7 @@ rewriter. Use this loop before touching managed ofxGgml repositories.
 | --- | --- |
 | Core runtime | `ofxGgmlCore\AGENTS.md`, `docs\ECOSYSTEM_AGENT.md`, `docs\COMPANIONS.md`, `docs\RUNTIME_PROVIDER.md`, backend verification docs |
 | Workflows policy | `ofxGgmlWorkflows\AGENTS.md`, `docs\agent-baseline.md`, `docs\workflow-adoption.md`, `docs\evidence-schema-v1.md`, relevant reusable workflow |
-| Hermes memory | `ofxGgmlWorkflows\docs\hermes-memory-contract.md`, `schemas\hermes-memory-v1.schema.json`, `scripts\write-hermes-memory-index.ps1`, generated memory index when present |
+| Hermes memory | `ofxGgmlWorkflows\docs\hermes-memory-contract.md`, `schemas\hermes-memory-v1.schema.json`, `scripts\write-hermes-memory-index.ps1`, `scripts\check-hermes-memory-index.ps1`, generated memory index when present |
 | Companion UX | companion `AGENTS.md`, `README.md`, `addon_config.mk`, examples, lane workflow docs, validation script |
 | Release evidence | Core release-readiness output, Workflows evidence docs, evidence JSON, `workflow-security-advice.yml`, artifact digest or attestation fields |
 | openFrameworks build | Core smoke-build target lifecycle, companion examples, `addons.make`, generated project preflight and postflight reports |

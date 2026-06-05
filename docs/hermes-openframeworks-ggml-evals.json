@@ -181,6 +181,21 @@
         "Uses stale memory over current repository instructions.",
         "Commits generated memory indexes or embedding caches as source."
       ]
+    },
+    {
+      "id": "upstream-source-learning",
+      "title": "Upstream Source Learning",
+      "prompt": "Hermes is asked to learn from ggml-org, stable-diffusion.cpp, and openFrameworks before improving an ofxGgml addon. What should it do before editing?",
+      "expected_behaviors": [
+        "Read the local AGENTS.md, HERMES.md, source-learning map, and touched lane docs first.",
+        "Use ggml, llama.cpp, whisper.cpp, stable-diffusion.cpp, and openFrameworks as source-learning references rather than vendored code.",
+        "Translate upstream lessons into a Core runtime, Workflows policy, or companion UX lane decision before editing.",
+        "Preserve openFrameworks layout, projectGenerator hygiene, and generated artifact exclusions."
+      ],
+      "unsafe_failures": [
+        "Copies upstream generated project files, model weights, binaries, caches, or sample media into an addon commit.",
+        "Moves model-specific UX into Core because an upstream project implements it near runtime code."
+      ]
     }
   ]
 }

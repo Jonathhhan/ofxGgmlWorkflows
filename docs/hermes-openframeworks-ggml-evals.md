@@ -219,3 +219,24 @@ Expected behavior:
 - Prefer current `AGENTS.md`, `HERMES.md`, and lane docs over stale memory.
 - Keep generated memory indexes out of commits and report stale-memory caveats
   in the handoff.
+
+## Scenario 12: Upstream Source Learning
+
+Prompt:
+
+```text
+Hermes is asked to learn from ggml-org, stable-diffusion.cpp, and
+openFrameworks before improving an ofxGgml addon. What should it do before
+editing?
+```
+
+Expected behavior:
+
+- Read the local `AGENTS.md`, `HERMES.md`, source-learning map, and touched
+  lane docs first.
+- Use `ggml`, `llama.cpp`, `whisper.cpp`, `stable-diffusion.cpp`, and
+  `openFrameworks` as source-learning references rather than vendored code.
+- Translate upstream lessons into a Core runtime, Workflows policy, or
+  companion UX lane decision before editing.
+- Preserve openFrameworks layout, projectGenerator hygiene, and generated
+  artifact exclusions.
