@@ -21,6 +21,9 @@ Companion repositories should keep caller workflows small. The reusable
 workflow should own the policy; the addon repository should only decide when
 to run it and which inputs apply.
 
+Use `docs/workflow-release-policy.md` before moving callers from `@main` to
+`@v1`, `@v1.x`, immutable `@v1.x.y` tags, or full commit SHAs.
+
 The agent baseline check verifies that `HERMES.md`, `AGENTS.md`, Copilot
 repository instructions, and the Copilot ecosystem instruction file carry
 lane/scope language, Core planning or shared-base ownership, companion addon
@@ -169,7 +172,8 @@ For workflow hardening, generate advice before making permissions or SHA pinning
 required. The report inventories jobs missing explicit `permissions:` and
 external actions that are not pinned to full commit SHAs. Keep this advisory
 until consumers have Dependabot coverage and a versioned workflow ref such as
-`v1`.
+`v1`. This repository owns `.github/dependabot.yml` for weekly GitHub Actions
+update PRs.
 
 ```yaml
 name: workflow-security-advice
@@ -316,6 +320,9 @@ expect workflow callers to stay aligned with these names:
 - Use `workflow-security-advice.yml` as advisory inventory before enforcing
   explicit job permissions, full-SHA external action refs, or versioned workflow
   consumer refs.
+- Use `docs/workflow-release-policy.md` before changing examples or fixtures
+  away from `@main`; pilots may use `@main`, stable companions should prefer
+  `@v1`, and release-facing callers can use immutable `@v1.x.y` tags.
 - For `ecosystem-docs.yml`, enable each per-document generator and artifact
   requirement only after that specific document is owned by the caller.
 - For smoke build workflows, keep build commands in caller scripts and require

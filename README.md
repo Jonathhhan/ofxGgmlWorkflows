@@ -15,6 +15,8 @@ Use [`docs/sam-evidence-pilot-handoff.md`](docs/sam-evidence-pilot-handoff.md)
 for the first Evidence Schema v1 companion rollout contract.
 Use [`docs/evidence-promotion-playbook.md`](docs/evidence-promotion-playbook.md)
 for the advisory-to-release evidence promotion ladder.
+Use [`docs/workflow-release-policy.md`](docs/workflow-release-policy.md) for
+`@main`, `v1`, immutable patch tag, Dependabot, and SHA-pinning rollout policy.
 Use [`docs/agent-handoff-contract.md`](docs/agent-handoff-contract.md) when
 passing cross-repo rollout, evidence promotion, release planning, or companion
 PR fanout work between agents.
@@ -187,7 +189,7 @@ jobs:
 
 Workflow security advice stays report-only during rollout. Use it to inventory
 jobs missing explicit `permissions:` and external actions that still use tag
-refs before adding Dependabot coverage or making SHA pinning required:
+refs before relying on Dependabot coverage or making SHA pinning required:
 
 ```yaml
 jobs:
@@ -270,6 +272,10 @@ hard release gates.
 
 The workflows enforce basic addon structure, artifact hygiene, and release readiness without requiring heavyweight native builds.
 
+`.github/dependabot.yml` enables weekly GitHub Actions update PRs for this
+workflow repository. Keep those updates reviewed before promoting external
+actions from tag refs to full commit SHAs.
+
 `coding-agent-instructions.yml` checks that consuming repositories carry
 Hermes Agent `HERMES.md` project context, Codex-style `AGENTS.md` guidance, and
 GitHub Copilot repository instructions plus
@@ -303,7 +309,8 @@ Local validation includes Evidence Schema v1 drift checks, evidence validator
 fixtures, evidence promotion advisor tests, validation manifest checks, rollout
 profile checks, and reusable workflow caller fixtures under `tests/workflows/`
 so representative advisory and required caller YAML stays aligned with the
-reusable workflow inputs. The
+reusable workflow inputs. Local validation also checks Dependabot GitHub
+Actions coverage and the workflow security advice report generator. The
 manifest in `schemas/validation-manifest.json` owns inventory-style validation
 such as expected files, workflow files, evidence fixture files, workflow fixture
 files, advisory-vs-required fixture pairs, rollout profile allowlists, docs

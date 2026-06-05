@@ -3,6 +3,7 @@
     { "path": "README.md", "label": "README" },
     { "path": "CHANGELOG.md", "label": "CHANGELOG" },
     { "path": ".gitignore", "label": ".gitignore" },
+    { "path": ".github/dependabot.yml", "label": "Dependabot GitHub Actions config" },
     { "path": "HERMES.md", "label": "Hermes instructions" },
     { "path": "AGENTS.md", "label": "Codex instructions" },
     { "path": ".github/copilot-instructions.md", "label": "Copilot instructions" },
@@ -18,12 +19,14 @@
     { "path": "docs/hermes-openframeworks-ggml-skills.md", "label": "Hermes openFrameworks and ggml skills" },
     { "path": "docs/managed-addon-rollout.md", "label": "managed addon rollout matrix" },
     { "path": "docs/sam-evidence-pilot-handoff.md", "label": "Sam evidence pilot handoff" },
+    { "path": "docs/workflow-release-policy.md", "label": "workflow release policy" },
     { "path": "docs/workflow-adoption.md", "label": "workflow adoption docs" },
     { "path": "schemas/evidence-v1.schema.json", "label": "evidence JSON schema" },
     { "path": "schemas/validation-manifest.json", "label": "validation manifest" },
     { "path": "scripts/test-evidence-schema-drift.ps1", "label": "evidence schema drift tests" },
     { "path": "scripts/test-evidence-promotion-advisor.ps1", "label": "evidence promotion advisor tests" },
     { "path": "scripts/test-evidence-validator.ps1", "label": "evidence validator tests" },
+    { "path": "scripts/test-dependabot-actions.ps1", "label": "Dependabot GitHub Actions tests" },
     { "path": "scripts/test-validation-manifest.ps1", "label": "validation manifest tests" },
     { "path": "scripts/test-workflow-security-advice.ps1", "label": "workflow security advice tests" },
     { "path": "scripts/test-workflow-profiles.ps1", "label": "workflow profile tests" },
@@ -42,6 +45,7 @@
     "README.md",
     "CHANGELOG.md",
     ".gitignore",
+    ".github/dependabot.yml",
     ".github/copilot-instructions.md",
     "docs/agent-baseline.md",
     "docs/agent-handoff-contract.md",
@@ -53,11 +57,13 @@
     "docs/hermes-openframeworks-ggml-skills.md",
     "docs/managed-addon-rollout.md",
     "docs/sam-evidence-pilot-handoff.md",
+    "docs/workflow-release-policy.md",
     "schemas/evidence-v1.schema.json",
     "schemas/validation-manifest.json",
     "scripts/test-evidence-schema-drift.ps1",
     "scripts/test-evidence-promotion-advisor.ps1",
     "scripts/test-evidence-validator.ps1",
+    "scripts/test-dependabot-actions.ps1",
     "scripts/test-validation-manifest.ps1",
     "scripts/test-workflow-security-advice.ps1",
     "scripts/test-workflow-profiles.ps1",
@@ -193,7 +199,9 @@
         "quality_report_path",
         "reject_generated_project_files",
         "artifact_digest",
-        "recommended_consumer_ref"
+        "recommended_consumer_ref",
+        "workflow-release-policy.md",
+        ".github/dependabot.yml"
       ]
     },
     {
@@ -211,7 +219,42 @@
         "reject_generated_project_files",
         "artifact_digest",
         "workflow-security-advice.yml",
-        "recommended_consumer_ref"
+        "recommended_consumer_ref",
+        "workflow-release-policy.md",
+        ".github/dependabot.yml"
+      ]
+    },
+    {
+      "path": "docs/workflow-release-policy.md",
+      "label": "workflow release policy",
+      "patterns": [
+        "main",
+        "v1",
+        "v1.x.y",
+        "Full commit SHA",
+        "Dependabot Role",
+        "workflow-security-advice.yml",
+        "validate-local.ps1"
+      ]
+    },
+    {
+      "path": ".github/dependabot.yml",
+      "label": "Dependabot GitHub Actions config",
+      "patterns": [
+        "package-ecosystem: \"github-actions\"",
+        "directory: \"/\"",
+        "interval: \"weekly\"",
+        "github-actions"
+      ]
+    },
+    {
+      "path": "scripts/test-dependabot-actions.ps1",
+      "label": "Dependabot GitHub Actions tests",
+      "patterns": [
+        "package-ecosystem",
+        "github-actions",
+        "weekly schedule",
+        "grouped updates"
       ]
     },
     {
