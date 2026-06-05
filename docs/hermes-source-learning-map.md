@@ -5,6 +5,12 @@ ofxGgml addon boundaries. Treat these projects as source-learning references,
 not as permission to vendor code, copy generated artifacts, or change runtime
 ownership.
 
+Generate an agent-ready retrieval packet with:
+
+```powershell
+scripts\plan-hermes-source-learning.ps1 -Json
+```
+
 ## Primary Sources
 
 ### ggml-org
@@ -69,6 +75,8 @@ ownership.
 1. Read local `AGENTS.md`, `HERMES.md`, and the touched addon docs.
 2. Check `docs\hermes-memory-contract.md` and run
    `scripts\check-hermes-memory-index.ps1` when a generated memory index exists.
+   Use `scripts\plan-hermes-source-learning.ps1` to choose the upstream source
+   folders for the task lane.
 3. For addon layout, inspect openFrameworks `addons`, `apps`, `docs`,
    `examples`, `libs`, `scripts`, platform docs, and projectGenerator behavior.
 4. For core tensor or backend design, inspect upstream `ggml` headers, source,

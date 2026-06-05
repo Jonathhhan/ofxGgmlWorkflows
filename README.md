@@ -28,7 +28,9 @@ ownership split, evidence expectations, and generated artifact hygiene.
 Use [`docs/hermes-source-learning-map.md`](docs/hermes-source-learning-map.md)
 when Hermes should learn from upstream sources such as `ggml-org`,
 `stable-diffusion.cpp`, and `openFrameworks` before changing local provider,
-companion, or addon-layout contracts.
+companion, or addon-layout contracts. Use
+`scripts\plan-hermes-source-learning.ps1 -Json` to generate an agent-ready
+source-learning retrieval packet.
 Use [`docs/hermes-ecosystem-learning-plan.md`](docs/hermes-ecosystem-learning-plan.md)
 for Hermes instruction, RAG/memory, skill, and evaluation layers before
 fine-tuning or broad agent automation.
@@ -326,11 +328,11 @@ scripts\validate-local.bat
 
 Local validation includes Evidence Schema v1 drift checks, evidence validator
 fixtures, evidence promotion advisor tests, validation manifest checks, rollout
-profile checks, Hermes memory index and readiness checks, and reusable workflow
-caller fixtures under `tests/workflows/` so representative advisory and
-required caller YAML stays aligned with the reusable workflow inputs. Local
-validation also checks Dependabot GitHub Actions coverage and the workflow
-security advice report generator. The manifest in
+profile checks, Hermes memory index and readiness checks, Hermes source-learning
+plan checks, and reusable workflow caller fixtures under `tests/workflows/` so
+representative advisory and required caller YAML stays aligned with the
+reusable workflow inputs. Local validation also checks Dependabot GitHub Actions
+coverage and the workflow security advice report generator. The manifest in
 `schemas/validation-manifest.json` owns
 inventory-style validation such as expected files, workflow files, evidence
 fixture files, workflow fixture files, advisory-vs-required fixture pairs,

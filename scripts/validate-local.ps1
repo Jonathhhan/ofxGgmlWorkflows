@@ -69,6 +69,7 @@ if ($schemaJson.title -ne "ofxGgml Evidence v1") {
 Write-Step "Checking Hermes memory index contract"
 & (Join-Path $repoRoot "scripts\test-hermes-memory-index.ps1")
 & (Join-Path $repoRoot "scripts\test-hermes-memory-readiness.ps1")
+& (Join-Path $repoRoot "scripts\test-hermes-source-learning-plan.ps1")
 
 Write-Step "Checking Hermes eval catalog"
 & (Join-Path $repoRoot "scripts\test-hermes-eval-catalog.ps1")

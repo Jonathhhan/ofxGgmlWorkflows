@@ -33,11 +33,13 @@
     { "path": "scripts/test-dependabot-actions.ps1", "label": "Dependabot GitHub Actions tests" },
     { "path": "scripts/test-hermes-memory-index.ps1", "label": "Hermes memory index tests" },
     { "path": "scripts/test-hermes-memory-readiness.ps1", "label": "Hermes memory readiness tests" },
+    { "path": "scripts/test-hermes-source-learning-plan.ps1", "label": "Hermes source-learning planner tests" },
     { "path": "scripts/test-validation-manifest.ps1", "label": "validation manifest tests" },
     { "path": "scripts/test-workflow-security-advice.ps1", "label": "workflow security advice tests" },
     { "path": "scripts/test-workflow-profiles.ps1", "label": "workflow profile tests" },
     { "path": "scripts/test-workflow-fixtures.ps1", "label": "workflow fixture tests" },
     { "path": "scripts/check-hermes-memory-index.ps1", "label": "Hermes memory readiness checker" },
+    { "path": "scripts/plan-hermes-source-learning.ps1", "label": "Hermes source-learning planner" },
     { "path": "scripts/write-evidence-promotion-advice.ps1", "label": "evidence promotion advisor" },
     { "path": "scripts/write-hermes-memory-index.ps1", "label": "Hermes memory index writer" },
     { "path": "scripts/write-workflow-security-advice.ps1", "label": "workflow security advisor" },
@@ -78,11 +80,13 @@
     "scripts/test-dependabot-actions.ps1",
     "scripts/test-hermes-memory-index.ps1",
     "scripts/test-hermes-memory-readiness.ps1",
+    "scripts/test-hermes-source-learning-plan.ps1",
     "scripts/test-validation-manifest.ps1",
     "scripts/test-workflow-security-advice.ps1",
     "scripts/test-workflow-profiles.ps1",
     "scripts/test-workflow-fixtures.ps1",
     "scripts/check-hermes-memory-index.ps1",
+    "scripts/plan-hermes-source-learning.ps1",
     "scripts/write-evidence-promotion-advice.ps1",
     "scripts/write-hermes-memory-index.ps1",
     "scripts/write-workflow-security-advice.ps1",
@@ -207,6 +211,7 @@
         "check-hermes-memory-index.ps1",
         "hermes-openframeworks-ggml-skills.md",
         "hermes-source-learning-map.md",
+        "plan-hermes-source-learning.ps1",
         "stable-diffusion.cpp",
         "openFrameworks",
         "coding-agent-instructions.yml",
@@ -224,6 +229,7 @@
         "artifact_digest",
         "artifact-digest",
         "Hermes memory index and readiness checks",
+        "source-learning retrieval packet",
         "recommended_consumer_ref",
         "require_explicit_permissions",
         "require_pinned_actions",
@@ -324,7 +330,8 @@
         "write-hermes-memory-index.ps1",
         "check-hermes-memory-index.ps1",
         "hermes-source-learning-map.md",
-        "upstream-source-learning"
+        "upstream-source-learning",
+        "plan-hermes-source-learning.ps1"
       ]
     },
     {
@@ -336,6 +343,8 @@
         "Hermes memory",
         "hermes-memory-contract.md",
         "check-hermes-memory-index.ps1",
+        "plan-hermes-source-learning.ps1",
+        "Upstream source learning",
         "Stop Conditions",
         "Agent Output Shape",
         "workflow-security-advice.yml",
@@ -383,6 +392,7 @@
         "Do not mix",
         "apps",
         "projectGenerator",
+        "plan-hermes-source-learning.ps1",
         "Core runtime",
         "companion UX",
         "Stop Conditions"
@@ -425,8 +435,23 @@
         "retrieval_tags",
         "source_path",
         "source-learning-map",
+        "plan-hermes-source-learning.ps1",
         "stable-diffusion.cpp",
         "openFrameworks"
+      ]
+    },
+    {
+      "path": "scripts/plan-hermes-source-learning.ps1",
+      "label": "Hermes source-learning planner",
+      "patterns": [
+        "addon-layout",
+        "core-runtime",
+        "diffusion-image-video",
+        "openFrameworks",
+        "stable-diffusion.cpp",
+        "read_first",
+        "stop_conditions",
+        "translate_to"
       ]
     },
     {
@@ -462,6 +487,18 @@
         "stale",
         "missing",
         "MaxAgeHours"
+      ]
+    },
+    {
+      "path": "scripts/test-hermes-source-learning-plan.ps1",
+      "label": "Hermes source-learning planner tests",
+      "patterns": [
+        "plan-hermes-source-learning.ps1",
+        "openframeworks",
+        "stable-diffusion-cpp",
+        "projectGenerator",
+        "self-contained",
+        "addon-layout"
       ]
     },
     {

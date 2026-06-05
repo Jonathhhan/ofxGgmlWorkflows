@@ -73,6 +73,9 @@ then use `scripts\check-hermes-memory-index.ps1` before relying on it. The
 generated index is a build artifact, not committed source, and stale records
 must yield to current repository files.
 
+Use `scripts\plan-hermes-source-learning.ps1 -Json` when Hermes needs a
+machine-readable retrieval packet for upstream source learning.
+
 ## Skill Layer
 
 Hermes should call or follow small named skills rather than one broad mental
@@ -85,7 +88,8 @@ model:
 - `upstream-source-learning`: inspect upstream `ggml`, `llama.cpp`,
   `whisper.cpp`, `stable-diffusion.cpp`, and `openFrameworks` patterns, then
   translate the lesson into a Core, Workflows, or companion lane decision before
-  editing.
+  editing. Use `scripts\plan-hermes-source-learning.ps1` to select the source
+  folders for the requested lane.
 - `ofxggml-ecosystem-planning`: run Core planning/readiness first, classify
   dirty repos, choose one lane, and write a handoff before cross-repo edits.
 - `windows-vs-openframeworks-build`: use Visual Studio/openFrameworks build
