@@ -44,7 +44,8 @@ behavior. The planner emits specialized role profiles and addon lane briefs;
 use `-Focus addon-fanout` for one-agent-per-addon review planning. Each profile
 also includes a `prompt_packet` for consistent sidecar launch prompts. The
 planner exposes a `prompt_launch_queue` when Hermes needs launchable work items.
-Use `-PromptQueue -Json` for a compact queue-only output.
+Use `-PromptQueue -Json` for a compact queue-only output, with `-QueueType` or
+`-QueueId` to select a specific work item.
 The planner tracks `NousResearch/hermes-agent` and `openai/codex` as source-learning
 references for agent loops, memory, skills, local validation, and handoff
 discipline without vendoring external code.

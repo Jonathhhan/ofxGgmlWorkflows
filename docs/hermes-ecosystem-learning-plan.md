@@ -81,7 +81,7 @@ operating-loop behavior. Treat its specialized role profiles and addon lane brie
 as the canonical delegation packet before spawning reviewers, and use each
 `prompt_packet` or the flattened `prompt_launch_queue` when launching a sidecar
 review. Use `-PromptQueue -Json` when a caller only needs launchable agent work
-items.
+items, and use `-QueueType` or `-QueueId` to narrow the launch packet.
 Use its `agent_source_references` to learn from `NousResearch/hermes-agent` and
 `openai/codex` without vendoring their code or weakening local ofxGgml
 boundaries.

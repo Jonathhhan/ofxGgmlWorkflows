@@ -195,4 +195,35 @@ foreach ($queueEntry in @($fanoutQueue)) {
 	}
 }
 
+$roleOnlyQueue = (& $plannerPath -Focus addon-fanout -PromptQueue -QueueType role-review -Json) | ConvertFrom-Json
+if (@($roleOnlyQueue).Count -ne @($fanoutPlan.roles).Count) {
+	throw "Hermes agent-improvement role-review queue selector should include selected roles only."
+}
+if (@($roleOnlyQueue | Where-Object { $_.type -ne "role-review" }).Count -ne 0) {
+	throw "Hermes agent-improvement role-review queue selector should not include addon reviews."
+}
+
+$addonOnlyQueue = (& $plannerPath -Focus addon-fanout -PromptQueue -QueueType addon-review -Json) | ConvertFrom-Json
+if (@($addonOnlyQueue).Count -ne @($fanoutPlan.addon_review_targets).Count) {
+	throw "Hermes agent-improvement addon-review queue selector should include addon targets only."
+}
+if (@($addonOnlyQueue | Where-Object { $_.type -ne "addon-review" }).Count -ne 0) {
+	throw "Hermes agent-improvement addon-review queue selector should not include role reviews."
+}
+
+$ragQueue = (& $plannerPath -Focus addon-fanout -PromptQueue -QueueId rag-memory-agent -Json) | ConvertFrom-Json
+if (@($ragQueue).Count -ne 1 -or [string]$ragQueue[0].repo -ne "ofxGgmlRag") {
+	throw "Hermes agent-improvement QueueId should select rag-memory-agent."
+}
+
+$repoQueue = (& $plannerPath -Focus addon-fanout -PromptQueue -QueueId ofxGgmlVideo -Json) | ConvertFrom-Json
+if (@($repoQueue).Count -ne 1 -or [string]$repoQueue[0].id -ne "video-pipeline-agent") {
+	throw "Hermes agent-improvement QueueId should select addon queue entries by repo name."
+}
+
+$emptyQueue = (& $plannerPath -Focus memory -PromptQueue -QueueType addon-review -Json) | ConvertFrom-Json
+if (@($emptyQueue).Count -ne 0) {
+	throw "Hermes agent-improvement queue selectors should allow empty queue results."
+}
+
 Write-Host "Hermes agent-improvement plan checks passed."

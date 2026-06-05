@@ -2,6 +2,9 @@ param(
 	[ValidateSet("all", "memory", "evals", "operating-loop", "source-learning", "addon-fanout")]
 	[string]$Focus = "all",
 	[switch]$PromptQueue,
+	[ValidateSet("all", "role-review", "addon-review")]
+	[string]$QueueType = "all",
+	[string]$QueueId = "",
 	[switch]$Json
 )
 
@@ -288,11 +291,19 @@ if ($Focus -eq "all" -or $Focus -eq "addon-fanout") {
 }
 
 $promptLaunchQueue = @($roleLaunchQueue + $addonLaunchQueue)
+if ($QueueType -ne "all") {
+	$promptLaunchQueue = @($promptLaunchQueue | Where-Object { $_.type -eq $QueueType })
+}
+if (![string]::IsNullOrWhiteSpace($QueueId)) {
+	$promptLaunchQueue = @($promptLaunchQueue | Where-Object { $_.id -eq $QueueId -or $_.repo -eq $QueueId })
+}
 
 $plan = [ordered]@{
 	schema_version = 1
 	generated_at = [DateTimeOffset]::UtcNow.ToString("o")
 	requested_focus = $Focus
+	requested_queue_type = $QueueType
+	requested_queue_id = $QueueId
 	local_first = @(
 		"AGENTS.md",
 		"HERMES.md",
@@ -341,7 +352,7 @@ $plan = [ordered]@{
 }
 
 if ($PromptQueue -and $Json) {
-	$plan.prompt_launch_queue | ConvertTo-Json -Depth 8
+	ConvertTo-Json -InputObject @($plan.prompt_launch_queue) -Depth 8
 } elseif ($Json) {
 	$plan | ConvertTo-Json -Depth 8
 } else {

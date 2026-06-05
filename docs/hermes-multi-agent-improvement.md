@@ -67,6 +67,10 @@ when spawning sidecar agents because the queue carries the packet type, id,
 specialization, launch mode, validation owner, and prompt text without requiring
 callers to inspect the full plan shape.
 
+Use `-QueueType role-review` or `-QueueType addon-review` to narrow the queue by
+work item type. Use `-QueueId <agent-id-or-repo>` to return a single launch
+packet, such as `rag-memory-agent` or `ofxGgmlVideo`.
+
 ## Addon Fanout
 
 Use one agent per addon only when the task is a review, inventory, or advisory
