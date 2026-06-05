@@ -17,5 +17,9 @@
   "tree_state": "mostly-clean",
   "untracked_count": -1,
   "artifact_sha256": "not-a-digest",
+  "artifact_digest": "not-a-digest",
+  "attestation_subject_digest": "sha256:not-a-digest",
+  "attestation_bundle_path": "",
+  "attestation_verified": "true",
   "subject_paths": []
 }

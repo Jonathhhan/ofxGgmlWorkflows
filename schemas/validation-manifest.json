@@ -184,7 +184,9 @@
         "evidence-promotion-advisor.yml",
         "release-gate.yml",
         "validate-evidence.py",
-        "quality_report_path"
+        "quality_report_path",
+        "reject_generated_project_files",
+        "artifact_digest"
       ]
     },
     {
@@ -198,7 +200,9 @@
         "workflow_call",
         "evidence-promotion-playbook.md",
         "release_profile",
-        "evidence_profile"
+        "evidence_profile",
+        "reject_generated_project_files",
+        "artifact_digest"
       ]
     },
     {
@@ -378,7 +382,9 @@
         "minimum_certification_level",
         "quality_report_path",
         "VALID_TREE_STATES",
-        "artifact_integrity"
+        "artifact_integrity",
+        "artifact_attestation",
+        "sha256_digest"
       ]
     }
   ],
@@ -430,7 +436,12 @@
     "addon-hygiene.yml": [
       "require_addon_config",
       "require_src",
-      "require_examples"
+      "require_examples",
+      "require_addon_metadata",
+      "require_core_dependency",
+      "require_example_core_dependency",
+      "forbidden_addon_dependencies",
+      "reject_generated_project_files"
     ],
     "release-gate.yml": [
       "release_profile",

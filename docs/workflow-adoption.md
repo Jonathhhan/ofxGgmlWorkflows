@@ -67,6 +67,25 @@ jobs:
       require_examples: true
 ```
 
+Once a managed addon has stable metadata and example wiring, enable the stricter
+addon hygiene contract. `require_addon_metadata` checks `ADDON_NAME`,
+`require_core_dependency` and `require_example_core_dependency` keep shared
+runtime ownership visible, `forbidden_addon_dependencies` catches companion
+cross-dependency drift, and `reject_generated_project_files` keeps
+projectGenerator output out of commits.
+
+```yaml
+jobs:
+  hygiene:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/addon-hygiene.yml@main
+    with:
+      require_addon_metadata: true
+      require_core_dependency: true
+      require_example_core_dependency: true
+      forbidden_addon_dependencies: "ofxGgmlAudio ofxGgmlMusic ofxGgmlVideo"
+      reject_generated_project_files: true
+```
+
 For managed companion addons, make feature metadata a release-facing contract:
 
 ```yaml
@@ -265,6 +284,8 @@ expect workflow callers to stay aligned with these names:
   generates the corresponding report artifacts at the configured report paths.
 - Enable release evidence gates only after `evidence-validation.yml` has passed
   in advisory mode for the same evidence path.
+- Add `artifact_digest` and attestation fields to evidence before requiring
+  release-facing provenance for uploaded reports or runtime artifacts.
 - Enable `backend-runtime-check.yml` required smoke inputs only after the
   caller has platform-native setup scripts and writes backend runtime evidence.
 - Enable generator/report `require_generator` and `require_report_artifact`

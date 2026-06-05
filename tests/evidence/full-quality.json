@@ -31,6 +31,10 @@
   "base_commit_sha": "0123456789abcdef0123456789abcdef01234567",
   "untracked_count": 0,
   "artifact_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "artifact_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "attestation_subject_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "attestation_bundle_path": "build/evidence/of-smoke-build.intoto.jsonl",
+  "attestation_verified": true,
   "subject_paths": [
     "examples/ofxGgmlSamPointExample"
   ],

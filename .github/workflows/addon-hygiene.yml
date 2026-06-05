@@ -15,6 +15,26 @@ on:
         type: boolean
         required: false
         default: false
+      require_addon_metadata:
+        type: boolean
+        required: false
+        default: false
+      require_core_dependency:
+        type: boolean
+        required: false
+        default: false
+      require_example_core_dependency:
+        type: boolean
+        required: false
+        default: false
+      forbidden_addon_dependencies:
+        type: string
+        required: false
+        default: ""
+      reject_generated_project_files:
+        type: boolean
+        required: false
+        default: false
 
 jobs:
   hygiene:
@@ -35,6 +55,65 @@ jobs:
             test -d src
           fi
 
+      - name: Verify addon metadata contract
+        if: inputs.require_addon_metadata
+        shell: bash
+        run: |
+          test -f addon_config.mk
+          if ! grep -Eq '^[[:space:]]*ADDON_NAME[[:space:]]*=' addon_config.mk; then
+            echo "addon_config.mk is missing ADDON_NAME."
+            exit 1
+          fi
+          declared_name="$(awk -F= '/^[[:space:]]*ADDON_NAME[[:space:]]*=/{gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; exit}' addon_config.mk)"
+          repo_name="${GITHUB_REPOSITORY##*/}"
+          if [[ -n "$repo_name" && -n "$declared_name" && "$declared_name" != "$repo_name" ]]; then
+            echo "ADDON_NAME '$declared_name' does not match repository name '$repo_name'."
+            exit 1
+          fi
+
+      - name: Verify Core dependency contract
+        if: inputs.require_core_dependency || inputs.require_example_core_dependency || inputs.forbidden_addon_dependencies != ''
+        shell: bash
+        run: |
+          dependency_files=()
+          if [[ -f addon_config.mk ]]; then
+            dependency_files+=(addon_config.mk)
+          fi
+          while IFS= read -r -d '' file; do
+            dependency_files+=("$file")
+          done < <(find . -path "*/addons.make" -print0)
+
+          if [[ "${{ inputs.require_core_dependency }}" == "true" ]]; then
+            if [[ "${#dependency_files[@]}" -eq 0 ]] || ! grep -Eq '(^|[[:space:]])ofxGgmlCore([[:space:]]|$)' "${dependency_files[@]}"; then
+              echo "Expected ofxGgmlCore in addon_config.mk ADDON_DEPENDENCIES or an addons.make file."
+              exit 1
+            fi
+          fi
+
+          if [[ "${{ inputs.require_example_core_dependency }}" == "true" ]]; then
+            mapfile -d '' example_addons < <(find . \( -path "./examples/*/addons.make" -o -path "./example*/addons.make" \) -print0)
+            if [[ "${#example_addons[@]}" -eq 0 ]]; then
+              echo "No example addons.make files found for Core dependency validation."
+              exit 1
+            fi
+            for addons_make in "${example_addons[@]}"; do
+              if ! grep -Eq '(^|[[:space:]])ofxGgmlCore([[:space:]]|$)' "$addons_make"; then
+                echo "$addons_make does not include ofxGgmlCore."
+                exit 1
+              fi
+            done
+          fi
+
+          forbidden="${{ inputs.forbidden_addon_dependencies }}"
+          if [[ -n "$forbidden" && "${#dependency_files[@]}" -gt 0 ]]; then
+            for addon in $forbidden; do
+              if grep -Eq "(^|[[:space:]])${addon}([[:space:]]|$)" "${dependency_files[@]}"; then
+                echo "Forbidden addon dependency detected: $addon"
+                exit 1
+              fi
+            done
+          fi
+
       - name: Verify examples
         if: inputs.require_examples
         run: |
@@ -52,5 +131,17 @@ jobs:
         run: |
           if find . \( -iname "*.gguf" -o -iname "*.dll" -o -iname "*.so" -o -iname "*.dylib" -o -iname "*.exe" \) | grep -q .; then
             echo "Forbidden artifact detected"
+            exit 1
+          fi
+
+      - name: Reject generated project files
+        if: inputs.reject_generated_project_files
+        shell: bash
+        run: |
+          if find . \
+            \( -path "./.git" -o -path "./bin" -o -path "./build" -o -path "./obj" \) -prune -o \
+            \( -iname "*.sln" -o -iname "*.vcxproj" -o -iname "*.vcxproj.filters" -o -iname "*.xcodeproj" -o -iname "*.xcworkspace" -o -iname "*.cbp" \) \
+            -print | grep -q .; then
+            echo "Generated project file detected. Run projectGenerator locally/temporarily, then keep generated IDE projects out of commits."
             exit 1
           fi

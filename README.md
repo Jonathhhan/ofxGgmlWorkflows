@@ -111,6 +111,21 @@ jobs:
       require_examples: true
 ```
 
+Managed companion addons can also opt into stricter openFrameworks and ggml
+boundary checks once their metadata and examples are stable:
+
+```yaml
+jobs:
+  hygiene:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/addon-hygiene.yml@main
+    with:
+      require_addon_metadata: true
+      require_core_dependency: true
+      require_example_core_dependency: true
+      forbidden_addon_dependencies: "ofxGgmlAudio ofxGgmlMusic ofxGgmlVideo"
+      reject_generated_project_files: true
+```
+
 To protect ecosystem feature promises, enable built-in metadata and README
 feature checks:
 
@@ -231,7 +246,11 @@ fields, optional certification fields, and ownership split. Both
 repositories do not need to vendor policy scripts. Advisory checks and release
 gates share one evidence validation implementation. The validator also writes
 an advisory quality report so weak evidence is visible before stricter gates
-are enabled.
+are enabled. Evidence records can include `artifact_digest`,
+`attestation_subject_digest`, `attestation_bundle_path`, and
+`attestation_verified` so uploaded reports and release artifacts can carry
+GitHub artifact digest and attestation provenance before those claims become
+hard release gates.
 
 ## Policy
 

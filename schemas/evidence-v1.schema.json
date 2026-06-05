@@ -212,6 +212,21 @@
           "type": "string",
           "pattern": "^[A-Fa-f0-9]{64}$"
         },
+        "artifact_digest": {
+          "type": "string",
+          "pattern": "^(sha256:)?[A-Fa-f0-9]{64}$"
+        },
+        "attestation_subject_digest": {
+          "type": "string",
+          "pattern": "^(sha256:)?[A-Fa-f0-9]{64}$"
+        },
+        "attestation_bundle_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "attestation_verified": {
+          "type": "boolean"
+        },
         "subject_paths": {
           "type": "array",
           "minItems": 1,

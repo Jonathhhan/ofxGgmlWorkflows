@@ -107,6 +107,15 @@ def hex_digest(value, length):
     return all(char in "0123456789abcdefABCDEF" for char in value.strip())
 
 
+def sha256_digest(value):
+    if not non_empty_string(value):
+        return False
+    normalized = value.strip()
+    if normalized.lower().startswith("sha256:"):
+        normalized = normalized.split(":", 1)[1]
+    return hex_digest(normalized, 64)
+
+
 def has_any(record, fields):
     return any(record.get(field) not in (None, "", [], {}) for field in fields)
 
@@ -329,6 +338,22 @@ def main():
         if "artifact_sha256" in record and not hex_digest(record["artifact_sha256"], 64):
             errors.append(f"{prefix}.artifact_sha256 must be a 64-character hex digest")
 
+        for field in ("artifact_digest", "attestation_subject_digest"):
+            if field in record and not sha256_digest(record[field]):
+                errors.append(
+                    f"{prefix}.{field} must be a SHA-256 digest, optionally prefixed with sha256:"
+                )
+
+        if "attestation_bundle_path" in record and not non_empty_string(
+            record["attestation_bundle_path"]
+        ):
+            errors.append(f"{prefix}.attestation_bundle_path must be a non-empty string")
+
+        if "attestation_verified" in record and not isinstance(
+            record["attestation_verified"], bool
+        ):
+            errors.append(f"{prefix}.attestation_verified must be a boolean")
+
         if "subject_paths" in record and not string_list(record["subject_paths"]):
             errors.append(f"{prefix}.subject_paths must be a non-empty string array")
 
@@ -430,7 +455,16 @@ def main():
                 (
                     "artifact_integrity",
                     hex_digest(record.get("artifact_sha256"), 64)
+                    or sha256_digest(record.get("artifact_digest"))
                     or string_list(record.get("subject_paths")),
+                ),
+                (
+                    "artifact_attestation",
+                    sha256_digest(record.get("attestation_subject_digest"))
+                    and (
+                        non_empty_string(record.get("attestation_bundle_path"))
+                        or record.get("attestation_verified") is True
+                    ),
                 ),
             )
         )

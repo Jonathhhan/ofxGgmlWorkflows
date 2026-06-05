@@ -41,7 +41,8 @@ current-SHA and max-age validation.
 | `command_exit_code`, `started_at`, `completed_at` | Command result and timing details. |
 | `tree_state` | One of `clean`, `dirty`, `generated-only`, or `unknown`. |
 | `base_commit_sha`, `working_tree_patch_hash`, `untracked_count` | Optional dirty-tree disclosure for advisory evidence. |
-| `artifact_sha256`, `subject_paths` | Artifact integrity and subject path hints for future trust gates. |
+| `artifact_sha256`, `artifact_digest`, `subject_paths` | Artifact integrity and subject path hints for future trust gates. `artifact_digest` may store an `actions/upload-artifact` SHA-256 digest. |
+| `attestation_subject_digest`, `attestation_bundle_path`, `attestation_verified` | Optional artifact attestation provenance for generated evidence or release artifacts. |
 
 ## Example
 
@@ -68,6 +69,10 @@ current-SHA and max-age validation.
   "workflow_sha": "0123456789abcdef0123456789abcdef01234567",
   "job_name": "of-smoke-build",
   "tree_state": "clean",
+  "artifact_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "attestation_subject_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "attestation_bundle_path": "build/evidence/of-smoke-build.intoto.jsonl",
+  "attestation_verified": true,
   "subject_paths": [
     "examples/ofxGgmlSamPointExample"
   ],
@@ -121,7 +126,8 @@ The report scores whether evidence includes the fields that make future gates
 trustworthy: schema core fields, current SHA, freshness, backend/result/level
 matches, command, tool versions, device summary, artifact path, workflow
 provenance, runner context, producer version, command result, timing,
-tree-state disclosure, and artifact integrity hints.
+tree-state disclosure, artifact integrity hints, and artifact attestation
+provenance.
 
 Quality scores are informational. Use them to improve evidence generators before
 turning on required schema, freshness, or release-gate inputs.
