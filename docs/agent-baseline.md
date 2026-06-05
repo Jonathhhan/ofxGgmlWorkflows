@@ -38,6 +38,8 @@ files should remain self-contained, but they should mirror these principles.
   generated artifact hygiene.
 - Use `docs\hermes-ecosystem-learning-plan.md` as the instruction, RAG/memory,
   skill, and evaluation plan before fine-tuning or broad Hermes automation.
+- Use `docs\hermes-openframeworks-ggml-evals.md` as the prompt-only readiness
+  suite before giving Hermes broader repository authority.
 
 ## Agent Skills
 

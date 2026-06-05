@@ -26,6 +26,8 @@ ownership split, evidence expectations, and generated artifact hygiene.
 Use [`docs/hermes-ecosystem-learning-plan.md`](docs/hermes-ecosystem-learning-plan.md)
 for Hermes instruction, RAG/memory, skill, and evaluation layers before
 fine-tuning or broad agent automation.
+Use [`docs/hermes-openframeworks-ggml-evals.md`](docs/hermes-openframeworks-ggml-evals.md)
+as the prompt-only eval pack before giving Hermes broader repository authority.
 
 ### Agent baseline
 
