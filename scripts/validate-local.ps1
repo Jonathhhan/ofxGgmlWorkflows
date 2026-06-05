@@ -63,6 +63,7 @@ if ($schemaJson.title -ne "ofxGgml Evidence v1") {
 & (Join-Path $repoRoot "scripts\test-evidence-promotion-advisor.ps1")
 & (Join-Path $repoRoot "scripts\test-workflow-profiles.ps1")
 & (Join-Path $repoRoot "scripts\test-workflow-fixtures.ps1")
+& (Join-Path $repoRoot "scripts\test-workflow-security-advice.ps1")
 
 Write-Step "Checking Hermes eval catalog"
 & (Join-Path $repoRoot "scripts\test-hermes-eval-catalog.ps1")

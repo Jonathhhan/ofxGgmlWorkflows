@@ -1,0 +1,79 @@
+name: reusable-workflow-security-advice
+
+on:
+  workflow_call:
+    inputs:
+      require_generator:
+        type: boolean
+        default: false
+      require_report_artifact:
+        type: boolean
+        default: false
+      report_artifact_path:
+        type: string
+        default: docs/workflow-security-advice.md
+      report_json_path:
+        type: string
+        default: build/workflow-security-advice.json
+      recommended_consumer_ref:
+        type: string
+        default: v1
+      upload_report:
+        type: boolean
+        default: true
+      artifact_name:
+        type: string
+        default: workflow-security-advice
+
+jobs:
+  workflow-security-advice:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout caller repository
+        uses: actions/checkout@v4
+
+      - name: Checkout workflow tools
+        uses: actions/checkout@v4
+        with:
+          repository: Jonathhhan/ofxGgmlWorkflows
+          ref: ${{ github.workflow_sha }}
+          path: .ofxggml-workflows
+
+      - name: Generate workflow security advice
+        shell: pwsh
+        run: |
+          $scriptPath = ".ofxggml-workflows/scripts/write-workflow-security-advice.ps1"
+          if (Test-Path -LiteralPath $scriptPath -PathType Leaf) {
+            & $scriptPath `
+              -WorkflowRoot ".github/workflows" `
+              -ReportPath "${{ inputs.report_artifact_path }}" `
+              -JsonPath "${{ inputs.report_json_path }}" `
+              -RecommendedConsumerRef "${{ inputs.recommended_consumer_ref }}"
+          } elseif ("${{ inputs.require_generator }}" -eq "true") {
+            Write-Error "Missing workflow security advice generator: $scriptPath"
+          } else {
+            Write-Host "No workflow security advice generator present"
+          }
+
+      - name: Verify workflow security advice
+        shell: pwsh
+        run: |
+          if (Test-Path -LiteralPath "${{ inputs.report_artifact_path }}" -PathType Leaf) {
+            Write-Host "Found workflow security advice: ${{ inputs.report_artifact_path }}"
+          } elseif ("${{ inputs.require_report_artifact }}" -eq "true") {
+            Write-Error "Missing workflow security advice: ${{ inputs.report_artifact_path }}"
+          } else {
+            Write-Host "No workflow security advice artifact present"
+          }
+
+      - name: Upload workflow security advice
+        if: always() && inputs.upload_report
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: ${{ inputs.artifact_name }}
+          path: |
+            ${{ inputs.report_artifact_path }}
+            ${{ inputs.report_json_path }}
+          if-no-files-found: ignore

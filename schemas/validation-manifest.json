@@ -25,9 +25,11 @@
     { "path": "scripts/test-evidence-promotion-advisor.ps1", "label": "evidence promotion advisor tests" },
     { "path": "scripts/test-evidence-validator.ps1", "label": "evidence validator tests" },
     { "path": "scripts/test-validation-manifest.ps1", "label": "validation manifest tests" },
+    { "path": "scripts/test-workflow-security-advice.ps1", "label": "workflow security advice tests" },
     { "path": "scripts/test-workflow-profiles.ps1", "label": "workflow profile tests" },
     { "path": "scripts/test-workflow-fixtures.ps1", "label": "workflow fixture tests" },
     { "path": "scripts/write-evidence-promotion-advice.ps1", "label": "evidence promotion advisor" },
+    { "path": "scripts/write-workflow-security-advice.ps1", "label": "workflow security advisor" },
     { "path": "scripts/validate-evidence.py", "label": "evidence validator" },
     { "path": "scripts/validate-local.ps1", "label": "local validation" },
     { "path": "scripts/workflow-metadata-extractor.ps1", "label": "workflow metadata extractor" },
@@ -57,9 +59,11 @@
     "scripts/test-evidence-promotion-advisor.ps1",
     "scripts/test-evidence-validator.ps1",
     "scripts/test-validation-manifest.ps1",
+    "scripts/test-workflow-security-advice.ps1",
     "scripts/test-workflow-profiles.ps1",
     "scripts/test-workflow-fixtures.ps1",
     "scripts/write-evidence-promotion-advice.ps1",
+    "scripts/write-workflow-security-advice.ps1",
     "scripts/validate-evidence.py",
     "scripts/validate-local.ps1",
     "scripts/workflow-metadata-extractor.ps1"
@@ -90,6 +94,7 @@
     "release-readiness-score.yml",
     "vulkan-runtime-certification.yml",
     "workflow-repo-validation.yml",
+    "workflow-security-advice.yml",
     "workflow-status-plan.yml"
   ],
   "evidence_fixture_files": [
@@ -180,13 +185,15 @@
         "metadata-validation.yml",
         "release-check.yml",
         "ecosystem-health.yml",
+        "workflow-security-advice.yml",
         "evidence-validation.yml",
         "evidence-promotion-advisor.yml",
         "release-gate.yml",
         "validate-evidence.py",
         "quality_report_path",
         "reject_generated_project_files",
-        "artifact_digest"
+        "artifact_digest",
+        "recommended_consumer_ref"
       ]
     },
     {
@@ -202,7 +209,9 @@
         "release_profile",
         "evidence_profile",
         "reject_generated_project_files",
-        "artifact_digest"
+        "artifact_digest",
+        "workflow-security-advice.yml",
+        "recommended_consumer_ref"
       ]
     },
     {
@@ -375,6 +384,16 @@
       ]
     },
     {
+      "path": "scripts/write-workflow-security-advice.ps1",
+      "label": "workflow security advisor",
+      "patterns": [
+        "missing_permissions_count",
+        "unpinned_action_count",
+        "recommended_consumer_ref",
+        "External actions not pinned to full SHA"
+      ]
+    },
+    {
       "path": "scripts/validate-evidence.py",
       "label": "evidence validator",
       "patterns": [
@@ -496,6 +515,7 @@
     "metadata-reconciliation.yml",
     "release-plan.yml",
     "release-readiness-score.yml",
+    "workflow-security-advice.yml",
     "workflow-status-plan.yml"
   ],
   "report_workflow_patterns": [

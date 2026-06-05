@@ -10,7 +10,7 @@ ofxGgml ecosystem. Companion repositories should consume these workflows with
 | --- | --- | --- |
 | Required agent baseline | Keep Codex, GitHub Copilot, and Hermes Agent instructions present and current. | `coding-agent-instructions.yml` |
 | Required addon hygiene | Check repository shape, optional examples, metadata, feature promises, generated artifact policy, and release basics. | `addon-hygiene.yml`, `metadata-validation.yml`, `release-check.yml` |
-| Operational visibility | Feed Core planning, dashboards, and live status reports. | `live-workflow-status.yml`, `workflow-status-plan.yml`, `ecosystem-health.yml`, `ecosystem-health-report.yml` |
+| Operational visibility | Feed Core planning, dashboards, live status reports, and report-only workflow hardening advice. | `live-workflow-status.yml`, `workflow-status-plan.yml`, `workflow-security-advice.yml`, `ecosystem-health.yml`, `ecosystem-health-report.yml` |
 | Compatibility and release planning | Score release readiness and compare repository metadata across the family. | `baseline-compatibility.yml`, `compatibility-matrix.yml`, `metadata-reconciliation.yml`, `release-gate.yml`, `release-plan.yml`, `release-readiness-score.yml` |
 | Runtime certification | Reserve backend and platform checks for lanes that can exercise the relevant runtime. | `evidence-validation.yml`, `backend-runtime-check.yml`, `backend-capability-report.yml`, `cross-repo-capability-map.yml`, `multi-platform-smoke.yml`, `of-smoke-build.yml`, `cuda-runtime-certification.yml`, `metal-runtime-certification.yml`, `vulkan-runtime-certification.yml` |
 | Workflow repository self-checks | Validate this repository and its documentation. | `workflow-repo-validation.yml`, `ecosystem-docs.yml` |
@@ -165,6 +165,27 @@ jobs:
       report_artifact_path: docs/release-readiness-score.md
 ```
 
+For workflow hardening, generate advice before making permissions or SHA pinning
+required. The report inventories jobs missing explicit `permissions:` and
+external actions that are not pinned to full commit SHAs. Keep this advisory
+until consumers have Dependabot coverage and a versioned workflow ref such as
+`v1`.
+
+```yaml
+name: workflow-security-advice
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  workflow-security:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/workflow-security-advice.yml@main
+    with:
+      recommended_consumer_ref: v1
+      report_artifact_path: docs/workflow-security-advice.md
+```
+
 For build smoke workflows, keep reusable logic generic and require caller-owned
 scripts only after that lane can build on the selected runner:
 
@@ -292,6 +313,9 @@ expect workflow callers to stay aligned with these names:
   together after the caller has the script and expected report path.
 - For status/checker workflows, use their matching `require_fetcher` or
   `require_checker` input alongside `require_report_artifact`.
+- Use `workflow-security-advice.yml` as advisory inventory before enforcing
+  explicit job permissions, full-SHA external action refs, or versioned workflow
+  consumer refs.
 - For `ecosystem-docs.yml`, enable each per-document generator and artifact
   requirement only after that specific document is owned by the caller.
 - For smoke build workflows, keep build commands in caller scripts and require

@@ -47,6 +47,7 @@ when an agent or dashboard needs the same scenarios in machine-readable form.
 - `.github/workflows/workflow-status-plan.yml` - generate workflow status plan
 - `.github/workflows/ecosystem-health.yml` - verify manifest, docs, governance, and workflow inheritance
 - `.github/workflows/ecosystem-health-report.yml` - generate ecosystem health report
+- `.github/workflows/workflow-security-advice.yml` - generate report-only workflow hardening advice for explicit permissions and SHA pinning
 
 ### Compatibility and release planning
 
@@ -182,6 +183,19 @@ jobs:
       require_generator: true
       require_report_artifact: true
       report_artifact_path: docs/release-readiness-score.md
+```
+
+Workflow security advice stays report-only during rollout. Use it to inventory
+jobs missing explicit `permissions:` and external actions that still use tag
+refs before adding Dependabot coverage or making SHA pinning required:
+
+```yaml
+jobs:
+  workflow-security:
+    uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/workflow-security-advice.yml@main
+    with:
+      recommended_consumer_ref: v1
+      report_artifact_path: docs/workflow-security-advice.md
 ```
 
 `ecosystem-docs.yml` exposes per-document requirements so callers can harden
