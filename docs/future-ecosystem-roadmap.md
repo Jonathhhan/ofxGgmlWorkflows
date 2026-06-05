@@ -10,8 +10,8 @@ For the concrete current repository queue, see
 ## Current Status
 
 - `ofxGgmlWorkflows` owns reusable `workflow_call` contracts, policy checks,
-  evidence validation, and automation docs. It is currently dirty with local
-  workflow/validation improvements in progress.
+  evidence validation, and automation docs. It is clean in the latest Core
+  planning pass.
 - `ofxGgmlCore` remains the shared base and ecosystem planning/dashboard
   control plane.
 - Companion addons own backend-specific scripts, model-specific UX, and
@@ -19,10 +19,10 @@ For the concrete current repository queue, see
 - Core planning currently recommends making one backend lane genuinely useful
   before broadening automation across all companions.
 - Dirty managed repositories should be reviewed before fanout enforcement:
-  `ofxGgmlAudio`, `ofxGgmlMusic`, `ofxGgmlVideo`, `ofxGgmlRag`,
-  `ofxGgmlAgents`, and `ofxGgmlWorkflows`.
+  `ofxGgmlStableDiffusion` and `ofxGgmlRag`.
 - Ready managed repositories are `ofxGgmlCore`, `ofxGgmlLlama`,
-  `ofxGgmlSam`, `ofxGgmlVision`, and `ofxGgmlStableDiffusion`.
+  `ofxGgmlSam`, `ofxGgmlAudio`, `ofxGgmlMusic`, `ofxGgmlVision`,
+  `ofxGgmlVideo`, `ofxGgmlAgents`, and `ofxGgmlWorkflows`.
 - Classified legacy/reference siblings should stay out of managed automation
   unless explicitly promoted: `ofxGgml`, `ofxGgml##`, `ofxGgml___`,
   `ofxGgml______________`, `ofxGgml_X`, `ofxGgmlAAAA`,
@@ -37,9 +37,9 @@ editing addon runtime behavior.
 | --- | --- | --- | --- |
 | 1 | `ofxGgmlCore` | Run planning/readiness commands and publish the current queue. | Core validation or planning failure. |
 | 2 | `ofxGgmlWorkflows` | Land reusable policy, fixtures, manifest checks, and caller examples. | Local workflow validation failure. |
-| 3 | `ofxGgmlSam` | Pilot CPU smoke evidence for `ofxGgmlSamPointExample` in advisory mode. | Missing evidence producer or dirty target repo. |
-| 4 | `ofxGgmlLlama`, `ofxGgmlVision`, `ofxGgmlStableDiffusion` | Add advisory workflow callers only after the Sam pilot is stable. | Missing caller scripts or stale Core plan. |
-| 5 | Dirty managed repos | Review unrelated work before rollout: Audio, Music, Video, Rag, Agents, Workflows. | Any unresolved dirty tree. |
+| 3 | `ofxGgmlSam` | Keep the SAM3 CPU evidence pilot advisory while repeated clean runs are reviewed. | Missing evidence producer or dirty target repo. |
+| 4 | Clean companion repos | Add advisory workflow callers only after the Sam pilot is stable. | Missing caller scripts or stale Core plan. |
+| 5 | Dirty managed repos | Review unrelated work before rollout: StableDiffusion and Rag. | Any unresolved dirty tree. |
 | 6 | Accelerator lanes | Add CUDA, Metal, or Vulkan certification only for repos with real self-hosted runner evidence. | No runner, no executable smoke, or stale evidence. |
 
 The queue is intentionally conservative: improve shared policy first, prove one
@@ -52,8 +52,8 @@ Pilot `ofxGgmlSam` CPU smoke-build evidence first.
 
 Reasons:
 
-- `ofxGgmlSam` is a clean managed companion and already appears in the Core
-  smoke-build lifecycle.
+- `ofxGgmlSam` is a clean managed companion and already owns the first evidence
+  wrapper and advisory promotion path.
 - CPU smoke avoids self-hosted CUDA, Metal, or Vulkan runner complexity.
 - `ofxGgmlSamPointExample` provides a concrete openFrameworks target.
 - The ownership split stays clean: Core selects and interprets the lane,
@@ -101,6 +101,6 @@ Reasons:
   planning in `ofxGgmlCore`.
 - Keep backend/model-specific commands and evidence producers in companion
   addons.
-- Avoid broad enforcement while managed repositories have unrelated dirty
+- Avoid broad enforcement while target repositories have unrelated dirty
   changes.
 - Defer accelerator certification expansion until CPU smoke evidence is stable.

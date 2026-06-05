@@ -39,6 +39,7 @@ All notable changes to ofxGgmlWorkflows are documented here.
 - Added `docs/evidence-promotion-playbook.md` with the advisory-visible to release-gated promotion ladder
 - Added `evidence-promotion-advisor.yml` and local advisor tests for advisory evidence promotion reports
 - Updated the ecosystem roadmap with the current all-addon improvement queue, ready repositories, dirty-repo stop conditions, and reference-repo exclusions
+- Refreshed rollout and roadmap docs with the current Core planning dirty/ready matrix
 - Strengthened `coding-agent-instructions.yml` to verify lane, Core planning, companion-boundary, artifact-hygiene, validation, and handoff guardrails
 - Evidence validation can now write an advisory quality report for evidence completeness before stricter gates are enabled
 - Rewrote `scripts/workflow-metadata-extractor.ps1` with proper PowerShell syntax and YAML-aware metadata extraction

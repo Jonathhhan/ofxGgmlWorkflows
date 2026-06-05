@@ -13,8 +13,8 @@ Generated from:
 ## Summary
 
 - Managed repositories present: 11
-- Ready managed repositories: 5
-- Dirty managed repositories: 6
+- Ready managed repositories: 9
+- Dirty managed repositories: 2
 - Missing managed repositories: 0
 - Missing validation entrypoints: 0
 - Missing doctor entrypoints: 0
@@ -25,9 +25,13 @@ Generated from:
 | --- | --- | --- | --- |
 | `ofxGgmlCore` | Keep planning/readiness commands authoritative before fanout. | none | none |
 | `ofxGgmlLlama` | Add advisory evidence validation after the Sam CPU pilot is stable. | `evidence_profile=advisory` | `build/**/*.json` |
-| `ofxGgmlSam` | Add a schema-compatible wrapper for SAM3 CPU smoke evidence before enabling the advisory caller. | `evidence_profile=advisory` | `build/evidence/sam3-runtime-evidence.json` |
+| `ofxGgmlSam` | Keep SAM3 CPU evidence validation and promotion advice advisory until repeated clean runs are reviewed. | `evidence_profile=advisory` | `build/evidence/sam3-runtime-evidence.json` |
+| `ofxGgmlAudio` | Add advisory evidence validation after the Sam CPU pilot is stable. | `evidence_profile=advisory` | `build/**/*.json` |
+| `ofxGgmlMusic` | Separate readiness, model-load, and generation evidence before stricter MusicGen or AceStep gates. | `evidence_profile=advisory` | `build/**/*.json` |
 | `ofxGgmlVision` | Add advisory evidence validation after the Sam CPU pilot is stable. | `evidence_profile=advisory` | `build/**/*.json` |
-| `ofxGgmlStableDiffusion` | Add advisory evidence validation after the Sam CPU pilot is stable. | `evidence_profile=advisory` | `build/**/*.json` |
+| `ofxGgmlVideo` | Keep MontageAutomat handoff contracts validated before adding model-backed video evidence. | none | none |
+| `ofxGgmlAgents` | Validate planning and handoff records before enabling autonomous runtime behavior. | none | none |
+| `ofxGgmlWorkflows` | Keep reusable workflow fixtures, manifest coverage, and evidence policy aligned. | none | none |
 
 ## Dirty Repositories
 
@@ -36,12 +40,8 @@ changes are reviewed.
 
 | Repository | Dirty count | Safe next step |
 | --- | ---: | --- |
-| `ofxGgmlAudio` | 7 | Review local changes before adding callers. |
-| `ofxGgmlMusic` | 3 | Review local changes before adding callers. |
-| `ofxGgmlVideo` | 19 | Review local changes before adding callers. |
-| `ofxGgmlRag` | 21 | Review local changes before adding callers. |
-| `ofxGgmlAgents` | 4 | Review local changes before adding callers. |
-| `ofxGgmlWorkflows` | 16 | Land reusable workflow and manifest changes before fanout. |
+| `ofxGgmlStableDiffusion` | 8 | Review local changes before adding callers. |
+| `ofxGgmlRag` | 9 | Review local changes before adding callers. |
 
 ## Reference Repositories
 
