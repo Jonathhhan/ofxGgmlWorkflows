@@ -44,6 +44,7 @@ Priority documents:
 - each managed addon's `AGENTS.md`, `README.md`, and `docs\*WORKFLOWS.md`
 - `ofxGgmlWorkflows\docs\agent-baseline.md`
 - `ofxGgmlWorkflows\docs\hermes-openframeworks-ggml-skills.md`
+- `ofxGgmlWorkflows\docs\hermes-agent-operating-loop.md`
 - `ofxGgmlWorkflows\docs\evidence-schema-v1.md`
 - selected openFrameworks docs and examples that explain addon layout,
   `addons.make`, projectGenerator, Visual Studio builds, and example structure
@@ -118,8 +119,10 @@ Evaluation should score:
 ## Operating Order
 
 1. Refresh Core planning or readiness.
-2. Retrieve the instruction layer and relevant lane docs.
-3. Select the smallest applicable skill.
-4. Execute only inside the chosen lane.
-5. Validate locally.
-6. Report commands, dirty-repo caveats, evidence gaps, and next action.
+2. Use `docs\hermes-agent-operating-loop.md` to classify the lane, retrieval
+   packet, stop conditions, and handoff shape.
+3. Retrieve the instruction layer and relevant lane docs.
+4. Select the smallest applicable skill.
+5. Execute only inside the chosen lane.
+6. Validate locally.
+7. Report commands, dirty-repo caveats, evidence gaps, and next action.

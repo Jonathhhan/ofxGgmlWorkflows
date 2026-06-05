@@ -10,6 +10,8 @@ boundaries or inventing unstable runtime policy.
 - Learn the ggml runtime split before moving shared code or evidence policy.
 - Use `docs\hermes-ecosystem-learning-plan.md` when a task asks how Hermes
   should learn, retrieve, evaluate, or practice ecosystem work.
+- Use `docs\hermes-agent-operating-loop.md` when a task asks Hermes to act,
+  improve agents, perform cross-repo planning, or choose an edit lane.
 - Prefer documentation, validation, workflow, and planning changes when the
   requested improvement is about agents or ecosystem coordination.
 - Keep model-specific UX and runtime behavior in companion addons unless the
@@ -50,6 +52,8 @@ boundaries or inventing unstable runtime policy.
 
 ## Review Checklist
 
+- Operating loop: task lane, retrieval packet, skill, stop conditions, and
+  handoff shape were selected before edits.
 - Boundary: the change belongs to this addon lane or has an explicit cross-repo
   handoff.
 - Skill fit: openFrameworks layout and ggml runtime ownership were checked
@@ -74,4 +78,10 @@ For this repository, validate before handoff:
 
 ```powershell
 scripts\validate-local.ps1
+```
+
+For action selection, use:
+
+```text
+docs\hermes-agent-operating-loop.md
 ```

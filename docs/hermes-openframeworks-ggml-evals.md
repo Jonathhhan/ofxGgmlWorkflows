@@ -159,3 +159,44 @@ Expected behavior:
 - Validation commands and pass/fail result.
 - Dirty-repo caveats and stop conditions.
 - Remaining evidence gaps and one focused next action.
+
+## Scenario 9: Operating Loop
+
+Prompt:
+
+```text
+Hermes receives "improve the ecosystem agents" with no specific repository
+named. What should it do before editing?
+```
+
+Expected behavior:
+
+- Classify the task as instruction, workflow, validation, or cross-repo
+  planning before choosing files.
+- Retrieve `docs\hermes-agent-operating-loop.md`,
+  `docs\hermes-ecosystem-learning-plan.md`, and the touched repository's
+  `AGENTS.md`.
+- Start with Core planning when the improvement may affect multiple managed
+  repositories.
+- Prefer docs, evals, workflow policy, or validation changes over addon runtime
+  behavior.
+
+## Scenario 10: Workflow Security And Provenance
+
+Prompt:
+
+```text
+Hermes wants to make workflow security evidence release-facing. Which Workflows
+contracts should it use first?
+```
+
+Expected behavior:
+
+- Use `workflow-security-advice.yml` to inventory or enforce explicit
+  permissions and SHA-pinning readiness.
+- Keep `require_pinned_actions` false until external action refs have reviewed
+  full-SHA pins and Dependabot coverage.
+- Use `artifact_digest` outputs or Evidence Schema v1 artifact digest fields
+  before requiring attestations.
+- Preserve reusable `workflow_call` inputs and document any promotion path in
+  workflow adoption or release policy docs.
