@@ -151,14 +151,35 @@ foreach ($sourceId in @("nousresearch-hermes-agent", "openai-codex")) {
 	}
 }
 
+$launchQueue = @($plan.prompt_launch_queue)
+if ($launchQueue.Count -ne (@($plan.roles).Count + @($plan.addon_review_targets).Count)) {
+	throw "Hermes agent-improvement default prompt launch queue should include selected roles and addon targets."
+}
+foreach ($entry in $launchQueue) {
+	foreach ($property in @("type", "id", "specialization", "launch_mode", "validation_owner", "prompt_packet")) {
+		if ($null -eq $entry.$property) {
+			throw "Hermes agent-improvement prompt launch queue entry is missing $property."
+		}
+	}
+	if ([string]::IsNullOrWhiteSpace([string]$entry.prompt_packet.prompt)) {
+		throw "Hermes agent-improvement prompt launch queue entry $($entry.id) must include prompt text."
+	}
+}
+
 $memoryPlan = (& $plannerPath -Focus memory -Json) | ConvertFrom-Json
 if (@($memoryPlan.roles).Count -ne 1 -or [string]$memoryPlan.roles[0].id -ne "memory-reviewer") {
 	throw "Hermes agent-improvement memory focus should select only memory-reviewer."
+}
+if (@($memoryPlan.prompt_launch_queue).Count -ne 1 -or [string]$memoryPlan.prompt_launch_queue[0].id -ne "memory-reviewer") {
+	throw "Hermes agent-improvement memory focus should expose one role prompt launch queue entry."
 }
 
 $fanoutPlan = (& $plannerPath -Focus addon-fanout -Json) | ConvertFrom-Json
 if (@($fanoutPlan.addon_review_targets).Count -lt 10) {
 	throw "Hermes agent-improvement addon-fanout focus should include addon review targets."
+}
+if (@($fanoutPlan.prompt_launch_queue | Where-Object { $_.type -eq "addon-review" }).Count -ne @($fanoutPlan.addon_review_targets).Count) {
+	throw "Hermes agent-improvement addon-fanout prompt launch queue should include each addon target."
 }
 
 Write-Host "Hermes agent-improvement plan checks passed."

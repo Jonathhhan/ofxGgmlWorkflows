@@ -60,6 +60,12 @@ the role, restate the specialization, repeat the one review question, and
 require severity, file references, validation risk, suggested owner, and an
 accepted or deferred recommendation in the response.
 
+The planner also emits `prompt_launch_queue`, which flattens selected role and
+addon prompt packets into launchable work items. Use the queue when spawning
+sidecar agents because it carries the packet type, id, specialization, launch
+mode, validation owner, and prompt text without requiring callers to inspect
+the full plan shape.
+
 ## Addon Fanout
 
 Use one agent per addon only when the task is a review, inventory, or advisory

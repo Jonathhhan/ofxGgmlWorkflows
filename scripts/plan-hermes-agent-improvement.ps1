@@ -253,6 +253,41 @@ if ($Focus -eq "all" -or $Focus -eq "addon-fanout") {
 	$selectedRoles = @($roles | Where-Object { $_.focus -eq $Focus })
 }
 
+$roleLaunchQueue = @(
+	foreach ($role in $selectedRoles) {
+		[ordered]@{
+			type = "role-review"
+			id = $role.id
+			focus = $role.focus
+			specialization = $role.specialization
+			launch_mode = "read-only sidecar"
+			validation_owner = "coordinator/integrator"
+			prompt_packet = $role.prompt_packet
+		}
+	}
+)
+
+$addonLaunchQueue = @()
+if ($Focus -eq "all" -or $Focus -eq "addon-fanout") {
+	$addonLaunchQueue = @(
+		foreach ($target in $addonReviewTargets) {
+			[ordered]@{
+				type = "addon-review"
+				id = $target.agent_id
+				repo = $target.repo
+				lane = $target.lane
+				specialization = $target.specialization
+				launch_mode = $target.default_action
+				validation_command = $target.validation_command
+				validation_owner = $target.handoff_owner
+				prompt_packet = $target.prompt_packet
+			}
+		}
+	)
+}
+
+$promptLaunchQueue = @($roleLaunchQueue + $addonLaunchQueue)
+
 $plan = [ordered]@{
 	schema_version = 1
 	generated_at = [DateTimeOffset]::UtcNow.ToString("o")
@@ -267,6 +302,7 @@ $plan = [ordered]@{
 	roles = @($selectedRoles)
 	addon_review_targets = @($addonReviewTargets)
 	agent_source_references = @($agentSourceReferences)
+	prompt_launch_queue = @($promptLaunchQueue)
 	authority_model = @(
 		"coordinator: main agent that classifies the lane and spawns bounded sidecar reviews",
 		"retriever: read-only agent that gathers local facts or memory/source-learning context",

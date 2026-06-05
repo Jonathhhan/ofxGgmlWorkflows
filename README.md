@@ -43,7 +43,8 @@ sibling agents to improve agent instructions, memory, evals, or operating-loop
 behavior. The planner emits specialized role profiles and addon lane briefs;
 use `-Focus addon-fanout` for one-agent-per-addon review planning. Each profile
 also includes a `prompt_packet` for consistent sidecar launch prompts. The
-planner tracks `NousResearch/hermes-agent` and `openai/codex` as source-learning
+planner exposes a `prompt_launch_queue` when Hermes needs launchable work items.
+The planner tracks `NousResearch/hermes-agent` and `openai/codex` as source-learning
 references for agent loops, memory, skills, local validation, and handoff
 discipline without vendoring external code.
 Use [`docs/hermes-memory-contract.md`](docs/hermes-memory-contract.md)

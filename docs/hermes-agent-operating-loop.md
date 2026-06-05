@@ -34,7 +34,7 @@ rewriter. Use this loop before touching managed ofxGgml repositories.
 | Workflows policy | `ofxGgmlWorkflows\AGENTS.md`, `docs\agent-baseline.md`, `docs\workflow-adoption.md`, `docs\evidence-schema-v1.md`, relevant reusable workflow |
 | Hermes memory | `ofxGgmlWorkflows\docs\hermes-memory-contract.md`, `schemas\hermes-memory-v1.schema.json`, `scripts\write-hermes-memory-index.ps1`, `scripts\check-hermes-memory-index.ps1`, generated memory index when present |
 | Upstream source learning | `ofxGgmlWorkflows\docs\hermes-source-learning-map.md`, `scripts\plan-hermes-source-learning.ps1`, local lane docs, selected upstream source folders |
-| Multi-agent improvement | `ofxGgmlWorkflows\docs\hermes-multi-agent-improvement.md`, `scripts\plan-hermes-agent-improvement.ps1 -Json`, specialized role profiles, addon lane briefs, `prompt_packet` launch prompts, agent baseline, handoff contract, eval catalog |
+| Multi-agent improvement | `ofxGgmlWorkflows\docs\hermes-multi-agent-improvement.md`, `scripts\plan-hermes-agent-improvement.ps1 -Json`, specialized role profiles, addon lane briefs, `prompt_packet` launch prompts, `prompt_launch_queue`, agent baseline, handoff contract, eval catalog |
 | Companion UX | companion `AGENTS.md`, `README.md`, `addon_config.mk`, examples, lane workflow docs, validation script |
 | Release evidence | Core release-readiness output, Workflows evidence docs, evidence JSON, `workflow-security-advice.yml`, artifact digest or attestation fields |
 | openFrameworks build | Core smoke-build target lifecycle, companion examples, `addons.make`, generated project preflight and postflight reports |

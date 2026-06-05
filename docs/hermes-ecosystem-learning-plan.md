@@ -79,7 +79,8 @@ Use `scripts\plan-hermes-agent-improvement.ps1 -Json` when Hermes needs
 subagents or sibling agents to review agent instructions, memory, evals, or
 operating-loop behavior. Treat its specialized role profiles and addon lane briefs
 as the canonical delegation packet before spawning reviewers, and use each
-`prompt_packet` when launching a sidecar review.
+`prompt_packet` or the flattened `prompt_launch_queue` when launching a sidecar
+review.
 Use its `agent_source_references` to learn from `NousResearch/hermes-agent` and
 `openai/codex` without vendoring their code or weakening local ofxGgml
 boundaries.
