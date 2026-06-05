@@ -36,12 +36,24 @@ not scatter edits across the ecosystem.
 
 ## Recommended Review Roles
 
-| Role | Read First | Output |
-| --- | --- | --- |
-| `memory-reviewer` | `docs\hermes-memory-contract.md`, memory schema, memory writer/checker/tests | Stale-memory, source-provenance, and handoff gaps |
-| `eval-reviewer` | Hermes eval markdown/JSON, eval catalog test, learning plan | Missing scenarios, unsafe failures, and measurable readiness gaps |
-| `operating-loop-reviewer` | operating loop, learning plan, skills guide, handoff contract, baseline | Delegation, anti-duplication, integration, and validation gaps |
-| `source-learning-reviewer` | source-learning map/planner, openFrameworks and ggml skills | Upstream-learning, generated artifact, and lane-translation gaps |
+Each role profile should have exactly one review question, a clear lane
+boundary, an explicit authority, and a small output contract. Reviewers may
+read bounded local files and report findings with severity, file references,
+validation risk, and suggested owner. They may not edit files, commit generated
+artifacts, or act as the final integrator unless the coordinator assigns a
+separate disjoint write scope.
+
+| Role | Specialization | Skill | Read First | Output Contract |
+| --- | --- | --- | --- | --- |
+| `memory-reviewer` | Permanent memory integrity, provenance, and freshness | `memory-contract-auditor` | `docs\hermes-memory-contract.md`, memory schema, memory writer/checker/tests | Stale-memory, source-provenance, readiness, and validation gaps |
+| `eval-reviewer` | Prompt-only eval coverage and anti-gaming review | `evaluation-gap-finder` | Hermes eval markdown/JSON, eval catalog test, learning plan | Missing scenarios, unsafe failures, scoring gaps, and readiness thresholds |
+| `operating-loop-reviewer` | Delegation flow, integration ownership, and handoff discipline | `operating-loop-contract-reviewer` | operating loop, learning plan, skills guide, handoff contract, baseline | Delegation, anti-duplication, integration, dirty-repo, and validation gaps |
+| `source-learning-reviewer` | Upstream source translation without lane leakage | `source-learning-boundary-reviewer` | source-learning map/planner, openFrameworks and ggml skills | Upstream-learning, Core/companion ownership, generated artifact, and retrieval packet gaps |
+
+Use `scripts\plan-hermes-agent-improvement.ps1 -Json` as the canonical
+machine-readable profile source. It emits each role's `specialization`, `skill`,
+`authority`, `lane_boundary`, `allowed_actions`, `forbidden_actions`,
+`output_contract`, `evidence`, and `stop_conditions`.
 
 ## Addon Fanout
 
@@ -50,6 +62,31 @@ rollout plan. Each addon agent should read its own `AGENTS.md`, `README.md`,
 workflow docs, validation script, and generated artifact policy, then report a
 lane-local finding set. The coordinator owns cross-addon comparison and final
 integration.
+
+Each addon brief should include:
+
+- Repository, lane, and specialized `agent_id`.
+- Lane-specific specialization and one primary review question.
+- `read_first` files, validation command, dirty policy, generated artifact
+  policy, and coordinator handoff owner.
+- Output shape: findings with severity and file references, lane-local risks,
+  validation notes, and deferred or out-of-lane items.
+
+Recommended addon specializations:
+
+| Addon | Agent Id | Specialization |
+| --- | --- | --- |
+| `ofxGgmlCore` | `core-runtime-boundary-agent` | Shared ggml provider, runtime ownership, and ecosystem control-plane review |
+| `ofxGgmlLlama` | `llama-text-agent` | Text, chat, embedding, and llama.cpp caller workflow review |
+| `ofxGgmlSam` | `sam-segmentation-agent` | Segmentation examples, SAM/SAM2 setup, and visual evidence review |
+| `ofxGgmlAudio` | `audio-speech-agent` | Audio capture, transcription, and speech evidence review |
+| `ofxGgmlMusic` | `music-generation-agent` | MusicGen, AceStep, prompt UX, and audio artifact hygiene review |
+| `ofxGgmlVision` | `vision-understanding-agent` | Image understanding, detector/classifier evidence, and metadata review |
+| `ofxGgmlVideo` | `video-pipeline-agent` | Video montage, frame pipeline, and temporal evidence review |
+| `ofxGgmlStableDiffusion` | `diffusion-image-agent` | stable-diffusion.cpp setup, image generation UX, and model artifact hygiene review |
+| `ofxGgmlRag` | `rag-memory-agent` | RAG retrieval, citation provenance, and memory boundary review |
+| `ofxGgmlAgents` | `local-agent-tools-agent` | Local tool-agent workflows, permissions, and delegation contract review |
+| `ofxGgmlWorkflows` | `workflows-coordinator-agent` | Workflow policy, reusable CI contracts, and integration owner |
 
 For edit work, one agent per addon is allowed only when:
 

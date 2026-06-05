@@ -40,7 +40,8 @@ conditions, validation, and handoff shape.
 Use [`docs/hermes-multi-agent-improvement.md`](docs/hermes-multi-agent-improvement.md)
 and `scripts\plan-hermes-agent-improvement.ps1 -Json` when using subagents or
 sibling agents to improve agent instructions, memory, evals, or operating-loop
-behavior. Use `-Focus addon-fanout` for one-agent-per-addon review planning.
+behavior. The planner emits specialized role profiles and addon lane briefs;
+use `-Focus addon-fanout` for one-agent-per-addon review planning.
 Use [`docs/hermes-memory-contract.md`](docs/hermes-memory-contract.md)
 with `scripts\write-hermes-memory-index.ps1` and
 `scripts\check-hermes-memory-index.ps1` when Hermes needs durable,

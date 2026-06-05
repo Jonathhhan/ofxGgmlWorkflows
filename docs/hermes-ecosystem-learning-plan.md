@@ -77,7 +77,8 @@ Use `scripts\plan-hermes-source-learning.ps1 -Json` when Hermes needs a
 machine-readable retrieval packet for upstream source learning.
 Use `scripts\plan-hermes-agent-improvement.ps1 -Json` when Hermes needs
 subagents or sibling agents to review agent instructions, memory, evals, or
-operating-loop behavior.
+operating-loop behavior. Treat its specialized role profiles and addon lane briefs
+as the canonical delegation packet before spawning reviewers.
 
 ## Skill Layer
 
@@ -95,9 +96,9 @@ model:
   folders for the requested lane.
 - `ofxggml-ecosystem-planning`: run Core planning/readiness first, classify
   dirty repos, choose one lane, and write a handoff before cross-repo edits.
-- `multi-agent-improvement`: use bounded read-only reviewers by default,
-  assign exactly one integration owner, avoid duplicate write scopes, and
-  report accepted and rejected outputs before validation.
+- `multi-agent-improvement`: use specialized bounded read-only reviewers by
+  default, assign exactly one integration owner, avoid duplicate write scopes,
+  and report accepted and rejected outputs before validation.
 - `windows-vs-openframeworks-build`: use Visual Studio/openFrameworks build
   wrappers, projectGenerator preflight/postflight, and generated-project repair
   planners without committing generated files.

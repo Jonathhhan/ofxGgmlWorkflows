@@ -38,11 +38,34 @@ foreach ($role in $roles) {
 	if ([string]$role.mode -ne "read-only review") {
 		throw "Hermes agent-improvement role $($role.id) should default to read-only review."
 	}
+	if ([string]$role.authority -ne "reviewer") {
+		throw "Hermes agent-improvement role $($role.id) should have reviewer authority."
+	}
+	if ([string]::IsNullOrWhiteSpace([string]$role.specialization)) {
+		throw "Hermes agent-improvement role $($role.id) must include a specialization."
+	}
+	if ([string]::IsNullOrWhiteSpace([string]$role.skill)) {
+		throw "Hermes agent-improvement role $($role.id) must include a specialized skill."
+	}
+	if ([string]::IsNullOrWhiteSpace([string]$role.lane_boundary)) {
+		throw "Hermes agent-improvement role $($role.id) must include a lane boundary."
+	}
 	if (@($role.read_first).Count -eq 0) {
 		throw "Hermes agent-improvement role $($role.id) must include read_first files."
 	}
 	if (@($role.output).Count -eq 0) {
 		throw "Hermes agent-improvement role $($role.id) must include output expectations."
+	}
+	if (@($role.output_contract).Count -eq 0) {
+		throw "Hermes agent-improvement role $($role.id) must include an output contract."
+	}
+	if (@($role.evidence).Count -eq 0) {
+		throw "Hermes agent-improvement role $($role.id) must include evidence expectations."
+	}
+	foreach ($property in @("allowed_actions", "forbidden_actions")) {
+		if (@($role.$property).Count -eq 0) {
+			throw "Hermes agent-improvement role $($role.id) must include $property."
+		}
 	}
 	if (@($role.stop_conditions).Count -eq 0) {
 		throw "Hermes agent-improvement role $($role.id) must include stop conditions."
@@ -73,6 +96,19 @@ if (@($plan.addon_review_targets).Count -lt 10) {
 foreach ($repo in @("ofxGgmlCore", "ofxGgmlStableDiffusion", "ofxGgmlRag", "ofxGgmlWorkflows")) {
 	if ($repo -notin @($plan.addon_review_targets | Select-Object -ExpandProperty repo)) {
 		throw "Hermes agent-improvement addon review targets should include: $repo"
+	}
+}
+foreach ($target in @($plan.addon_review_targets)) {
+	foreach ($property in @("agent_id", "specialization", "read_first", "focus_questions", "one_question", "output_shape", "validation_command", "dirty_policy", "generated_artifact_policy", "handoff_owner", "stop_conditions")) {
+		if ($null -eq $target.$property) {
+			throw "Hermes agent-improvement addon target $($target.repo) is missing $property."
+		}
+	}
+	if (@($target.focus_questions).Count -eq 0 -or [string]::IsNullOrWhiteSpace([string]$target.one_question)) {
+		throw "Hermes agent-improvement addon target $($target.repo) must include a lane-specific question."
+	}
+	if ([string]$target.handoff_owner -ne "coordinator/integrator") {
+		throw "Hermes agent-improvement addon target $($target.repo) should keep handoff owner as coordinator/integrator."
 	}
 }
 foreach ($ruleToken in @("one agent per addon", "clean target repos", "pauses fanout")) {
