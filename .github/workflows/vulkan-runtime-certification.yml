@@ -29,6 +29,9 @@ jobs:
   vulkan-runtime-certification:
     runs-on: [self-hosted, linux, vulkan]
 
+    permissions:
+      contents: read
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4

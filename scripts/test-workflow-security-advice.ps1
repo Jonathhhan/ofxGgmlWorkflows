@@ -44,8 +44,8 @@ $json = Get-Content -LiteralPath $jsonPath -Raw | ConvertFrom-Json
 if ([int]$json.workflow_count -le 0) {
 	throw "Workflow security advice JSON did not count workflow files."
 }
-if ([int]$json.missing_permissions_count -le 0) {
-	throw "Workflow security advice JSON should report missing job permissions during advisory rollout."
+if ([int]$json.missing_permissions_count -ne 0) {
+	throw "Workflow security advice JSON should report zero missing job permissions after least-privilege rollout."
 }
 if ([int]$json.unpinned_action_count -le 0) {
 	throw "Workflow security advice JSON should report non-SHA action refs during advisory rollout."

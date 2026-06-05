@@ -29,6 +29,9 @@ jobs:
   metal-runtime-certification:
     runs-on: [self-hosted, macos, metal]
 
+    permissions:
+      contents: read
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4

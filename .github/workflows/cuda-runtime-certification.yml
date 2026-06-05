@@ -29,6 +29,9 @@ jobs:
   cuda-runtime-certification:
     runs-on: [self-hosted, linux, cuda]
 
+    permissions:
+      contents: read
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
