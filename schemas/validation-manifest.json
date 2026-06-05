@@ -17,22 +17,26 @@
     { "path": "docs/future-ecosystem-roadmap.md", "label": "future ecosystem roadmap" },
     { "path": "docs/hermes-agent-operating-loop.md", "label": "Hermes agent operating loop" },
     { "path": "docs/hermes-ecosystem-learning-plan.md", "label": "Hermes ecosystem learning plan" },
+    { "path": "docs/hermes-memory-contract.md", "label": "Hermes memory contract" },
     { "path": "docs/hermes-openframeworks-ggml-skills.md", "label": "Hermes openFrameworks and ggml skills" },
     { "path": "docs/managed-addon-rollout.md", "label": "managed addon rollout matrix" },
     { "path": "docs/sam-evidence-pilot-handoff.md", "label": "Sam evidence pilot handoff" },
     { "path": "docs/workflow-release-policy.md", "label": "workflow release policy" },
     { "path": "docs/workflow-adoption.md", "label": "workflow adoption docs" },
     { "path": "schemas/evidence-v1.schema.json", "label": "evidence JSON schema" },
+    { "path": "schemas/hermes-memory-v1.schema.json", "label": "Hermes memory JSON schema" },
     { "path": "schemas/validation-manifest.json", "label": "validation manifest" },
     { "path": "scripts/test-evidence-schema-drift.ps1", "label": "evidence schema drift tests" },
     { "path": "scripts/test-evidence-promotion-advisor.ps1", "label": "evidence promotion advisor tests" },
     { "path": "scripts/test-evidence-validator.ps1", "label": "evidence validator tests" },
     { "path": "scripts/test-dependabot-actions.ps1", "label": "Dependabot GitHub Actions tests" },
+    { "path": "scripts/test-hermes-memory-index.ps1", "label": "Hermes memory index tests" },
     { "path": "scripts/test-validation-manifest.ps1", "label": "validation manifest tests" },
     { "path": "scripts/test-workflow-security-advice.ps1", "label": "workflow security advice tests" },
     { "path": "scripts/test-workflow-profiles.ps1", "label": "workflow profile tests" },
     { "path": "scripts/test-workflow-fixtures.ps1", "label": "workflow fixture tests" },
     { "path": "scripts/write-evidence-promotion-advice.ps1", "label": "evidence promotion advisor" },
+    { "path": "scripts/write-hermes-memory-index.ps1", "label": "Hermes memory index writer" },
     { "path": "scripts/write-workflow-security-advice.ps1", "label": "workflow security advisor" },
     { "path": "scripts/validate-evidence.py", "label": "evidence validator" },
     { "path": "scripts/validate-local.ps1", "label": "local validation" },
@@ -56,21 +60,25 @@
     "docs/future-ecosystem-roadmap.md",
     "docs/hermes-agent-operating-loop.md",
     "docs/hermes-ecosystem-learning-plan.md",
+    "docs/hermes-memory-contract.md",
     "docs/hermes-openframeworks-ggml-skills.md",
     "docs/managed-addon-rollout.md",
     "docs/sam-evidence-pilot-handoff.md",
     "docs/workflow-release-policy.md",
     "schemas/evidence-v1.schema.json",
+    "schemas/hermes-memory-v1.schema.json",
     "schemas/validation-manifest.json",
     "scripts/test-evidence-schema-drift.ps1",
     "scripts/test-evidence-promotion-advisor.ps1",
     "scripts/test-evidence-validator.ps1",
     "scripts/test-dependabot-actions.ps1",
+    "scripts/test-hermes-memory-index.ps1",
     "scripts/test-validation-manifest.ps1",
     "scripts/test-workflow-security-advice.ps1",
     "scripts/test-workflow-profiles.ps1",
     "scripts/test-workflow-fixtures.ps1",
     "scripts/write-evidence-promotion-advice.ps1",
+    "scripts/write-hermes-memory-index.ps1",
     "scripts/write-workflow-security-advice.ps1",
     "scripts/validate-evidence.py",
     "scripts/validate-local.ps1",
@@ -188,6 +196,8 @@
         "agent-baseline.md",
         "hermes-agent-operating-loop.md",
         "hermes-ecosystem-learning-plan.md",
+        "hermes-memory-contract.md",
+        "write-hermes-memory-index.ps1",
         "hermes-openframeworks-ggml-skills.md",
         "coding-agent-instructions.yml",
         "addon-hygiene.yml",
@@ -203,6 +213,7 @@
         "reject_generated_project_files",
         "artifact_digest",
         "artifact-digest",
+        "Hermes memory index checks",
         "recommended_consumer_ref",
         "require_explicit_permissions",
         "require_pinned_actions",
@@ -298,7 +309,9 @@
         "openframeworks-addon-layout",
         "ggml-runtime-provider",
         "release-readiness-evidence",
-        "plan-release-readiness.ps1 -Json"
+        "plan-release-readiness.ps1 -Json",
+        "hermes-memory-contract.md",
+        "write-hermes-memory-index.ps1"
       ]
     },
     {
@@ -307,6 +320,8 @@
       "patterns": [
         "Task lane",
         "Retrieval Packets",
+        "Hermes memory",
+        "hermes-memory-contract.md",
         "Stop Conditions",
         "Agent Output Shape",
         "workflow-security-advice.yml",
@@ -328,7 +343,58 @@
         "ofxGgmlCore",
         "workflow_call",
         "Evidence Schema v1",
-        "artifact integrity"
+        "artifact integrity",
+        "memory indexes",
+        "stale records"
+      ]
+    },
+    {
+      "path": "docs/hermes-memory-contract.md",
+      "label": "Hermes memory contract",
+      "patterns": [
+        "schema_version",
+        "source_path",
+        "commit_sha",
+        "freshness",
+        "retrieval_tags",
+        "write-hermes-memory-index.ps1",
+        "generated",
+        "stale"
+      ]
+    },
+    {
+      "path": "schemas/hermes-memory-v1.schema.json",
+      "label": "Hermes memory JSON schema",
+      "patterns": [
+        "Hermes Memory Index v1",
+        "schema_version",
+        "commit_sha",
+        "tree_state",
+        "records",
+        "retrieval_tags"
+      ]
+    },
+    {
+      "path": "scripts/write-hermes-memory-index.ps1",
+      "label": "Hermes memory index writer",
+      "patterns": [
+        "schema_version",
+        "commit_sha",
+        "tree_state",
+        "retrieval_tags",
+        "source_path"
+      ]
+    },
+    {
+      "path": "scripts/test-hermes-memory-index.ps1",
+      "label": "Hermes memory index tests",
+      "patterns": [
+        "Hermes Memory Index v1",
+        "schema_version",
+        "source_path",
+        "retrieval_tags",
+        "operating-loop",
+        "memory-contract"
       ]
     },
     {

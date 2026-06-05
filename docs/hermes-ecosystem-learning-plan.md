@@ -63,7 +63,11 @@ Priority scripts:
 
 Memory records should store source path, commit SHA when available, repository
 lane, freshness timestamp, and whether the source is instruction, workflow,
-runtime, evidence, or example material.
+runtime, evidence, validation, planning, release, security, memory, or example
+material. Use `docs\hermes-memory-contract.md` and
+`scripts\write-hermes-memory-index.ps1` for the Workflows lane memory index.
+The generated index is a build artifact, not committed source, and stale
+records must yield to current repository files.
 
 ## Skill Layer
 
@@ -111,6 +115,7 @@ Evaluation should score:
 
 - Boundary correctness.
 - Retrieval-grounded citations to local files.
+- Memory freshness and source-path correctness.
 - Generated artifact hygiene.
 - Correct logging and validation conventions.
 - Evidence honesty and release-readiness judgment.
@@ -122,7 +127,9 @@ Evaluation should score:
 2. Use `docs\hermes-agent-operating-loop.md` to classify the lane, retrieval
    packet, stop conditions, and handoff shape.
 3. Retrieve the instruction layer and relevant lane docs.
-4. Select the smallest applicable skill.
-5. Execute only inside the chosen lane.
-6. Validate locally.
-7. Report commands, dirty-repo caveats, evidence gaps, and next action.
+4. Refresh or verify the Hermes memory index when the task is cross-repo,
+   release-facing, or agent-improvement work.
+5. Select the smallest applicable skill.
+6. Execute only inside the chosen lane.
+7. Validate locally.
+8. Report commands, dirty-repo caveats, evidence gaps, and next action.

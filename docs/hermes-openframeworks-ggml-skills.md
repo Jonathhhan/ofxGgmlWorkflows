@@ -60,6 +60,8 @@ boundaries or inventing unstable runtime policy.
   before editing.
 - Hygiene: no generated project files, binaries, model weights, downloaded
   runtimes, media dumps, memory indexes, caches, or IDE metadata were added.
+- Memory: source-grounded memory indexes were refreshed or checked for
+  freshness before relying on them, and stale records yielded to current docs.
 - Evidence: runtime or backend claims use existing Workflows evidence contracts.
 - Evidence detail: artifact integrity is captured when promotion or release
   policy depends on generated runtime evidence.

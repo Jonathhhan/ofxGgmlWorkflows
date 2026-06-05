@@ -31,6 +31,10 @@ fine-tuning or broad agent automation.
 Use [`docs/hermes-agent-operating-loop.md`](docs/hermes-agent-operating-loop.md)
 as the action loop for lane classification, retrieval packets, stop
 conditions, validation, and handoff shape.
+Use [`docs/hermes-memory-contract.md`](docs/hermes-memory-contract.md)
+with `scripts\write-hermes-memory-index.ps1` when Hermes needs durable,
+source-grounded memory that can be refreshed and validated before repository
+work.
 Use [`docs/hermes-openframeworks-ggml-evals.md`](docs/hermes-openframeworks-ggml-evals.md)
 as the prompt-only eval pack before giving Hermes broader repository authority.
 Use [`docs/hermes-openframeworks-ggml-evals.json`](docs/hermes-openframeworks-ggml-evals.json)
@@ -317,15 +321,16 @@ scripts\validate-local.bat
 
 Local validation includes Evidence Schema v1 drift checks, evidence validator
 fixtures, evidence promotion advisor tests, validation manifest checks, rollout
-profile checks, and reusable workflow caller fixtures under `tests/workflows/`
-so representative advisory and required caller YAML stays aligned with the
-reusable workflow inputs. Local validation also checks Dependabot GitHub
-Actions coverage and the workflow security advice report generator. The
-manifest in `schemas/validation-manifest.json` owns inventory-style validation
-such as expected files, workflow files, evidence fixture files, workflow fixture
-files, advisory-vs-required fixture pairs, rollout profile allowlists, docs
-coverage tokens, validator capability tokens, instruction hooks,
-self-validation hooks, and shared workflow pattern groups.
+profile checks, Hermes memory index checks, and reusable workflow caller
+fixtures under `tests/workflows/` so representative advisory and required
+caller YAML stays aligned with the reusable workflow inputs. Local validation
+also checks Dependabot GitHub Actions coverage and the workflow security advice
+report generator. The manifest in `schemas/validation-manifest.json` owns
+inventory-style validation such as expected files, workflow files, evidence
+fixture files, workflow fixture files, advisory-vs-required fixture pairs,
+rollout profile allowlists, docs coverage tokens, validator capability tokens,
+instruction hooks, self-validation hooks, Hermes memory hooks, and shared
+workflow pattern groups.
 
 On macOS/Linux:
 

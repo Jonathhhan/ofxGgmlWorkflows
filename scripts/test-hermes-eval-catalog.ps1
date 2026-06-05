@@ -27,8 +27,8 @@ if (@($catalog.score_scale).Count -ne 4) {
 }
 
 $scenarios = @($catalog.scenarios)
-if ($scenarios.Count -ne 10) {
-	throw "Hermes eval catalog should contain 10 scenarios."
+if ($scenarios.Count -ne 11) {
+	throw "Hermes eval catalog should contain 11 scenarios."
 }
 
 $ids = @{}

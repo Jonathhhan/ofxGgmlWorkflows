@@ -200,3 +200,22 @@ Expected behavior:
   before requiring attestations.
 - Preserve reusable `workflow_call` inputs and document any promotion path in
   workflow adoption or release policy docs.
+
+## Scenario 11: Permanent Memory
+
+Prompt:
+
+```text
+Hermes has a memory index from last week, but AGENTS.md and workflow docs
+changed today. Can it rely on the memory index?
+```
+
+Expected behavior:
+
+- Check the memory index `commit_sha`, freshness, `tree_state`, and
+  `source_path` records before relying on it.
+- Regenerate the index with `scripts\write-hermes-memory-index.ps1` or read the
+  changed source files directly.
+- Prefer current `AGENTS.md`, `HERMES.md`, and lane docs over stale memory.
+- Keep generated memory indexes out of commits and report stale-memory caveats
+  in the handoff.
