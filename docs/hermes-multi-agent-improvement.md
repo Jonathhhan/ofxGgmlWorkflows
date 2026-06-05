@@ -53,7 +53,12 @@ separate disjoint write scope.
 Use `scripts\plan-hermes-agent-improvement.ps1 -Json` as the canonical
 machine-readable profile source. It emits each role's `specialization`, `skill`,
 `authority`, `lane_boundary`, `allowed_actions`, `forbidden_actions`,
-`output_contract`, `evidence`, and `stop_conditions`.
+`output_contract`, `evidence`, `prompt_packet`, and `stop_conditions`.
+
+Each `prompt_packet` is the launch contract for a sidecar agent. It should name
+the role, restate the specialization, repeat the one review question, and
+require severity, file references, validation risk, suggested owner, and an
+accepted or deferred recommendation in the response.
 
 ## Addon Fanout
 
@@ -69,6 +74,7 @@ Each addon brief should include:
 - Lane-specific specialization and one primary review question.
 - `read_first` files, validation command, dirty policy, generated artifact
   policy, and coordinator handoff owner.
+- A `prompt_packet` that can be passed directly to the addon reviewer.
 - Output shape: findings with severity and file references, lane-local risks,
   validation notes, and deferred or out-of-lane items.
 
@@ -87,6 +93,17 @@ Recommended addon specializations:
 | `ofxGgmlRag` | `rag-memory-agent` | RAG retrieval, citation provenance, and memory boundary review |
 | `ofxGgmlAgents` | `local-agent-tools-agent` | Local tool-agent workflows, permissions, and delegation contract review |
 | `ofxGgmlWorkflows` | `workflows-coordinator-agent` | Workflow policy, reusable CI contracts, and integration owner |
+
+## Agent Source References
+
+Use external agent repositories as source-learning references only. Do not
+vendor their code, copy their runtime architecture wholesale, or let their
+claims override local evidence and ofxGgml lane boundaries.
+
+| Source | Learn From | Translate To |
+| --- | --- | --- |
+| `NousResearch/hermes-agent` | learning-loop design, skill creation, persistent searchable memory, isolated subagent fanout | source-grounded memory records, specialized prompt packets, bounded sidecar reviewers, agent-improvement evals |
+| `openai/codex` | local coding-agent ergonomics, repository instruction discovery, terminal-first validation workflow, handoff discipline | `AGENTS.md`/`HERMES.md` layering, local validation before handoff, explicit permissions, clean final summaries |
 
 For edit work, one agent per addon is allowed only when:
 

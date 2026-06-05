@@ -67,6 +67,15 @@ foreach ($role in $roles) {
 			throw "Hermes agent-improvement role $($role.id) must include $property."
 		}
 	}
+	if ($null -eq $role.prompt_packet) {
+		throw "Hermes agent-improvement role $($role.id) must include a prompt packet."
+	}
+	if ([string]::IsNullOrWhiteSpace([string]$role.prompt_packet.prompt) -or @($role.prompt_packet.expected_response).Count -eq 0) {
+		throw "Hermes agent-improvement role $($role.id) prompt packet must include prompt and expected_response."
+	}
+	if ([string]$role.prompt_packet.prompt -notmatch [regex]::Escape([string]$role.id)) {
+		throw "Hermes agent-improvement role $($role.id) prompt packet should name the role."
+	}
 	if (@($role.stop_conditions).Count -eq 0) {
 		throw "Hermes agent-improvement role $($role.id) must include stop conditions."
 	}
@@ -99,7 +108,7 @@ foreach ($repo in @("ofxGgmlCore", "ofxGgmlStableDiffusion", "ofxGgmlRag", "ofxG
 	}
 }
 foreach ($target in @($plan.addon_review_targets)) {
-	foreach ($property in @("agent_id", "specialization", "read_first", "focus_questions", "one_question", "output_shape", "validation_command", "dirty_policy", "generated_artifact_policy", "handoff_owner", "stop_conditions")) {
+	foreach ($property in @("agent_id", "specialization", "read_first", "focus_questions", "one_question", "output_shape", "validation_command", "dirty_policy", "generated_artifact_policy", "handoff_owner", "prompt_packet", "stop_conditions")) {
 		if ($null -eq $target.$property) {
 			throw "Hermes agent-improvement addon target $($target.repo) is missing $property."
 		}
@@ -110,10 +119,35 @@ foreach ($target in @($plan.addon_review_targets)) {
 	if ([string]$target.handoff_owner -ne "coordinator/integrator") {
 		throw "Hermes agent-improvement addon target $($target.repo) should keep handoff owner as coordinator/integrator."
 	}
+	if ([string]::IsNullOrWhiteSpace([string]$target.prompt_packet.prompt) -or @($target.prompt_packet.expected_response).Count -eq 0) {
+		throw "Hermes agent-improvement addon target $($target.repo) prompt packet must include prompt and expected_response."
+	}
+	if ([string]$target.prompt_packet.prompt -notmatch [regex]::Escape([string]$target.agent_id)) {
+		throw "Hermes agent-improvement addon target $($target.repo) prompt packet should name the addon agent."
+	}
 }
 foreach ($ruleToken in @("one agent per addon", "clean target repos", "pauses fanout")) {
 	if (@($plan.addon_fanout_rules | Where-Object { $_ -match [regex]::Escape($ruleToken) }).Count -eq 0) {
 		throw "Hermes agent-improvement addon fanout rules should mention: $ruleToken"
+	}
+}
+
+$sourceReferences = @($plan.agent_source_references)
+if ($sourceReferences.Count -lt 2) {
+	throw "Hermes agent-improvement plan should include agent source-learning references."
+}
+foreach ($sourceId in @("nousresearch-hermes-agent", "openai-codex")) {
+	$source = @($sourceReferences | Where-Object { $_.id -eq $sourceId })[0]
+	if ($null -eq $source) {
+		throw "Hermes agent-improvement plan is missing source reference: $sourceId"
+	}
+	foreach ($property in @("repo", "url", "use_for", "translate_to", "do_not_copy")) {
+		if ($null -eq $source.$property) {
+			throw "Hermes agent-improvement source reference $sourceId is missing $property."
+		}
+	}
+	if (@($source.do_not_copy | Where-Object { $_ -match "do not vendor" }).Count -eq 0) {
+		throw "Hermes agent-improvement source reference $sourceId should forbid vendoring source code."
 	}
 }
 

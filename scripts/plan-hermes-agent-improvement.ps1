@@ -43,6 +43,17 @@ function New-AgentRole {
 			"commit generated artifacts, model weights, binaries, media dumps, caches, or memory indexes",
 			"act as final integrator"
 		)
+		prompt_packet = [ordered]@{
+			title = "$Id prompt packet"
+			prompt = "Act as $Id. Specialization: $Specialization. Read only the listed files, answer exactly this question: $Question. Report findings with severity, file references, validation risk, suggested owner, and accepted/deferred recommendation. Stop if any declared stop condition applies."
+			expected_response = @(
+				"scope checked",
+				"findings with severity and file references",
+				"validation risks",
+				"accepted or deferred recommendation",
+				"stop conditions triggered"
+			)
+		}
 		stop_conditions = @($StopConditions)
 	}
 }
@@ -79,6 +90,17 @@ function New-AddonReviewTarget {
 		dirty_policy = $DirtyPolicy
 		generated_artifact_policy = "never commit generated project files, binaries, model weights, downloaded runtimes, sample media dumps, memory indexes, or caches"
 		handoff_owner = "coordinator/integrator"
+		prompt_packet = [ordered]@{
+			title = "$AgentId addon review packet"
+			prompt = "Act as $AgentId for $Repo. Lane: $Lane. Specialization: $Specialization. Read only the lane-local files in read_first unless the coordinator expands scope. Answer the primary question: $($FocusQuestions[0]). Report findings with severity, file references, lane-local risk, validation notes, and deferred/out-of-lane items. Do not edit unless the coordinator assigns a clean disjoint write scope."
+			expected_response = @(
+				"repo and lane checked",
+				"primary question answer",
+				"findings with severity and file references",
+				"dirty or generated-artifact caveats",
+				"validation command status or recommendation"
+			)
+		}
 		stop_conditions = @($StopConditions)
 	}
 }
@@ -178,6 +200,53 @@ $addonReviewTargets = @(
 	New-AddonReviewTarget "ofxGgmlWorkflows" "reusable ecosystem automation" "workflows-coordinator-agent" "Workflow policy, reusable CI contracts, and integration owner" @("AGENTS.md", "README.md", "docs/agent-baseline.md", "docs/agent-handoff-contract.md", "scripts/validate-local.ps1") @("Does the change preserve workflow_call inputs?", "Is validation local and focused?", "Are delegated outputs accepted or rejected explicitly?") "scripts\validate-local.ps1" "coordinator/integration lane" "own integration locally and stop on workflow_call contract breaks without a release plan" @("workflow_call contract breaks without release plan", "finding belongs in companion runtime behavior")
 )
 
+$agentSourceReferences = @(
+	[ordered]@{
+		id = "nousresearch-hermes-agent"
+		repo = "NousResearch/hermes-agent"
+		url = "https://github.com/NousResearch/hermes-agent"
+		use_for = @(
+			"learning-loop design",
+			"skill creation and self-improvement",
+			"persistent searchable memory",
+			"isolated subagent fanout"
+		)
+		translate_to = @(
+			"source-grounded memory records",
+			"specialized prompt packets",
+			"bounded sidecar reviewers",
+			"agent-improvement evals"
+		)
+		do_not_copy = @(
+			"do not vendor Hermes Agent code",
+			"do not bypass local ofxGgml lane boundaries",
+			"do not treat external memory claims as local evidence"
+		)
+	}
+	[ordered]@{
+		id = "openai-codex"
+		repo = "openai/codex"
+		url = "https://github.com/openai/codex"
+		use_for = @(
+			"local coding-agent ergonomics",
+			"repository instruction discovery",
+			"terminal-first validation workflow",
+			"agent handoff discipline"
+		)
+		translate_to = @(
+			"AGENTS/HERMES instruction layering",
+			"local validation before handoff",
+			"explicit sandbox and permission prompts",
+			"clean final summaries with changed files and tests"
+		)
+		do_not_copy = @(
+			"do not vendor Codex code",
+			"do not replace ofxGgml workflow_call contracts",
+			"do not weaken generated artifact hygiene"
+		)
+	}
+)
+
 if ($Focus -eq "all" -or $Focus -eq "addon-fanout") {
 	$selectedRoles = @($roles)
 } else {
@@ -197,6 +266,7 @@ $plan = [ordered]@{
 	)
 	roles = @($selectedRoles)
 	addon_review_targets = @($addonReviewTargets)
+	agent_source_references = @($agentSourceReferences)
 	authority_model = @(
 		"coordinator: main agent that classifies the lane and spawns bounded sidecar reviews",
 		"retriever: read-only agent that gathers local facts or memory/source-learning context",

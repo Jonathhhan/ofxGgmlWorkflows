@@ -41,7 +41,11 @@ Use [`docs/hermes-multi-agent-improvement.md`](docs/hermes-multi-agent-improveme
 and `scripts\plan-hermes-agent-improvement.ps1 -Json` when using subagents or
 sibling agents to improve agent instructions, memory, evals, or operating-loop
 behavior. The planner emits specialized role profiles and addon lane briefs;
-use `-Focus addon-fanout` for one-agent-per-addon review planning.
+use `-Focus addon-fanout` for one-agent-per-addon review planning. Each profile
+also includes a `prompt_packet` for consistent sidecar launch prompts. The
+planner tracks `NousResearch/hermes-agent` and `openai/codex` as source-learning
+references for agent loops, memory, skills, local validation, and handoff
+discipline without vendoring external code.
 Use [`docs/hermes-memory-contract.md`](docs/hermes-memory-contract.md)
 with `scripts\write-hermes-memory-index.ps1` and
 `scripts\check-hermes-memory-index.ps1` when Hermes needs durable,
