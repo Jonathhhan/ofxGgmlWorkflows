@@ -61,10 +61,11 @@ require severity, file references, validation risk, suggested owner, and an
 accepted or deferred recommendation in the response.
 
 The planner also emits `prompt_launch_queue`, which flattens selected role and
-addon prompt packets into launchable work items. Use the queue when spawning
-sidecar agents because it carries the packet type, id, specialization, launch
-mode, validation owner, and prompt text without requiring callers to inspect
-the full plan shape.
+addon prompt packets into launchable work items. Use
+`scripts\plan-hermes-agent-improvement.ps1 -Focus addon-fanout -PromptQueue -Json`
+when spawning sidecar agents because the queue carries the packet type, id,
+specialization, launch mode, validation owner, and prompt text without requiring
+callers to inspect the full plan shape.
 
 ## Addon Fanout
 

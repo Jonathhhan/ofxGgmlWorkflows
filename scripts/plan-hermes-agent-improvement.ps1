@@ -1,6 +1,7 @@
 param(
 	[ValidateSet("all", "memory", "evals", "operating-loop", "source-learning", "addon-fanout")]
 	[string]$Focus = "all",
+	[switch]$PromptQueue,
 	[switch]$Json
 )
 
@@ -339,7 +340,9 @@ $plan = [ordered]@{
 	)
 }
 
-if ($Json) {
+if ($PromptQueue -and $Json) {
+	$plan.prompt_launch_queue | ConvertTo-Json -Depth 8
+} elseif ($Json) {
 	$plan | ConvertTo-Json -Depth 8
 } else {
 	Write-Host "Hermes agent-improvement plan: $Focus"
@@ -363,6 +366,16 @@ if ($Json) {
 		Write-Host "Addon review targets:"
 		foreach ($target in $plan.addon_review_targets) {
 			Write-Host " - $($target.repo): $($target.default_action)"
+		}
+	}
+	if ($PromptQueue) {
+		Write-Host "Prompt launch queue:"
+		foreach ($entry in $plan.prompt_launch_queue) {
+			$target = $entry.id
+			if ($entry.repo) {
+				$target = "$($entry.id) [$($entry.repo)]"
+			}
+			Write-Host " - $($entry.type): $target ($($entry.launch_mode))"
 		}
 	}
 }

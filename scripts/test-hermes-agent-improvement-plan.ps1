@@ -173,6 +173,10 @@ if (@($memoryPlan.roles).Count -ne 1 -or [string]$memoryPlan.roles[0].id -ne "me
 if (@($memoryPlan.prompt_launch_queue).Count -ne 1 -or [string]$memoryPlan.prompt_launch_queue[0].id -ne "memory-reviewer") {
 	throw "Hermes agent-improvement memory focus should expose one role prompt launch queue entry."
 }
+$memoryQueue = (& $plannerPath -Focus memory -PromptQueue -Json) | ConvertFrom-Json
+if (@($memoryQueue).Count -ne 1 -or [string]$memoryQueue[0].id -ne "memory-reviewer") {
+	throw "Hermes agent-improvement memory prompt queue output should include only memory-reviewer."
+}
 
 $fanoutPlan = (& $plannerPath -Focus addon-fanout -Json) | ConvertFrom-Json
 if (@($fanoutPlan.addon_review_targets).Count -lt 10) {
@@ -180,6 +184,15 @@ if (@($fanoutPlan.addon_review_targets).Count -lt 10) {
 }
 if (@($fanoutPlan.prompt_launch_queue | Where-Object { $_.type -eq "addon-review" }).Count -ne @($fanoutPlan.addon_review_targets).Count) {
 	throw "Hermes agent-improvement addon-fanout prompt launch queue should include each addon target."
+}
+$fanoutQueue = (& $plannerPath -Focus addon-fanout -PromptQueue -Json) | ConvertFrom-Json
+if (@($fanoutQueue | Where-Object { $_.type -eq "addon-review" }).Count -ne @($fanoutPlan.addon_review_targets).Count) {
+	throw "Hermes agent-improvement addon-fanout prompt queue output should include each addon target."
+}
+foreach ($queueEntry in @($fanoutQueue)) {
+	if ($null -eq $queueEntry.prompt_packet -or [string]::IsNullOrWhiteSpace([string]$queueEntry.prompt_packet.prompt)) {
+		throw "Hermes agent-improvement prompt queue output entry $($queueEntry.id) should include prompt text."
+	}
 }
 
 Write-Host "Hermes agent-improvement plan checks passed."
