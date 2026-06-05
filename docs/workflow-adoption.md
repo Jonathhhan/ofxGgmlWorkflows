@@ -311,6 +311,10 @@ expect workflow callers to stay aligned with these names:
   in advisory mode for the same evidence path.
 - Add `artifact_digest` and attestation fields to evidence before requiring
   release-facing provenance for uploaded reports or runtime artifacts.
+- Use the `artifact_digest` reusable workflow output from single-job evidence,
+  promotion, workflow-security, and accelerator certification workflows when a
+  caller needs to pass uploaded artifact integrity into downstream jobs. It is
+  sourced from the `actions/upload-artifact` `artifact-digest` output.
 - Enable `backend-runtime-check.yml` required smoke inputs only after the
   caller has platform-native setup scripts and writes backend runtime evidence.
 - Enable generator/report `require_generator` and `require_report_artifact`

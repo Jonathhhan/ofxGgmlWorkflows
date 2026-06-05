@@ -63,10 +63,16 @@ on:
         type: string
         required: false
         default: ofxggml-evidence-promotion
+    outputs:
+      artifact_digest:
+        description: SHA-256 digest emitted by actions/upload-artifact for the promotion advice bundle.
+        value: ${{ jobs.evidence-promotion-advisor.outputs.artifact_digest }}
 
 jobs:
   evidence-promotion-advisor:
     runs-on: ubuntu-latest
+    outputs:
+      artifact_digest: ${{ steps.upload-promotion-advice.outputs.artifact-digest }}
 
     permissions:
       contents: read
@@ -101,6 +107,7 @@ jobs:
             -JsonPath "${{ inputs.promotion_json_path }}"
 
       - name: Upload promotion advice
+        id: upload-promotion-advice
         if: always() && inputs.upload_report
         uses: actions/upload-artifact@v4
         continue-on-error: true

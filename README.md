@@ -267,6 +267,11 @@ are enabled. Evidence records can include `artifact_digest`,
 `attestation_verified` so uploaded reports and release artifacts can carry
 GitHub artifact digest and attestation provenance before those claims become
 hard release gates.
+For upload-capable reusable workflows, callers can also read the
+`artifact_digest` workflow output when the underlying `actions/upload-artifact`
+step emits its `artifact-digest` output. Matrix workflows expose per-runner
+upload step IDs instead of a single collapsed digest because each OS produces
+its own artifact.
 
 ## Policy
 

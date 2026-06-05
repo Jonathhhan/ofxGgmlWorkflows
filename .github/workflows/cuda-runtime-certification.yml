@@ -24,10 +24,16 @@ on:
       runtime_smoke_evidence_path:
         type: string
         default: build/runtime-smoke/cuda-runtime-smoke.json
+    outputs:
+      artifact_digest:
+        description: SHA-256 digest emitted by actions/upload-artifact for CUDA runtime smoke evidence.
+        value: ${{ jobs.cuda-runtime-certification.outputs.artifact_digest }}
 
 jobs:
   cuda-runtime-certification:
     runs-on: [self-hosted, linux, cuda]
+    outputs:
+      artifact_digest: ${{ steps.upload-cuda-runtime-smoke.outputs.artifact-digest }}
 
     permissions:
       contents: read
@@ -96,6 +102,7 @@ jobs:
           fi
 
       - name: Upload CUDA runtime smoke evidence
+        id: upload-cuda-runtime-smoke
         if: always()
         uses: actions/upload-artifact@v4
         continue-on-error: true

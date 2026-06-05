@@ -199,6 +199,7 @@
         "quality_report_path",
         "reject_generated_project_files",
         "artifact_digest",
+        "artifact-digest",
         "recommended_consumer_ref",
         "workflow-release-policy.md",
         ".github/dependabot.yml"
@@ -218,6 +219,7 @@
         "evidence_profile",
         "reject_generated_project_files",
         "artifact_digest",
+        "artifact-digest",
         "workflow-security-advice.yml",
         "recommended_consumer_ref",
         "workflow-release-policy.md",
@@ -523,6 +525,9 @@
       "require_current_sha",
       "require_freshness",
       "quality_report_path",
+      "artifact_digest",
+      "upload-evidence",
+      "artifact-digest",
       ".ofxggml-workflows/scripts/validate-evidence.py"
     ],
     "evidence-promotion-advisor.yml": [
@@ -531,6 +536,9 @@
       "required_clean_runs",
       "observed_clean_runs",
       "minimum_quality_score",
+      "artifact_digest",
+      "upload-promotion-advice",
+      "artifact-digest",
       ".ofxggml-workflows/scripts/write-evidence-promotion-advice.ps1"
     ],
     "backend-runtime-check.yml": [
@@ -538,7 +546,8 @@
       "require_linux_runtime_smoke_script",
       "require_windows_runtime_smoke_scripts",
       "require_macos_runtime_smoke_script",
-      "require_backend_runtime_smoke_evidence"
+      "require_backend_runtime_smoke_evidence",
+      "upload-backend-runtime-smoke"
     ],
     "metadata-validation.yml": [
       "require_feature_metadata",
@@ -548,6 +557,12 @@
       "Verify ecosystem guardrails",
       "companion addon boundary",
       "generated artifact hygiene"
+    ],
+    "workflow-security-advice.yml": [
+      "recommended_consumer_ref",
+      "artifact_digest",
+      "upload-workflow-security-advice",
+      "artifact-digest"
     ]
   },
   "report_workflows": [
@@ -578,7 +593,9 @@
     "require_runtime_smoke_build_script",
     "runtime_smoke_executable_path",
     "require_runtime_smoke_evidence",
-    "runtime_smoke_evidence_path"
+    "runtime_smoke_evidence_path",
+    "artifact_digest",
+    "artifact-digest"
   ],
   "required_reusable_workflows": [
     "addon-hygiene.yml",

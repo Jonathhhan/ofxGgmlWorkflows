@@ -24,10 +24,16 @@ on:
       artifact_name:
         type: string
         default: workflow-security-advice
+    outputs:
+      artifact_digest:
+        description: SHA-256 digest emitted by actions/upload-artifact for the workflow security advice bundle.
+        value: ${{ jobs.workflow-security-advice.outputs.artifact_digest }}
 
 jobs:
   workflow-security-advice:
     runs-on: ubuntu-latest
+    outputs:
+      artifact_digest: ${{ steps.upload-workflow-security-advice.outputs.artifact-digest }}
 
     permissions:
       contents: read
@@ -71,6 +77,7 @@ jobs:
           }
 
       - name: Upload workflow security advice
+        id: upload-workflow-security-advice
         if: always() && inputs.upload_report
         uses: actions/upload-artifact@v4
         continue-on-error: true

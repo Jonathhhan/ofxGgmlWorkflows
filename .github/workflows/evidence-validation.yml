@@ -63,10 +63,16 @@ on:
         type: string
         required: false
         default: ofxggml-evidence
+    outputs:
+      artifact_digest:
+        description: SHA-256 digest emitted by actions/upload-artifact for the evidence bundle.
+        value: ${{ jobs.evidence-validation.outputs.artifact_digest }}
 
 jobs:
   evidence-validation:
     runs-on: ubuntu-latest
+    outputs:
+      artifact_digest: ${{ steps.upload-evidence.outputs.artifact-digest }}
 
     permissions:
       contents: read
@@ -150,6 +156,7 @@ jobs:
             --quality-report-path "${{ inputs.quality_report_path }}"
 
       - name: Upload evidence
+        id: upload-evidence
         if: always() && inputs.upload_evidence
         uses: actions/upload-artifact@v4
         continue-on-error: true

@@ -24,10 +24,16 @@ on:
       runtime_smoke_evidence_path:
         type: string
         default: build/runtime-smoke/vulkan-runtime-smoke.json
+    outputs:
+      artifact_digest:
+        description: SHA-256 digest emitted by actions/upload-artifact for Vulkan runtime smoke evidence.
+        value: ${{ jobs.vulkan-runtime-certification.outputs.artifact_digest }}
 
 jobs:
   vulkan-runtime-certification:
     runs-on: [self-hosted, linux, vulkan]
+    outputs:
+      artifact_digest: ${{ steps.upload-vulkan-runtime-smoke.outputs.artifact-digest }}
 
     permissions:
       contents: read
@@ -95,6 +101,7 @@ jobs:
           fi
 
       - name: Upload Vulkan runtime smoke evidence
+        id: upload-vulkan-runtime-smoke
         if: always()
         uses: actions/upload-artifact@v4
         continue-on-error: true

@@ -24,10 +24,16 @@ on:
       runtime_smoke_evidence_path:
         type: string
         default: build/runtime-smoke/metal-runtime-smoke.json
+    outputs:
+      artifact_digest:
+        description: SHA-256 digest emitted by actions/upload-artifact for Metal runtime smoke evidence.
+        value: ${{ jobs.metal-runtime-certification.outputs.artifact_digest }}
 
 jobs:
   metal-runtime-certification:
     runs-on: [self-hosted, macos, metal]
+    outputs:
+      artifact_digest: ${{ steps.upload-metal-runtime-smoke.outputs.artifact-digest }}
 
     permissions:
       contents: read
@@ -95,6 +101,7 @@ jobs:
           fi
 
       - name: Upload Metal runtime smoke evidence
+        id: upload-metal-runtime-smoke
         if: always()
         uses: actions/upload-artifact@v4
         continue-on-error: true
