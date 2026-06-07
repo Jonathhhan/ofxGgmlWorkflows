@@ -44,6 +44,19 @@ scripts\plan-hermes-source-learning.ps1 -Json
   `examples`, `libs`, `scripts`, `projectGenerator`, platform docs, and
   generated project guidance when learning addon structure or build workflows.
 
+## Agent Source References
+
+Use external agent repositories as source-learning references only. Do not
+vendor their code, copy their runtime architecture wholesale, or let their
+claims override local evidence and ofxGgml lane boundaries. These references
+appear in the improvement planner (`scripts\plan-hermes-agent-improvement.ps1`)
+as `agent_source_references`.
+
+| Source | Learn From | Translate To |
+| --- | --- | --- |
+| `NousResearch/hermes-agent` | learning-loop design, skill creation, persistent searchable memory, isolated subagent fanout | source-grounded memory records, specialized prompt packets, bounded sidecar reviewers, agent-improvement evals |
+| `openai/codex` | local coding-agent ergonomics, repository instruction discovery, terminal-first validation workflow, handoff discipline | `AGENTS.md`/`HERMES.md` layering, local validation before handoff, explicit permissions, clean final summaries |
+
 ## Lessons For ofxGgml
 
 - Keep Core as the shared ggml/runtime provider. Upstream model projects can

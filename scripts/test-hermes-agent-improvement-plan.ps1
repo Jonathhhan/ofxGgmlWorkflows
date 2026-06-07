@@ -73,6 +73,16 @@ foreach ($role in $roles) {
 	if ([string]::IsNullOrWhiteSpace([string]$role.prompt_packet.prompt) -or @($role.prompt_packet.expected_response).Count -eq 0) {
 		throw "Hermes agent-improvement role $($role.id) prompt packet must include prompt and expected_response."
 	}
+	foreach ($property in @("read_first", "question", "output_contract", "stop_conditions")) {
+		if ($null -eq $role.prompt_packet.$property -or @($role.prompt_packet.$property).Count -eq 0) {
+			throw "Hermes agent-improvement role $($role.id) prompt packet must include $property for local launch."
+		}
+	}
+	foreach ($readPath in @($role.read_first)) {
+		if ([string]$role.prompt_packet.prompt -notmatch [regex]::Escape([string]$readPath)) {
+			throw "Hermes agent-improvement role $($role.id) prompt must include read_first path: $readPath"
+		}
+	}
 	if ([string]$role.prompt_packet.prompt -notmatch [regex]::Escape([string]$role.id)) {
 		throw "Hermes agent-improvement role $($role.id) prompt packet should name the role."
 	}
@@ -90,6 +100,46 @@ foreach ($ruleToken in @("main agent owns edits", "do not duplicate", "deferred 
 foreach ($authorityToken in @("coordinator", "retriever", "reviewer", "integrator")) {
 	if (@($plan.authority_model | Where-Object { $_ -match [regex]::Escape($authorityToken) }).Count -eq 0) {
 		throw "Hermes agent-improvement authority model should mention: $authorityToken"
+	}
+}
+
+if ($null -eq $plan.thread_spawn_mcp) {
+	throw "Hermes agent-improvement plan should describe the MCP thread spawn bridge."
+}
+if ([string]$plan.thread_spawn_mcp.tool -ne "spawn_codex_thread") {
+	throw "Hermes agent-improvement MCP thread spawn tool should be spawn_codex_thread."
+}
+foreach ($mcpToken in @("ofxGgmlLlamaCodexLocalExample", "[mcp_servers.ofxggml_codex_threads]")) {
+	$mcpText = (($plan.thread_spawn_mcp.PSObject.Properties | ForEach-Object { [string]$_.Value }) -join "`n")
+	if ($mcpText -notmatch [regex]::Escape($mcpToken)) {
+		throw "Hermes agent-improvement MCP thread spawn contract should mention: $mcpToken"
+	}
+}
+foreach ($mcpRule in @("spawn one bounded thread", "fall back to single-threaded simulation")) {
+	if (@($plan.thread_spawn_mcp.rules | Where-Object { $_ -match [regex]::Escape($mcpRule) }).Count -eq 0) {
+		throw "Hermes agent-improvement MCP thread spawn rules should mention: $mcpRule"
+	}
+}
+
+if ($null -eq $plan.thread_spawn_fallback) {
+	throw "Hermes agent-improvement plan should describe the thread spawn fallback."
+}
+foreach ($fallbackToken in @("MCP thread spawning is unavailable", "ofxGgmlLlamaCodexLocalExample")) {
+	if (@($plan.thread_spawn_fallback.applies_when | Where-Object { $_ -match [regex]::Escape($fallbackToken) }).Count -eq 0) {
+		throw "Hermes agent-improvement fallback applies_when should mention: $fallbackToken"
+	}
+}
+if ([string]$plan.thread_spawn_fallback.mode -ne "single-threaded simulation") {
+	throw "Hermes agent-improvement fallback mode should be single-threaded simulation."
+}
+foreach ($fallbackRule in @("process prompt_launch_queue entries sequentially", "do not claim independent subagent execution")) {
+	if (@($plan.thread_spawn_fallback.rules | Where-Object { $_ -match [regex]::Escape($fallbackRule) }).Count -eq 0) {
+		throw "Hermes agent-improvement fallback rules should mention: $fallbackRule"
+	}
+}
+foreach ($reportField in @("runtime", "spawn_capability", "fallback_mode", "queue_entries_simulated")) {
+	if ($reportField -notin @($plan.thread_spawn_fallback.report_fields)) {
+		throw "Hermes agent-improvement fallback report fields should include: $reportField"
 	}
 }
 
@@ -121,6 +171,16 @@ foreach ($target in @($plan.addon_review_targets)) {
 	}
 	if ([string]::IsNullOrWhiteSpace([string]$target.prompt_packet.prompt) -or @($target.prompt_packet.expected_response).Count -eq 0) {
 		throw "Hermes agent-improvement addon target $($target.repo) prompt packet must include prompt and expected_response."
+	}
+	foreach ($property in @("read_first", "question", "output_contract", "stop_conditions")) {
+		if ($null -eq $target.prompt_packet.$property -or @($target.prompt_packet.$property).Count -eq 0) {
+			throw "Hermes agent-improvement addon target $($target.repo) prompt packet must include $property for local launch."
+		}
+	}
+	foreach ($readPath in @($target.read_first)) {
+		if ([string]$target.prompt_packet.prompt -notmatch [regex]::Escape([string]$readPath)) {
+			throw "Hermes agent-improvement addon target $($target.repo) prompt must include read_first path: $readPath"
+		}
 	}
 	if ([string]$target.prompt_packet.prompt -notmatch [regex]::Escape([string]$target.agent_id)) {
 		throw "Hermes agent-improvement addon target $($target.repo) prompt packet should name the addon agent."
@@ -156,13 +216,26 @@ if ($launchQueue.Count -ne (@($plan.roles).Count + @($plan.addon_review_targets)
 	throw "Hermes agent-improvement default prompt launch queue should include selected roles and addon targets."
 }
 foreach ($entry in $launchQueue) {
-	foreach ($property in @("type", "id", "specialization", "launch_mode", "validation_owner", "prompt_packet")) {
+	foreach ($property in @("type", "id", "specialization", "launch_mode", "validation_owner", "read_first", "question", "output_contract", "stop_conditions", "prompt_packet")) {
 		if ($null -eq $entry.$property) {
 			throw "Hermes agent-improvement prompt launch queue entry is missing $property."
 		}
 	}
+	foreach ($property in @("read_first", "output_contract", "stop_conditions")) {
+		if (@($entry.$property).Count -eq 0) {
+			throw "Hermes agent-improvement prompt launch queue entry $($entry.id) must include non-empty $property."
+		}
+	}
+	if ([string]::IsNullOrWhiteSpace([string]$entry.question)) {
+		throw "Hermes agent-improvement prompt launch queue entry $($entry.id) must include a question."
+	}
 	if ([string]::IsNullOrWhiteSpace([string]$entry.prompt_packet.prompt)) {
 		throw "Hermes agent-improvement prompt launch queue entry $($entry.id) must include prompt text."
+	}
+	foreach ($readPath in @($entry.read_first)) {
+		if ([string]$entry.prompt_packet.prompt -notmatch [regex]::Escape([string]$readPath)) {
+			throw "Hermes agent-improvement prompt launch queue entry $($entry.id) prompt must include read_first path: $readPath"
+		}
 	}
 }
 

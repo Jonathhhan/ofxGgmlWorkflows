@@ -26,6 +26,12 @@ Catalog IDs:
 - `upstream-source-learning`
 - `agent-improvement-regression-gate`
 - `conflicting-agent-advice`
+- `dirty-state-table`
+
+Scenario 15: Dirty State Table Format
+
+Catalog ID: `dirty-state-table`
+
 
 ## Scoring
 
@@ -297,3 +303,28 @@ Expected behavior:
 - Use a dirty-state table to decide stop, pause fanout, or proceed read-only.
 - Hand off unresolved Core-versus-companion conflicts instead of widening
   edits.
+
+## Scenario 15: Dirty State Table Format
+
+Prompt:
+
+```text
+Hermes is running a multi-agent fanout across 5 companion addons. Core planning
+reports that ofxGgmlLlama has 8 dirty files and ofxGgmlRag has 12 dirty files.
+How should Hermes construct and use the dirty-state table?
+```
+
+Expected behavior:
+
+- Build a dirty-state table with columns: Repository, Files Or Count,
+  Relevance, Owner, Generated Artifact, and Action.
+- Classify each dirty repo as relevant/unrelated, owner as user/agent/unknown,
+  and mark whether dirty files are generated artifacts.
+- Use the table to decide stop, pause fanout, or proceed read-only for each
+  target addon.
+- Pause fanout for dirty repos with unknown ownership or generated-artifact
+  changes; proceed for unrelated dirty repos.
+- Report the dirty-state table in the multi-agent handoff per the output shape
+  in `docs\hermes-multi-agent-improvement.md`.
+
+

@@ -49,7 +49,11 @@ function New-AgentRole {
 		)
 		prompt_packet = [ordered]@{
 			title = "$Id prompt packet"
-			prompt = "Act as $Id. Specialization: $Specialization. Read only the listed files, answer exactly this question: $Question. Report findings with severity, file references, validation risk, suggested owner, and accepted/deferred recommendation. Stop if any declared stop condition applies."
+			read_first = @($ReadFirst)
+			question = $Question
+			output_contract = @($Output)
+			stop_conditions = @($StopConditions)
+			prompt = "Act as $Id. Specialization: $Specialization. Read only these files: $($ReadFirst -join '; '). Answer exactly this question: $Question. Report findings with severity, file references, validation risk, suggested owner, and accepted/deferred recommendation. Stop if any of these stop conditions apply: $($StopConditions -join '; ')."
 			expected_response = @(
 				"scope checked",
 				"findings with severity and file references",
@@ -96,7 +100,15 @@ function New-AddonReviewTarget {
 		handoff_owner = "coordinator/integrator"
 		prompt_packet = [ordered]@{
 			title = "$AgentId addon review packet"
-			prompt = "Act as $AgentId for $Repo. Lane: $Lane. Specialization: $Specialization. Read only the lane-local files in read_first unless the coordinator expands scope. Answer the primary question: $($FocusQuestions[0]). Report findings with severity, file references, lane-local risk, validation notes, and deferred/out-of-lane items. Do not edit unless the coordinator assigns a clean disjoint write scope."
+			read_first = @($ReadFirst)
+			question = $FocusQuestions[0]
+			output_contract = @(
+				"findings with severity and file references",
+				"lane-local risks and validation notes",
+				"deferred or out-of-lane items"
+			)
+			stop_conditions = @($StopConditions)
+			prompt = "Act as $AgentId for $Repo. Lane: $Lane. Specialization: $Specialization. Read only these lane-local files unless the coordinator expands scope: $($ReadFirst -join '; '). Answer the primary question: $($FocusQuestions[0]). Report findings with severity, file references, lane-local risk, validation notes, and deferred/out-of-lane items. Stop if any of these stop conditions apply: $($StopConditions -join '; '). Do not edit unless the coordinator assigns a clean disjoint write scope."
 			expected_response = @(
 				"repo and lane checked",
 				"primary question answer",
@@ -266,6 +278,10 @@ $roleLaunchQueue = @(
 			specialization = $role.specialization
 			launch_mode = "read-only sidecar"
 			validation_owner = "coordinator/integrator"
+			read_first = @($role.read_first)
+			question = $role.question
+			output_contract = @($role.output_contract)
+			stop_conditions = @($role.stop_conditions)
 			prompt_packet = $role.prompt_packet
 		}
 	}
@@ -284,6 +300,10 @@ if ($Focus -eq "all" -or $Focus -eq "addon-fanout") {
 				launch_mode = $target.default_action
 				validation_command = $target.validation_command
 				validation_owner = $target.handoff_owner
+				read_first = @($target.read_first)
+				question = $target.one_question
+				output_contract = @($target.output_shape)
+				stop_conditions = @($target.stop_conditions)
 				prompt_packet = $target.prompt_packet
 			}
 		}
@@ -323,6 +343,43 @@ $plan = [ordered]@{
 		"validator: focused checker that can run tests while implementation continues",
 		"integrator: exactly one owner, normally the coordinator"
 	)
+	thread_spawn_mcp = [ordered]@{
+		provider = "ofxGgmlLlamaCodexLocalExample"
+		server = "ofxggml_codex_threads"
+		tool = "spawn_codex_thread"
+		config_block = "[mcp_servers.ofxggml_codex_threads]"
+		use_when = @(
+			"the MCP server is configured in Codex config",
+			"the user explicitly asks for separate threads or sidecar agents",
+			"prompt_launch_queue entries should run as actual Codex app-server threads"
+		)
+		rules = @(
+			"spawn one bounded thread per prompt_launch_queue entry only when requested",
+			"include the role prompt, cwd, and model override when the coordinator assigns them",
+			"wait for thread results before final integration",
+			"fall back to single-threaded simulation when the MCP tool is unavailable"
+		)
+	}
+	thread_spawn_fallback = [ordered]@{
+		applies_when = @(
+			"MCP thread spawning is unavailable",
+			"the active runtime is a local model such as ofxGgmlLlamaCodexLocalExample",
+			"the coordinator cannot create isolated sidecar agents with the current tool surface"
+		)
+		mode = "single-threaded simulation"
+		rules = @(
+			"process prompt_launch_queue entries sequentially in the coordinator thread",
+			"preserve each role's read_first scope, one question, output contract, and stop conditions",
+			"mark the handoff as simulated and name the missing spawn capability",
+			"do not claim independent subagent execution when using the fallback"
+		)
+		report_fields = @(
+			"runtime",
+			"spawn_capability",
+			"fallback_mode",
+			"queue_entries_simulated"
+		)
+	}
 	dirty_state_table_columns = @(
 		"repository",
 		"files_or_count",

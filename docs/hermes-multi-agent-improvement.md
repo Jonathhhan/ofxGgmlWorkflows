@@ -58,18 +58,48 @@ machine-readable profile source. It emits each role's `specialization`, `skill`,
 Each `prompt_packet` is the launch contract for a sidecar agent. It should name
 the role, restate the specialization, repeat the one review question, and
 require severity, file references, validation risk, suggested owner, and an
-accepted or deferred recommendation in the response.
+accepted or deferred recommendation in the response. It must be self-contained
+for local launch: include the exact files to read first, the single question,
+the expected output contract, and stop conditions so a local model or copied
+thread prompt does not need hidden planner context.
 
 The planner also emits `prompt_launch_queue`, which flattens selected role and
 addon prompt packets into launchable work items. Use
 `scripts\plan-hermes-agent-improvement.ps1 -Focus addon-fanout -PromptQueue -Json`
 when spawning sidecar agents because the queue carries the packet type, id,
-specialization, launch mode, validation owner, and prompt text without requiring
+specialization, launch mode, validation owner, read-first scope, review
+question, output contract, stop conditions, and prompt text without requiring
 callers to inspect the full plan shape.
 
 Use `-QueueType role-review` or `-QueueType addon-review` to narrow the queue by
 work item type. Use `-QueueId <agent-id-or-repo>` to return a single launch
 packet, such as `rag-memory-agent` or `ofxGgmlVideo`.
+
+## MCP Thread Spawning
+
+When `ofxGgmlLlamaCodexLocalExample` has configured the
+`[mcp_servers.ofxggml_codex_threads]` server, the coordinator can use the
+`spawn_codex_thread` MCP tool for explicit sidecar work. Spawn one bounded
+thread per selected `prompt_launch_queue` entry, pass the role prompt and local
+working directory, wait for the thread result, then integrate findings in the
+main coordinator thread.
+
+Use this only when the user asks for separate threads or sidecar agents. If
+the MCP tool is absent, disabled, or fails to initialize, use the fallback
+below and report that the launch queue was simulated.
+
+## Thread Spawn Fallback
+
+When MCP thread spawning is unavailable, including local-model runs such as
+`ofxGgmlLlamaCodexLocalExample`, the coordinator may process
+`prompt_launch_queue` entries sequentially in the main thread. Preserve each
+entry's `read_first` scope, one question, output contract, and stop conditions,
+then report the work as a single-threaded simulation instead of independent
+subagent execution.
+
+Fallback handoffs should name the runtime, spawn capability, fallback mode, and
+number of queue entries simulated. Do not widen write scope because a sidecar
+could not be spawned; the coordinator remains the integration owner.
 
 ## Addon Fanout
 
@@ -167,6 +197,9 @@ Multi-agent improvement handoffs should include:
 - Agents used and their review scopes.
 - Findings integrated and findings deferred.
 - Files changed by the main agent.
+- Local files retrieved.
+- Planning or readiness command used.
 - Validation commands and results.
 - Dirty-repo caveats.
+- Remaining evidence or security gaps.
 - One focused next action.

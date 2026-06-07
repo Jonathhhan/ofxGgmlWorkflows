@@ -16,7 +16,8 @@ rewriter. Use this loop before touching managed ofxGgml repositories.
    learn from upstream code before editing.
 5. Use `scripts\plan-hermes-agent-improvement.ps1` and
    `docs\hermes-multi-agent-improvement.md` when the task asks agents to
-   improve agents.
+   improve agents. Refresh the memory index per step 3 before starting
+   improvement work, as agent-improvement tasks require current memory state.
 6. Retrieve the smallest packet of local facts for that lane.
 7. Choose one named skill from `docs\hermes-ecosystem-learning-plan.md`.
 8. Search canonical docs, scripts, schemas, and workflows before adding new
@@ -24,7 +25,7 @@ rewriter. Use this loop before touching managed ofxGgml repositories.
 9. Edit only files owned by the chosen lane.
 10. Validate locally with the touched repository's validation command.
 11. Report dirty-repo caveats, files changed, validation result, evidence gaps,
-   and one focused next action.
+    and one focused next action.
 
 ## Retrieval Packets
 
@@ -38,6 +39,7 @@ rewriter. Use this loop before touching managed ofxGgml repositories.
 | Companion UX | companion `AGENTS.md`, `README.md`, `addon_config.mk`, examples, lane workflow docs, validation script |
 | Release evidence | Core release-readiness output, Workflows evidence docs, evidence JSON, `workflow-security-advice.yml`, artifact digest or attestation fields |
 | openFrameworks build | Core smoke-build target lifecycle, companion examples, `addons.make`, generated project preflight and postflight reports |
+| Addon fanout | `docs\hermes-multi-agent-improvement.md` (addon fanout section), addon `AGENTS.md`, `README.md`, validation script, generated artifact policy, dirty-state table, coordinator handoff rules |
 
 ## Stop Conditions
 
