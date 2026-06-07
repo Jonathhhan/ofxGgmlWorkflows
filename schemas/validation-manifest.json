@@ -716,7 +716,7 @@
         "workflow_call",
         "agent-handoff-contract.md",
         "agent-baseline.md",
-        "hermes-openframeworks-ggml-skills.md"
+        "generated binaries"
       ]
     },
     {
@@ -727,7 +727,7 @@
         "workflow_call",
         "agent-handoff-contract.md",
         "agent-baseline.md",
-        "hermes-openframeworks-ggml-skills.md"
+        "generated project files"
       ]
     },
     {
@@ -738,7 +738,7 @@
         "workflow_call",
         "agent-handoff-contract.md",
         "agent-baseline.md",
-        "hermes-openframeworks-ggml-skills.md"
+        "generated outputs"
       ]
     },
     {
@@ -749,7 +749,7 @@
         "check-ecosystem-readiness",
         "agent-handoff-contract.md",
         "agent-baseline.md",
-        "hermes-openframeworks-ggml-skills.md"
+        "generated artifact hygiene"
       ]
     },
     {

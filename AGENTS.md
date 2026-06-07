@@ -14,7 +14,6 @@ This repository is part of the ofxGgml openFrameworks addon ecosystem.
 - Keep edits scoped to this addon's lane and preserve the companion-addon split.
 - Start with an ecosystem plan when a task asks for cross-repo improvement or planning.
 - Use ofxGgmlCore as the default shared ggml/runtime base for companion addons; do not add reverse dependencies from Core to companion addons.
-- Use docs\hermes-openframeworks-ggml-skills.md to learn the openFrameworks addon loop, ggml runtime ownership, evidence expectations, and generated artifact hygiene before changing behavior.
 - Do not commit generated project files, binaries, model weights, downloaded runtimes, sample media dumps, memory indexes, or caches.
 - Prefer focused tests and local validation over broad refactors.
 - Use openFrameworks ofLogNotice, ofLogWarning, ofLogError, or module-scoped ofLog(...) for addon runtime/example logging; keep raw stdout/stderr only for tests and CLI tools with machine-readable output contracts.

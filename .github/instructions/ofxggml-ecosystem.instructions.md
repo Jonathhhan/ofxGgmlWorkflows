@@ -13,7 +13,6 @@ applyTo: "**"
 - Work in instruction, documentation, workflow, validation, or planning files before addon source when the task is about the ecosystem or coding agents.
 - Do not edit addon runtime behavior unless the user explicitly asks for addon behavior.
 - Keep companion changes inside this repository's lane and use ofxGgmlCore as the default shared ggml/runtime base.
-- Use docs\hermes-openframeworks-ggml-skills.md to learn the openFrameworks addon loop, ggml runtime ownership, evidence expectations, and generated artifact hygiene.
 - Preserve generated artifact hygiene: no binaries, build folders, IDE metadata, model weights, downloaded runtimes, caches, media dumps, or memory indexes.
 - Use openFrameworks ofLogNotice, ofLogWarning, ofLogError, or module-scoped ofLog(...) for addon runtime/example logging; keep raw stdout/stderr only for tests and CLI tools with machine-readable output contracts.
 - Validate before handoff with scripts\validate-local.ps1; for cross-repo planning also report the Core readiness or planning command used.

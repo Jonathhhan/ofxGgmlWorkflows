@@ -6,7 +6,6 @@ ofxGgmlWorkflows is part of the ofxGgml openFrameworks addon ecosystem.
 - Keep changes inside this addon's lane unless a task explicitly asks for a cross-addon update.
 - For ecosystem planning tasks, prefer instruction, documentation, workflow, and validation changes before addon source changes.
 - Use ofxGgmlCore as the default shared ggml/runtime base for companion addons and keep companion workflows out of Core.
-- Use docs\hermes-openframeworks-ggml-skills.md for openFrameworks addon shape, ggml runtime ownership, evidence expectations, and generated artifact hygiene.
 - Avoid committing generated outputs, local models, build directories, IDE metadata, downloaded runtimes, caches, or media dumps.
 - Use openFrameworks ofLogNotice, ofLogWarning, ofLogError, or module-scoped ofLog(...) for addon runtime/example logging; keep raw stdout/stderr only for tests and CLI tools with machine-readable output contracts.
 - Add or update headless tests for public helper behavior.
