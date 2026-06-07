@@ -73,10 +73,13 @@ foreach ($role in $roles) {
 	if ([string]::IsNullOrWhiteSpace([string]$role.prompt_packet.prompt) -or @($role.prompt_packet.expected_response).Count -eq 0) {
 		throw "Hermes agent-improvement role $($role.id) prompt packet must include prompt and expected_response."
 	}
-	foreach ($property in @("read_first", "question", "output_contract", "stop_conditions")) {
+	foreach ($property in @("cwd", "read_first", "question", "output_contract", "stop_conditions")) {
 		if ($null -eq $role.prompt_packet.$property -or @($role.prompt_packet.$property).Count -eq 0) {
 			throw "Hermes agent-improvement role $($role.id) prompt packet must include $property for local launch."
 		}
+	}
+	if ([string]::IsNullOrWhiteSpace([string]$role.cwd) -or [string]$role.prompt_packet.cwd -ne [string]$role.cwd) {
+		throw "Hermes agent-improvement role $($role.id) prompt packet must include matching cwd."
 	}
 	foreach ($readPath in @($role.read_first)) {
 		if ([string]$role.prompt_packet.prompt -notmatch [regex]::Escape([string]$readPath)) {
@@ -172,10 +175,13 @@ foreach ($target in @($plan.addon_review_targets)) {
 	if ([string]::IsNullOrWhiteSpace([string]$target.prompt_packet.prompt) -or @($target.prompt_packet.expected_response).Count -eq 0) {
 		throw "Hermes agent-improvement addon target $($target.repo) prompt packet must include prompt and expected_response."
 	}
-	foreach ($property in @("read_first", "question", "output_contract", "stop_conditions")) {
+	foreach ($property in @("cwd", "read_first", "question", "output_contract", "stop_conditions")) {
 		if ($null -eq $target.prompt_packet.$property -or @($target.prompt_packet.$property).Count -eq 0) {
 			throw "Hermes agent-improvement addon target $($target.repo) prompt packet must include $property for local launch."
 		}
+	}
+	if ([string]::IsNullOrWhiteSpace([string]$target.cwd) -or [string]$target.prompt_packet.cwd -ne [string]$target.cwd) {
+		throw "Hermes agent-improvement addon target $($target.repo) prompt packet must include matching cwd."
 	}
 	foreach ($readPath in @($target.read_first)) {
 		if ([string]$target.prompt_packet.prompt -notmatch [regex]::Escape([string]$readPath)) {
@@ -216,10 +222,13 @@ if ($launchQueue.Count -ne (@($plan.roles).Count + @($plan.addon_review_targets)
 	throw "Hermes agent-improvement default prompt launch queue should include selected roles and addon targets."
 }
 foreach ($entry in $launchQueue) {
-	foreach ($property in @("type", "id", "specialization", "launch_mode", "validation_owner", "read_first", "question", "output_contract", "stop_conditions", "prompt_packet")) {
+	foreach ($property in @("type", "id", "cwd", "specialization", "launch_mode", "validation_owner", "read_first", "question", "output_contract", "stop_conditions", "prompt_packet")) {
 		if ($null -eq $entry.$property) {
 			throw "Hermes agent-improvement prompt launch queue entry is missing $property."
 		}
+	}
+	if ([string]::IsNullOrWhiteSpace([string]$entry.cwd) -or [string]$entry.prompt_packet.cwd -ne [string]$entry.cwd) {
+		throw "Hermes agent-improvement prompt launch queue entry $($entry.id) must include matching cwd."
 	}
 	foreach ($property in @("read_first", "output_contract", "stop_conditions")) {
 		if (@($entry.$property).Count -eq 0) {
@@ -266,6 +275,9 @@ foreach ($queueEntry in @($fanoutQueue)) {
 	if ($null -eq $queueEntry.prompt_packet -or [string]::IsNullOrWhiteSpace([string]$queueEntry.prompt_packet.prompt)) {
 		throw "Hermes agent-improvement prompt queue output entry $($queueEntry.id) should include prompt text."
 	}
+	if ([string]::IsNullOrWhiteSpace([string]$queueEntry.cwd) -or [string]$queueEntry.prompt_packet.cwd -ne [string]$queueEntry.cwd) {
+		throw "Hermes agent-improvement prompt queue output entry $($queueEntry.id) should include matching cwd."
+	}
 }
 
 $roleOnlyQueue = (& $plannerPath -Focus addon-fanout -PromptQueue -QueueType role-review -Json) | ConvertFrom-Json
@@ -292,6 +304,9 @@ if (@($ragQueue).Count -ne 1 -or [string]$ragQueue[0].repo -ne "ofxGgmlRag") {
 $repoQueue = (& $plannerPath -Focus addon-fanout -PromptQueue -QueueId ofxGgmlVideo -Json) | ConvertFrom-Json
 if (@($repoQueue).Count -ne 1 -or [string]$repoQueue[0].id -ne "video-pipeline-agent") {
 	throw "Hermes agent-improvement QueueId should select addon queue entries by repo name."
+}
+if ([string]$repoQueue[0].cwd -notmatch "ofxGgmlVideo$") {
+	throw "Hermes agent-improvement QueueId repo selection should include the addon cwd."
 }
 
 $emptyQueue = (& $plannerPath -Focus memory -PromptQueue -QueueType addon-review -Json) | ConvertFrom-Json

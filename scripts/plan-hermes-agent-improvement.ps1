@@ -10,6 +10,10 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+$scriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
+$addonRoot = Resolve-Path (Join-Path $scriptRoot "..")
+$addonsRoot = Split-Path -Parent $addonRoot.Path
+
 function New-AgentRole {
 	param(
 		[string]$Id,
@@ -27,6 +31,7 @@ function New-AgentRole {
 	return [ordered]@{
 		id = $Id
 		focus = $Focus
+		cwd = $addonRoot.Path
 		specialization = $Specialization
 		skill = $Skill
 		authority = "reviewer"
@@ -49,11 +54,12 @@ function New-AgentRole {
 		)
 		prompt_packet = [ordered]@{
 			title = "$Id prompt packet"
+			cwd = $addonRoot.Path
 			read_first = @($ReadFirst)
 			question = $Question
 			output_contract = @($Output)
 			stop_conditions = @($StopConditions)
-			prompt = "Act as $Id. Specialization: $Specialization. Read only these files: $($ReadFirst -join '; '). Answer exactly this question: $Question. Report findings with severity, file references, validation risk, suggested owner, and accepted/deferred recommendation. Stop if any of these stop conditions apply: $($StopConditions -join '; ')."
+			prompt = "Act as $Id. Working directory: $($addonRoot.Path). Specialization: $Specialization. Read only these files: $($ReadFirst -join '; '). Answer exactly this question: $Question. Report findings with severity, file references, validation risk, suggested owner, and accepted/deferred recommendation. Stop if any of these stop conditions apply: $($StopConditions -join '; ')."
 			expected_response = @(
 				"scope checked",
 				"findings with severity and file references",
@@ -80,8 +86,10 @@ function New-AddonReviewTarget {
 		[string[]]$StopConditions
 	)
 
+	$targetCwd = Join-Path $addonsRoot $Repo
 	return [ordered]@{
 		repo = $Repo
+		cwd = $targetCwd
 		lane = $Lane
 		agent_id = $AgentId
 		specialization = $Specialization
@@ -100,6 +108,7 @@ function New-AddonReviewTarget {
 		handoff_owner = "coordinator/integrator"
 		prompt_packet = [ordered]@{
 			title = "$AgentId addon review packet"
+			cwd = $targetCwd
 			read_first = @($ReadFirst)
 			question = $FocusQuestions[0]
 			output_contract = @(
@@ -108,7 +117,7 @@ function New-AddonReviewTarget {
 				"deferred or out-of-lane items"
 			)
 			stop_conditions = @($StopConditions)
-			prompt = "Act as $AgentId for $Repo. Lane: $Lane. Specialization: $Specialization. Read only these lane-local files unless the coordinator expands scope: $($ReadFirst -join '; '). Answer the primary question: $($FocusQuestions[0]). Report findings with severity, file references, lane-local risk, validation notes, and deferred/out-of-lane items. Stop if any of these stop conditions apply: $($StopConditions -join '; '). Do not edit unless the coordinator assigns a clean disjoint write scope."
+			prompt = "Act as $AgentId for $Repo. Working directory: $targetCwd. Lane: $Lane. Specialization: $Specialization. Read only these lane-local files unless the coordinator expands scope: $($ReadFirst -join '; '). Answer the primary question: $($FocusQuestions[0]). Report findings with severity, file references, lane-local risk, validation notes, and deferred/out-of-lane items. Stop if any of these stop conditions apply: $($StopConditions -join '; '). Do not edit unless the coordinator assigns a clean disjoint write scope."
 			expected_response = @(
 				"repo and lane checked",
 				"primary question answer",
@@ -275,6 +284,7 @@ $roleLaunchQueue = @(
 			type = "role-review"
 			id = $role.id
 			focus = $role.focus
+			cwd = $role.cwd
 			specialization = $role.specialization
 			launch_mode = "read-only sidecar"
 			validation_owner = "coordinator/integrator"
@@ -295,6 +305,7 @@ if ($Focus -eq "all" -or $Focus -eq "addon-fanout") {
 				type = "addon-review"
 				id = $target.agent_id
 				repo = $target.repo
+				cwd = $target.cwd
 				lane = $target.lane
 				specialization = $target.specialization
 				launch_mode = $target.default_action

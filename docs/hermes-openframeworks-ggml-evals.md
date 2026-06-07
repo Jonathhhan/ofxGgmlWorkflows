@@ -28,11 +28,6 @@ Catalog IDs:
 - `conflicting-agent-advice`
 - `dirty-state-table`
 
-Scenario 15: Dirty State Table Format
-
-Catalog ID: `dirty-state-table`
-
-
 ## Scoring
 
 Score each scenario from 0 to 3:
@@ -326,5 +321,3 @@ Expected behavior:
   changes; proceed for unrelated dirty repos.
 - Report the dirty-state table in the multi-agent handoff per the output shape
   in `docs\hermes-multi-agent-improvement.md`.
-
-
