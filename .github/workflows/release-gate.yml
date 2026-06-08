@@ -85,17 +85,17 @@ jobs:
 
     steps:
       - name: Checkout caller repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Checkout workflow tools
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: Jonathhhan/ofxGgmlWorkflows
           ref: ${{ github.workflow_sha }}
           path: .ofxggml-workflows
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.x'
 

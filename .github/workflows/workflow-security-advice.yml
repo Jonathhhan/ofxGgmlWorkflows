@@ -46,10 +46,10 @@ jobs:
 
     steps:
       - name: Checkout caller repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Checkout workflow tools
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: Jonathhhan/ofxGgmlWorkflows
           ref: ${{ github.workflow_sha }}
@@ -87,7 +87,7 @@ jobs:
       - name: Upload workflow security advice
         id: upload-workflow-security-advice
         if: always() && inputs.upload_report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         continue-on-error: true
         with:
           name: ${{ inputs.artifact_name }}

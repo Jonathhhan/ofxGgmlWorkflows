@@ -39,7 +39,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Environment info
         shell: bash
@@ -104,7 +104,7 @@ jobs:
       - name: Upload smoke build evidence
         id: upload-smoke-build-evidence
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         continue-on-error: true
         with:
           name: of-smoke-build-${{ matrix.os }}
