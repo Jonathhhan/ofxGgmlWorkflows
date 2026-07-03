@@ -88,6 +88,11 @@ jobs:
           ref: ${{ github.workflow_sha }}
           path: .ofxggml-workflows
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
       - name: Write evidence promotion advice
         shell: pwsh
         run: |

@@ -52,6 +52,29 @@ foreach ($workflow in $workflowFiles) {
 	}
 }
 
+Write-Step "Checking text for mojibake"
+$mojibakeMarkers = @(
+	([string][char]0x00E2 + [char]0x20AC + [char]0x201D),
+	([string][char]0x00E2 + [char]0x2020 + [char]0x2019)
+)
+$textExtensions = @(".md", ".json", ".yml", ".yaml", ".ps1", ".py", ".sh", ".bat")
+$mojibakeFiles = New-Object System.Collections.Generic.List[string]
+foreach ($textFile in Get-ChildItem -LiteralPath $repoRoot -Recurse -File) {
+	if ($textFile.FullName -match "[\\/]\.git[\\/]" -or $textFile.Extension -notin $textExtensions) {
+		continue
+	}
+	$text = [System.IO.File]::ReadAllText($textFile.FullName, [System.Text.Encoding]::UTF8)
+	foreach ($marker in $mojibakeMarkers) {
+		if ($text.Contains($marker)) {
+			$mojibakeFiles.Add($textFile.FullName)
+			break
+		}
+	}
+}
+if ($mojibakeFiles.Count -gt 0) {
+	throw "Mojibake detected in: $($mojibakeFiles -join ', ')"
+}
+
 Write-Step "Checking evidence schema JSON"
 $schemaJson = Get-Content -LiteralPath (Join-Path $repoRoot "schemas\evidence-v1.schema.json") -Raw | ConvertFrom-Json
 if ($schemaJson.title -ne "ofxGgml Evidence v1") {

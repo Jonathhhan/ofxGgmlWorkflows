@@ -120,7 +120,6 @@ $issues = New-Object System.Collections.Generic.List[string]
 $qualityPassed = 0
 $qualityTotal = 0
 $matchingRecords = 0
-$schemaValidRecords = 0
 $currentShaRecords = 0
 $freshRecords = 0
 
@@ -148,9 +147,7 @@ foreach ($file in $evidenceFiles) {
 			$issues.Add("$file timestamp must be ISO 8601")
 			$recordSchemaValid = $false
 		}
-		if ($recordSchemaValid) { $schemaValidRecords++ }
-
-		if (Test-CommitMatch ([string] $record.commit_sha) $ExpectedCommitSha) { $currentShaRecords++ }
+		$recordCurrentSha = Test-CommitMatch ([string] $record.commit_sha) $ExpectedCommitSha
 		$timestamp = Parse-IsoTimestamp $record.timestamp
 		$isFresh = $true
 		if ($MaxEvidenceAgeHours -gt 0) {
@@ -160,12 +157,14 @@ foreach ($file in $evidenceFiles) {
 				$isFresh = ($ageHours -ge 0 -and $ageHours -le $MaxEvidenceAgeHours)
 			}
 		}
-		if ($isFresh) { $freshRecords++ }
 
 		$backendMatches = [string]::IsNullOrWhiteSpace($RequiredBackend) -or $record.backend -eq $RequiredBackend
 		$resultMatches = [string]::IsNullOrWhiteSpace($RequiredResult) -or $record.result -eq $RequiredResult
 		$levelMatches = Test-LevelAtLeast ([string] $record.certification_level) $MinimumCertificationLevel
-		if ($backendMatches -and $resultMatches -and $levelMatches) { $matchingRecords++ }
+		$recordMatches = $backendMatches -and $resultMatches -and $levelMatches
+		if ($recordMatches) { $matchingRecords++ }
+		if ($recordMatches -and $recordCurrentSha) { $currentShaRecords++ }
+		if ($recordMatches -and $recordCurrentSha -and $isFresh) { $freshRecords++ }
 
 		foreach ($field in $requiredFields + $qualityFields) {
 			$qualityTotal++
@@ -175,7 +174,24 @@ foreach ($file in $evidenceFiles) {
 }
 
 $hasEvidence = $records.Count -gt 0
-$schemaValid = $hasEvidence -and $schemaValidRecords -eq $records.Count
+$schemaValid = $false
+if ($hasEvidence) {
+	$validatorPath = Join-Path $PSScriptRoot "validate-evidence.py"
+	$schemaValidationOutput = @(
+		& python $validatorPath `
+			--evidence-path $EvidencePath `
+			--require-evidence-file true `
+			--require-schema-valid true 2>&1
+	)
+	$schemaValid = $LASTEXITCODE -eq 0
+	if (-not $schemaValid) {
+		foreach ($line in $schemaValidationOutput) {
+			if (-not [string]::IsNullOrWhiteSpace([string] $line)) {
+				$issues.Add("Schema validator: $line")
+			}
+		}
+	}
+}
 $currentSha = $hasEvidence -and $currentShaRecords -gt 0
 $fresh = $hasEvidence -and $freshRecords -gt 0
 $matchingRecord = $hasEvidence -and $matchingRecords -gt 0

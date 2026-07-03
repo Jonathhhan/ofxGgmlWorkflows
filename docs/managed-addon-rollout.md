@@ -24,11 +24,11 @@ Generated from:
 | Repository | First improvement | Initial rollout profile | Evidence/report path |
 | --- | --- | --- | --- |
 | `ofxGgmlCore` | Keep planning/readiness commands authoritative before fanout. | none | none |
-| `ofxGgmlLlama` | Add advisory evidence validation after the Sam CPU pilot is stable. | `evidence_profile=advisory` | `build/**/*.json` |
-| `ofxGgmlSam` | Keep SAM3 CPU evidence validation and promotion advice advisory until repeated clean runs are reviewed. | `evidence_profile=advisory` | `build/evidence/sam3-runtime-evidence.json` |
-| `ofxGgmlAudio` | Add advisory evidence validation after the Sam CPU pilot is stable. | `evidence_profile=advisory` | `build/**/*.json` |
-| `ofxGgmlMusic` | Separate readiness, model-load, and generation evidence before stricter MusicGen or AceStep gates. | `evidence_profile=advisory` | `build/**/*.json` |
-| `ofxGgmlVision` | Add advisory evidence validation after the Sam CPU pilot is stable. | `evidence_profile=advisory` | `build/**/*.json` |
+| `ofxGgmlLlama` | Evidence writer ready (v1.0.0) -- quality 76.92% local, CI pending. | `evidence_profile=advisory` | `build/evidence/llama-runtime-evidence.json` |
+| `ofxGgmlSam` | Evidence writer updated (v1.0.0) -- quality 92.31% in a CI simulation and 76.92% locally; real CI verification is pending. | `evidence_profile=advisory` | `build/evidence/sam3-runtime-evidence.json` |
+| `ofxGgmlAudio` | Evidence writer ready (v1.0.0) -- quality 76.92% local, CI pending. | `evidence_profile=advisory` | `build/evidence/audio-runtime-evidence.json` |
+| `ofxGgmlMusic` | Evidence writer ready (v1.0.0) -- quality 76.92% local, CI pending. | `evidence_profile=advisory` | `build/evidence/music-runtime-evidence.json` |
+| `ofxGgmlVision` | Evidence writer ready (v1.0.0) -- quality 76.92% local, CI pending. | `evidence_profile=advisory` | `build/evidence/vision-runtime-evidence.json` |
 | `ofxGgmlVideo` | Keep MontageAutomat handoff contracts validated before adding model-backed video evidence. | none | none |
 | `ofxGgmlAgents` | Validate planning and handoff records before enabling autonomous runtime behavior. | none | none |
 | `ofxGgmlWorkflows` | Keep reusable workflow fixtures, manifest coverage, and evidence policy aligned. | none | none |
@@ -57,6 +57,36 @@ are explicitly promoted by Core planning:
 - `ofxGgmlDiffusion`
 - `ofxGgmlXXX`
 
+## SAM Pilot Status
+
+The SAM evidence writer (`scripts/write-sam3-runtime-evidence.ps1`) has been
+updated to v1.0.0 with improved quality coverage:
+
+- **CI-simulated quality**: 92.31% (12/13 checks) -- exceeds the 85% quality threshold but does not satisfy the clean CI-run gate
+- **Local quality**: 76.92% (10/13 checks) -- CI-only fields missing locally
+- **Known gap**: `artifact_attestation` requires sigstore/slsa tooling
+- **Next gate**: Push changes to `ofxGgmlSam` and verify CI workflows pass
+- **Promotion path**: advisory -> schema (after repeated clean CI runs)
+
+
+## Companion Evidence Writer Status
+
+Evidence writers for the four clean companion addons follow the SAM Evidence Pilot
+pattern (Evidence Schema v1). All writers produce 76.92% quality locally
+(10/13 checks) with CI-provenance fields expected to raise scores to 92.31%+ in CI.
+
+| Addon | Writer script | Evidence output | Local quality | CI quality | Status |
+| --- | --- | --- | --- | --- | --- |
+| `ofxGgmlLlama` | `scripts/write-llama-runtime-evidence.ps1` | `build/evidence/llama-runtime-evidence.json` | 76.92% | pending | writer ready |
+| `ofxGgmlAudio` | `scripts/write-audio-runtime-evidence.ps1` | `build/evidence/audio-runtime-evidence.json` | 76.92% | pending | writer ready |
+| `ofxGgmlMusic` | `scripts/write-music-runtime-evidence.ps1` | `build/evidence/music-runtime-evidence.json` | 76.92% | pending | writer ready |
+| `ofxGgmlVision` | `scripts/write-vision-runtime-evidence.ps1` | `build/evidence/vision-runtime-evidence.json` | 76.92% | pending | writer ready |
+
+**Known gaps** (all companions): `workflow_provenance`, `runner_context`, and
+`artifact_attestation` are missing locally; these populate in GitHub Actions CI.
+`artifact_attestation` requires sigstore/slsa tooling.
+
+**Next gate**: Push companion addon changes to GitHub and verify CI workflows pass.
 ## Promotion Rules
 
 - Start with advisory `evidence-validation.yml` callers.
