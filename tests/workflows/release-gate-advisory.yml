@@ -8,5 +8,12 @@ jobs:
     uses: Jonathhhan/ofxGgmlWorkflows/.github/workflows/release-gate.yml@main
     with:
       release_profile: advisory
+      require_release_readiness_score: false
+      require_metadata_reconciliation_report: false
+      require_cross_repo_capability_map: false
+      require_evidence_file: false
+      require_evidence_schema_valid: false
+      require_current_sha_evidence: false
+      require_fresh_evidence: false
       evidence_path: build/**/*.json
       quality_report_path: build/release/release-evidence-quality.md

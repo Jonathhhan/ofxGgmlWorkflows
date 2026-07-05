@@ -9,4 +9,8 @@ jobs:
     with:
       evidence_path: build/of-smoke/*.json
       evidence_profile: advisory
+      require_evidence_file: false
+      require_schema_valid: false
+      require_current_sha: false
+      require_freshness: false
       quality_report_path: build/evidence/evidence-quality.md

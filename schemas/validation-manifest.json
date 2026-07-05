@@ -1,953 +1,1137 @@
 {
-  "required_paths": [
-    { "path": "README.md", "label": "README" },
-    { "path": "CHANGELOG.md", "label": "CHANGELOG" },
-    { "path": ".gitignore", "label": ".gitignore" },
-    { "path": ".github/dependabot.yml", "label": "Dependabot GitHub Actions config" },
-    { "path": "HERMES.md", "label": "Hermes instructions" },
-    { "path": "AGENTS.md", "label": "Codex instructions" },
-    { "path": ".github/copilot-instructions.md", "label": "Copilot instructions" },
-    { "path": ".github/instructions/ofxggml-ecosystem.instructions.md", "label": "Copilot ecosystem instructions" },
-    { "path": "docs/agent-baseline.md", "label": "agent baseline" },
-    { "path": "docs/agent-handoff-contract.md", "label": "agent handoff contract" },
-    { "path": "docs/codex-ecosystem-usage.md", "label": "ecosystem usage docs" },
-    { "path": "docs/codex-qwen3-rtx3090-profile.md", "label": "Codex Qwen RTX 3090 profile" },
-    { "path": "docs/evidence-schema-v1.md", "label": "evidence schema docs" },
-    { "path": "docs/evidence-promotion-playbook.md", "label": "evidence promotion playbook" },
-    { "path": "docs/future-ecosystem-roadmap.md", "label": "future ecosystem roadmap" },
-    { "path": "docs/hermes-agent-operating-loop.md", "label": "Hermes agent operating loop" },
-    { "path": "docs/hermes-ecosystem-learning-plan.md", "label": "Hermes ecosystem learning plan" },
-    { "path": "docs/hermes-memory-contract.md", "label": "Hermes memory contract" },
-    { "path": "docs/hermes-multi-agent-improvement.md", "label": "Hermes multi-agent improvement guide" },
-    { "path": "docs/hermes-openframeworks-ggml-skills.md", "label": "Hermes openFrameworks and ggml skills" },
-    { "path": "docs/hermes-source-learning-map.md", "label": "Hermes source learning map" },
-    { "path": "docs/managed-addon-rollout.md", "label": "managed addon rollout matrix" },
-    { "path": "docs/sam-evidence-pilot-handoff.md", "label": "Sam evidence pilot handoff" },
-    { "path": "docs/workflow-release-policy.md", "label": "workflow release policy" },
-    { "path": "docs/workflow-adoption.md", "label": "workflow adoption docs" },
-    { "path": "schemas/evidence-v1.schema.json", "label": "evidence JSON schema" },
-    { "path": "schemas/hermes-memory-v1.schema.json", "label": "Hermes memory JSON schema" },
-    { "path": "schemas/validation-manifest.json", "label": "validation manifest" },
-    { "path": "scripts/test-evidence-schema-drift.ps1", "label": "evidence schema drift tests" },
-    { "path": "scripts/test-evidence-promotion-advisor.ps1", "label": "evidence promotion advisor tests" },
-    { "path": "scripts/test-evidence-validator.ps1", "label": "evidence validator tests" },
-    { "path": "scripts/test-dependabot-actions.ps1", "label": "Dependabot GitHub Actions tests" },
-    { "path": "scripts/test-hermes-agent-improvement-plan.ps1", "label": "Hermes agent-improvement planner tests" },
-    { "path": "scripts/test-hermes-memory-index.ps1", "label": "Hermes memory index tests" },
-    { "path": "scripts/test-hermes-memory-readiness.ps1", "label": "Hermes memory readiness tests" },
-    { "path": "scripts/test-hermes-source-learning-plan.ps1", "label": "Hermes source-learning planner tests" },
-    { "path": "scripts/test-validation-manifest.ps1", "label": "validation manifest tests" },
-    { "path": "scripts/test-workflow-security-advice.ps1", "label": "workflow security advice tests" },
-    { "path": "scripts/test-workflow-profiles.ps1", "label": "workflow profile tests" },
-    { "path": "scripts/test-workflow-fixtures.ps1", "label": "workflow fixture tests" },
-    { "path": "scripts/check-hermes-memory-index.ps1", "label": "Hermes memory readiness checker" },
-    { "path": "scripts/plan-hermes-agent-improvement.ps1", "label": "Hermes agent-improvement planner" },
-    { "path": "scripts/plan-hermes-source-learning.ps1", "label": "Hermes source-learning planner" },
-    { "path": "scripts/write-evidence-promotion-advice.ps1", "label": "evidence promotion advisor" },
-    { "path": "scripts/write-hermes-memory-index.ps1", "label": "Hermes memory index writer" },
-    { "path": "scripts/write-workflow-security-advice.ps1", "label": "workflow security advisor" },
-    { "path": "scripts/validate-evidence.py", "label": "evidence validator" },
-    { "path": "scripts/validate-local.ps1", "label": "local validation" },
-    { "path": "scripts/workflow-metadata-extractor.ps1", "label": "workflow metadata extractor" },
-    { "path": "tests/evidence/full-quality.json", "label": "full-quality evidence fixture" },
-    { "path": "tests/evidence/invalid-optional-fields.json", "label": "invalid optional fields evidence fixture" },
-    { "path": "tests/workflows/evidence-validation-advisory.yml", "label": "advisory workflow fixture" },
-    { "path": "tests/workflows/release-gate-required.yml", "label": "required workflow fixture" }
-  ],
-  "no_bom_paths": [
-    "README.md",
-    "CHANGELOG.md",
-    ".gitignore",
-    ".github/dependabot.yml",
-    ".github/copilot-instructions.md",
-    "docs/agent-baseline.md",
-    "docs/agent-handoff-contract.md",
-    "docs/codex-ecosystem-usage.md",
-    "docs/evidence-schema-v1.md",
-    "docs/evidence-promotion-playbook.md",
-    "docs/future-ecosystem-roadmap.md",
-    "docs/hermes-agent-operating-loop.md",
-    "docs/hermes-ecosystem-learning-plan.md",
-    "docs/hermes-memory-contract.md",
-    "docs/hermes-multi-agent-improvement.md",
-    "docs/hermes-openframeworks-ggml-skills.md",
-    "docs/hermes-source-learning-map.md",
-    "docs/managed-addon-rollout.md",
-    "docs/sam-evidence-pilot-handoff.md",
-    "docs/workflow-release-policy.md",
-    "schemas/evidence-v1.schema.json",
-    "schemas/hermes-memory-v1.schema.json",
-    "schemas/validation-manifest.json",
-    "scripts/test-evidence-schema-drift.ps1",
-    "scripts/test-evidence-promotion-advisor.ps1",
-    "scripts/test-evidence-validator.ps1",
-    "scripts/test-dependabot-actions.ps1",
-    "scripts/test-hermes-agent-improvement-plan.ps1",
-    "scripts/test-hermes-memory-index.ps1",
-    "scripts/test-hermes-memory-readiness.ps1",
-    "scripts/test-hermes-source-learning-plan.ps1",
-    "scripts/test-validation-manifest.ps1",
-    "scripts/test-workflow-security-advice.ps1",
-    "scripts/test-workflow-profiles.ps1",
-    "scripts/test-workflow-fixtures.ps1",
-    "scripts/check-hermes-memory-index.ps1",
-    "scripts/plan-hermes-agent-improvement.ps1",
-    "scripts/plan-hermes-source-learning.ps1",
-    "scripts/write-evidence-promotion-advice.ps1",
-    "scripts/write-hermes-memory-index.ps1",
-    "scripts/write-workflow-security-advice.ps1",
-    "scripts/validate-evidence.py",
-    "scripts/validate-local.ps1",
-    "scripts/workflow-metadata-extractor.ps1"
-  ],
-  "workflow_files": [
-    "addon-hygiene.yml",
-    "backend-capability-report.yml",
-    "backend-runtime-check.yml",
-    "baseline-compatibility.yml",
-    "coding-agent-instructions.yml",
-    "compatibility-matrix.yml",
-    "cross-repo-capability-map.yml",
-    "cuda-runtime-certification.yml",
-    "ecosystem-docs.yml",
-    "ecosystem-health-report.yml",
-    "ecosystem-health.yml",
-    "evidence-promotion-advisor.yml",
-    "evidence-validation.yml",
-    "live-workflow-status.yml",
-    "metadata-reconciliation.yml",
-    "metadata-validation.yml",
-    "metal-runtime-certification.yml",
-    "multi-platform-smoke.yml",
-    "of-smoke-build.yml",
-    "release-check.yml",
-    "release-gate.yml",
-    "release-plan.yml",
-    "release-readiness-score.yml",
-    "vulkan-runtime-certification.yml",
-    "workflow-repo-validation.yml",
-    "workflow-security-advice.yml",
-    "workflow-status-plan.yml"
-  ],
-  "evidence_fixture_files": [
-    "array-records.json",
-    "bad-certification-level.json",
-    "full-quality.json",
-    "invalid-optional-fields.json",
-    "minimal-quality.json",
-    "mismatched-sha.json",
-    "stale-evidence.json"
-  ],
-  "workflow_fixture_files": [
-    "accelerator-certification-advisory.yml",
-    "accelerator-certification-required.yml",
-    "backend-runtime-advisory.yml",
-    "backend-runtime-required.yml",
-    "evidence-promotion-advisory.yml",
-    "evidence-validation-advisory.yml",
-    "evidence-validation-required.yml",
-    "generator-report-advisory.yml",
-    "generator-report-required.yml",
-    "of-smoke-build-advisory.yml",
-    "of-smoke-build-required.yml",
-    "release-gate-advisory.yml",
-    "release-gate-required.yml"
-  ],
-  "workflow_fixture_pairs": [
-    {
-      "advisory_fixture": "accelerator-certification-advisory.yml",
-      "required_fixture": "accelerator-certification-required.yml",
-      "workflow": "cuda-runtime-certification.yml",
-      "required_inputs": [
-        "require_runtime_smoke_source",
-        "require_runtime_smoke_build_script",
-        "require_runtime_smoke_evidence"
-      ]
-    },
-    {
-      "advisory_fixture": "backend-runtime-advisory.yml",
-      "required_fixture": "backend-runtime-required.yml",
-      "workflow": "backend-runtime-check.yml",
-      "required_inputs": [
-        "require_runtime_smoke_source",
-        "require_linux_runtime_smoke_script",
-        "require_windows_runtime_smoke_scripts",
-        "require_macos_runtime_smoke_script",
-        "require_backend_runtime_smoke_evidence"
-      ]
-    },
-    {
-      "advisory_fixture": "generator-report-advisory.yml",
-      "required_fixture": "generator-report-required.yml",
-      "workflow": "release-readiness-score.yml",
-      "required_inputs": [
-        "require_generator",
-        "require_report_artifact"
-      ]
-    },
-    {
-      "advisory_fixture": "of-smoke-build-advisory.yml",
-      "required_fixture": "of-smoke-build-required.yml",
-      "workflow": "of-smoke-build.yml",
-      "required_inputs": [
-        "require_examples",
-        "require_project_generator_script",
-        "require_example_build_script",
-        "require_smoke_build_evidence"
-      ]
-    }
-  ],
-  "coverage_checks": [
-    {
-      "path": "README.md",
-      "label": "README",
-      "patterns": [
-        "workflow_call",
-        "workflow-adoption.md",
-        "future-ecosystem-roadmap.md",
-        "managed-addon-rollout.md",
-        "sam-evidence-pilot-handoff.md",
-        "evidence-promotion-playbook.md",
-        "agent-handoff-contract.md",
-        "agent-baseline.md",
-        "hermes-agent-operating-loop.md",
-        "hermes-ecosystem-learning-plan.md",
-        "hermes-multi-agent-improvement.md",
-        "plan-hermes-agent-improvement.ps1",
-        "specialized role profiles",
-        "addon lane briefs",
-        "addon-fanout",
-        "hermes-memory-contract.md",
-        "write-hermes-memory-index.ps1",
-        "check-hermes-memory-index.ps1",
-        "file hashes and timestamps",
-        "hermes-openframeworks-ggml-skills.md",
-        "hermes-source-learning-map.md",
-        "plan-hermes-source-learning.ps1",
-        "stable-diffusion.cpp",
-        "openFrameworks",
-        "coding-agent-instructions.yml",
-        "addon-hygiene.yml",
-        "metadata-validation.yml",
-        "release-check.yml",
-        "ecosystem-health.yml",
-        "workflow-security-advice.yml",
-        "evidence-validation.yml",
-        "evidence-promotion-advisor.yml",
-        "release-gate.yml",
-        "validate-evidence.py",
-        "quality_report_path",
-        "reject_generated_project_files",
-        "artifact_digest",
-        "artifact-digest",
-        "Hermes memory index and readiness checks",
-        "Hermes agent and",
-        "source-learning retrieval packet",
-        "recommended_consumer_ref",
-        "require_explicit_permissions",
-        "require_pinned_actions",
-        "workflow-release-policy.md",
-        ".github/dependabot.yml"
-      ]
-    },
-    {
-      "path": "docs/workflow-adoption.md",
-      "label": "workflow adoption docs",
-      "patterns": [
-        "coding-agent-instructions.yml",
-        "evidence-validation.yml",
-        "evidence-promotion-advisor.yml",
-        "check-ecosystem-readiness.bat",
-        "workflow_call",
-        "evidence-promotion-playbook.md",
-        "release_profile",
-        "evidence_profile",
-        "reject_generated_project_files",
-        "artifact_digest",
-        "artifact-digest",
-        "workflow-security-advice.yml",
-        "recommended_consumer_ref",
-        "require_explicit_permissions",
-        "require_pinned_actions",
-        "workflow-release-policy.md",
-        ".github/dependabot.yml"
-      ]
-    },
-    {
-      "path": "docs/workflow-release-policy.md",
-      "label": "workflow release policy",
-      "patterns": [
-        "main",
-        "v1",
-        "v1.x.y",
-        "Full commit SHA",
-        "Dependabot Role",
-        "workflow-security-advice.yml",
-        "validate-local.ps1"
-      ]
-    },
-    {
-      "path": ".github/dependabot.yml",
-      "label": "Dependabot GitHub Actions config",
-      "patterns": [
-        "package-ecosystem: \"github-actions\"",
-        "directory: \"/\"",
-        "interval: \"weekly\"",
-        "github-actions"
-      ]
-    },
-    {
-      "path": "scripts/test-dependabot-actions.ps1",
-      "label": "Dependabot GitHub Actions tests",
-      "patterns": [
-        "package-ecosystem",
-        "github-actions",
-        "weekly schedule",
-        "grouped updates"
-      ]
-    },
-    {
-      "path": "docs/agent-baseline.md",
-      "label": "agent baseline",
-      "patterns": [
-        "ofxGgmlWorkflows",
-        "ofxGgmlCore",
-        "agent-handoff-contract.md",
-        "hermes-agent-operating-loop.md",
-        "hermes-ecosystem-learning-plan.md",
-        "hermes-openframeworks-ggml-skills.md",
-        "openFrameworks",
-        "ggml",
-        "Evidence Schema v1",
-        "dirty-state table",
-        "delegation roles",
-        "integration owner"
-      ]
-    },
-    {
-      "path": "docs/hermes-ecosystem-learning-plan.md",
-      "label": "Hermes ecosystem learning plan",
-      "patterns": [
-        "Instruction Layer",
-        "RAG And Memory Layer",
-        "Skill Layer",
-        "Evaluation Layer",
-        "openFrameworks project layout",
-        "ofLogNotice",
-        "ggml/Core provider rules",
-        "Core owns shared runtime",
-        "companion addons own model UX",
-        "hermes-agent-operating-loop.md",
-        "openframeworks-addon-layout",
-        "ggml-runtime-provider",
-        "release-readiness-evidence",
-        "plan-release-readiness.ps1 -Json",
-        "hermes-memory-contract.md",
-        "write-hermes-memory-index.ps1",
-        "check-hermes-memory-index.ps1",
-        "plan-hermes-agent-improvement.ps1",
-        "multi-agent-improvement",
-        "specialized role profiles",
-        "addon lane briefs",
-        "prompt_packet",
-        "prompt_launch_queue",
-        "-PromptQueue -Json",
-        "-QueueType",
-        "-QueueId",
-        "agent_source_references",
-        "NousResearch/hermes-agent",
-        "openai/codex",
-        "hermes-source-learning-map.md",
-        "upstream-source-learning",
-        "plan-hermes-source-learning.ps1"
-      ]
-    },
-    {
-      "path": "docs/hermes-agent-operating-loop.md",
-      "label": "Hermes agent operating loop",
-      "patterns": [
-        "Task lane",
-        "Retrieval Packets",
-        "Hermes memory",
-        "hermes-memory-contract.md",
-        "check-hermes-memory-index.ps1",
-        "plan-hermes-source-learning.ps1",
-        "plan-hermes-agent-improvement.ps1",
-        "specialized role profiles",
-        "addon lane briefs",
-        "prompt_packet",
-        "prompt_launch_queue",
-        "-PromptQueue -Json",
-        "-QueueType",
-        "-QueueId",
-        "Multi-agent improvement",
-        "Upstream source learning",
-        "Stop Conditions",
-        "Agent Output Shape",
-        "workflow-security-advice.yml",
-        "artifact digest",
-        "validate"
-      ]
-    },
-    {
-      "path": "docs/hermes-multi-agent-improvement.md",
-      "label": "Hermes multi-agent improvement guide",
-      "patterns": [
-        "Delegation Rules",
-        "Addon Fanout",
-        "one agent per addon",
-        "Authority Model",
-        "Recommended addon specializations",
-        "specialization",
-        "allowed_actions",
-        "output_contract",
-        "prompt_packet",
-        "prompt_launch_queue",
-        "-PromptQueue -Json",
-        "-QueueType",
-        "-QueueId",
-        "Agent Source References",
-        "NousResearch/hermes-agent",
-        "openai/codex",
-        "coordinator",
-        "retriever",
-        "reviewer",
-        "integrator",
-        "Integration owner",
-        "Accepted outputs",
-        "Rejected or unused outputs",
-        "dirty-state table",
-        "pause fanout",
-        "anti-duplication",
-        "Final validation owner"
-      ]
-    },
-    {
-      "path": "docs/hermes-openframeworks-ggml-skills.md",
-      "label": "Hermes openFrameworks and ggml skills",
-      "patterns": [
-        "openFrameworks Skill Loop",
-        "ggml Skill Loop",
-        "hermes-ecosystem-learning-plan.md",
-        "hermes-agent-operating-loop.md",
-        "addon_config.mk",
-        "ofLogNotice",
-        "projectGenerator",
-        "ofxGgmlCore",
-        "workflow_call",
-        "Evidence Schema v1",
-        "artifact integrity",
-        "memory indexes",
-        "stale records",
-        "hermes-source-learning-map.md",
-        "stable-diffusion.cpp",
-        "openFrameworks",
-        "creative-coding",
-        "self-contained",
-        "Do not mix",
-        "apps"
-      ]
-    },
-    {
-      "path": "docs/hermes-source-learning-map.md",
-      "label": "Hermes source learning map",
-      "patterns": [
-        "ggml-org",
-        "stable-diffusion.cpp",
-        "openFrameworks",
-        "llama.cpp",
-        "whisper.cpp",
-        "creative-coding",
-        "self-contained",
-        "Do not mix",
-        "apps",
-        "projectGenerator",
-        "plan-hermes-source-learning.ps1",
-        "Core runtime",
-        "companion UX",
-        "Stop Conditions"
-      ]
-    },
-    {
-      "path": "docs/hermes-memory-contract.md",
-      "label": "Hermes memory contract",
-      "patterns": [
-        "schema_version",
-        "source_path",
-        "source_sha256",
-        "source_modified_at",
-        "commit_sha",
-        "freshness",
-        "retrieval_tags",
-        "write-hermes-memory-index.ps1",
-        "check-hermes-memory-index.ps1",
-        "generated",
-        "stale",
-        "-Strict",
-        "freshness"
-      ]
-    },
-    {
-      "path": "schemas/hermes-memory-v1.schema.json",
-      "label": "Hermes memory JSON schema",
-      "patterns": [
-        "Hermes Memory Index v1",
-        "schema_version",
-        "commit_sha",
-        "tree_state",
-        "records",
-        "source_sha256",
-        "source_modified_at",
-        "retrieval_tags"
-      ]
-    },
-    {
-      "path": "scripts/write-hermes-memory-index.ps1",
-      "label": "Hermes memory index writer",
-      "patterns": [
-        "schema_version",
-        "commit_sha",
-        "tree_state",
-        "retrieval_tags",
-        "source_path",
-        "source_sha256",
-        "source_modified_at",
-        "Get-FileHash",
-        "source-learning-map",
-        "plan-hermes-source-learning.ps1",
-        "stable-diffusion.cpp",
-        "openFrameworks"
-      ]
-    },
-    {
-      "path": "scripts/plan-hermes-source-learning.ps1",
-      "label": "Hermes source-learning planner",
-      "patterns": [
-        "addon-layout",
-        "core-runtime",
-        "diffusion-image-video",
-        "openFrameworks",
-        "stable-diffusion.cpp",
-        "read_first",
-        "stop_conditions",
-        "translate_to"
-      ]
-    },
-    {
-      "path": "scripts/check-hermes-memory-index.ps1",
-      "label": "Hermes memory readiness checker",
-      "patterns": [
-        "MaxAgeHours",
-        "refresh_required",
-        "current_commit_sha",
-        "source_path",
-        "source_sha256",
-        "source_modified_at",
-        "changed_source_count",
-        "freshness",
-        "retrieval_tags",
-        "Strict"
-      ]
-    },
-    {
-      "path": "scripts/plan-hermes-agent-improvement.ps1",
-      "label": "Hermes agent-improvement planner",
-      "patterns": [
-        "memory-reviewer",
-        "eval-reviewer",
-        "operating-loop-reviewer",
-        "source-learning-reviewer",
-        "addon-fanout",
-        "addon_review_targets",
-        "addon_fanout_rules",
-        "specialization",
-        "allowed_actions",
-        "output_contract",
-        "prompt_packet",
-        "prompt_launch_queue",
-        "PromptQueue",
-        "QueueType",
-        "QueueId",
-        "agent_source_references",
-        "nousresearch-hermes-agent",
-        "openai-codex",
-        "generated_artifact_policy",
-        "handoff_owner",
-        "ofxGgmlStableDiffusion",
-        "ofxGgmlRag",
-        "authority_model",
-        "dirty_state_table_columns",
-        "integration_rules"
-      ]
-    },
-    {
-      "path": "scripts/test-hermes-memory-index.ps1",
-      "label": "Hermes memory index tests",
-      "patterns": [
-        "Hermes Memory Index v1",
-        "schema_version",
-        "source_path",
-        "source_sha256",
-        "source_modified_at",
-        "retrieval_tags",
-        "operating-loop",
-        "memory-contract"
-      ]
-    },
-    {
-      "path": "scripts/test-hermes-memory-readiness.ps1",
-      "label": "Hermes memory readiness tests",
-      "patterns": [
-        "check-hermes-memory-index.ps1",
-        "refresh_required",
-        "stale",
-        "changed-source",
-        "changed_source_count",
-        "source_sha256",
-        "missing",
-        "MaxAgeHours"
-      ]
-    },
-    {
-      "path": "scripts/test-hermes-agent-improvement-plan.ps1",
-      "label": "Hermes agent-improvement planner tests",
-      "patterns": [
-        "plan-hermes-agent-improvement.ps1",
-        "memory-reviewer",
-        "eval-reviewer",
-        "dirty_state_table_columns",
-        "addon_review_targets",
-        "addon_fanout_rules",
-        "specialization",
-        "output_contract",
-        "prompt_packet",
-        "prompt_launch_queue",
-        "PromptQueue",
-        "QueueType",
-        "QueueId",
-        "agent_source_references",
-        "generated_artifact_policy",
-        "handoff_owner",
-        "main agent owns edits"
-      ]
-    },
-    {
-      "path": "scripts/test-hermes-source-learning-plan.ps1",
-      "label": "Hermes source-learning planner tests",
-      "patterns": [
-        "plan-hermes-source-learning.ps1",
-        "openframeworks",
-        "stable-diffusion-cpp",
-        "projectGenerator",
-        "self-contained",
-        "addon-layout"
-      ]
-    },
-    {
-      "path": "docs/agent-handoff-contract.md",
-      "label": "agent handoff contract",
-      "patterns": [
-        "Core planning command",
-        "Dirty-repo caveats",
-        "Rollout profile",
-        "Delegation roles",
-        "Integration owner",
-        "Accepted outputs",
-        "Rejected/unused outputs",
-        "Final validation owner",
-        "Dirty-state table"
-      ]
-    },
-    {
-      "path": "docs/managed-addon-rollout.md",
-      "label": "managed addon rollout matrix",
-      "patterns": [
-        "Ready managed repositories",
-        "Dirty managed repositories",
-        "ofxGgmlSam",
-        "evidence_profile=advisory",
-        "sam-evidence-pilot-handoff.md",
-        "Reference Repositories",
-        "Promotion Rules"
-      ]
-    },
-    {
-      "path": "docs/sam-evidence-pilot-handoff.md",
-      "label": "Sam evidence pilot handoff",
-      "patterns": [
-        "ofxGgmlSam",
-        "Evidence Schema v1",
-        "build/evidence/sam3-runtime-evidence.json",
-        "evidence_profile=advisory",
-        "evidence-validation.yml",
-        "schema_version",
-        "commit_sha"
-      ]
-    },
-    {
-      "path": "docs/evidence-promotion-playbook.md",
-      "label": "evidence promotion playbook",
-      "patterns": [
-        "advisory-visible",
-        "schema-required",
-        "current-sha-required",
-        "fresh-current-sha-required",
-        "release-gated",
-        "evidence-promotion-advisor.yml",
-        "Evidence Schema v1"
-      ]
-    },
-    {
-      "path": "scripts/write-evidence-promotion-advice.ps1",
-      "label": "evidence promotion advisor",
-      "patterns": [
-        "MinimumQualityScore",
-        "ObservedCleanRuns",
-        "CandidateProfile",
-        "recommendation",
-        "ready for release-gate"
-      ]
-    },
-    {
-      "path": "HERMES.md",
-      "label": "Hermes instructions",
-      "patterns": [
-        "ofxGgmlWorkflows",
-        "workflow_call",
-        "agent-handoff-contract.md",
-        "agent-baseline.md",
-        "generated binaries"
-      ]
-    },
-    {
-      "path": "AGENTS.md",
-      "label": "Codex instructions",
-      "patterns": [
-        "ofxGgmlWorkflows",
-        "workflow_call",
-        "agent-handoff-contract.md",
-        "agent-baseline.md",
-        "generated project files"
-      ]
-    },
-    {
-      "path": ".github/copilot-instructions.md",
-      "label": "Copilot instructions",
-      "patterns": [
-        "ofxGgmlWorkflows",
-        "workflow_call",
-        "agent-handoff-contract.md",
-        "agent-baseline.md",
-        "generated outputs"
-      ]
-    },
-    {
-      "path": ".github/instructions/ofxggml-ecosystem.instructions.md",
-      "label": "Copilot ecosystem instructions",
-      "patterns": [
-        "ofxGgmlWorkflows",
-        "check-ecosystem-readiness",
-        "agent-handoff-contract.md",
-        "agent-baseline.md",
-        "generated artifact hygiene"
-      ]
-    },
-    {
-      "path": ".github/workflows/coding-agent-instructions.yml",
-      "label": "coding-agent-instructions.yml",
-      "patterns": [
-        "ofxggml-ecosystem.instructions.md",
-        "Verify ecosystem guardrails",
-        "companion addon boundary",
-        "generated artifact hygiene"
-      ]
-    },
-    {
-      "path": ".github/workflows/workflow-repo-validation.yml",
-      "label": "workflow-repo-validation.yml",
-      "patterns": [
-        "scripts/validate-local.ps1"
-      ]
-    },
-    {
-      "path": "scripts/write-workflow-security-advice.ps1",
-      "label": "workflow security advisor",
-      "patterns": [
-        "missing_permissions_count",
-        "unpinned_action_count",
-        "recommended_consumer_ref",
-        "RequireExplicitPermissions",
-        "RequirePinnedActions",
-        "External actions not pinned to full SHA"
-      ]
-    },
-    {
-      "path": "scripts/validate-evidence.py",
-      "label": "evidence validator",
-      "patterns": [
-        "VALID_RESULTS",
-        "minimum_certification_level",
-        "quality_report_path",
-        "VALID_TREE_STATES",
-        "artifact_integrity",
-        "artifact_attestation",
-        "sha256_digest"
-      ]
-    }
-  ],
-  "workflow_profiles": {
-    "evidence_profile": {
-      "workflow": "evidence-validation.yml",
-      "profiles": [
-        "custom",
-        "advisory",
-        "schema",
-        "current-sha",
-        "fresh-current-sha",
-        "certification",
-        "release"
-      ],
-      "fixture_profiles": [
-        {
-          "fixture": "evidence-validation-advisory.yml",
-          "profile": "advisory"
-        },
-        {
-          "fixture": "evidence-validation-required.yml",
-          "profile": "fresh-current-sha"
-        }
-      ]
-    },
-    "release_profile": {
-      "workflow": "release-gate.yml",
-      "profiles": [
-        "custom",
-        "advisory",
-        "reports",
-        "evidence",
-        "release"
-      ],
-      "fixture_profiles": [
-        {
-          "fixture": "release-gate-advisory.yml",
-          "profile": "advisory"
-        },
-        {
-          "fixture": "release-gate-required.yml",
-          "profile": "release"
-        }
-      ]
-    }
-  },
-  "workflow_patterns": {
-    "addon-hygiene.yml": [
-      "require_addon_config",
-      "require_src",
-      "require_examples",
-      "require_addon_metadata",
-      "require_core_dependency",
-      "require_example_core_dependency",
-      "forbidden_addon_dependencies",
-      "reject_generated_project_files"
-    ],
-    "release-gate.yml": [
-      "release_profile",
-      "require_release_readiness_score",
-      "release_readiness_score_path",
-      "require_evidence_file",
-      "require_evidence_schema_valid",
-      "require_current_sha_evidence",
-      "require_fresh_evidence",
-      "quality_report_path",
-      ".ofxggml-workflows/scripts/validate-evidence.py"
-    ],
-    "evidence-validation.yml": [
-      "evidence_profile",
-      "require_evidence_file",
-      "require_schema_valid",
-      "require_current_sha",
-      "require_freshness",
-      "quality_report_path",
-      "artifact_digest",
-      "upload-evidence",
-      "artifact-digest",
-      ".ofxggml-workflows/scripts/validate-evidence.py"
-    ],
-    "evidence-promotion-advisor.yml": [
-      "current_profile",
-      "candidate_profile",
-      "required_clean_runs",
-      "observed_clean_runs",
-      "minimum_quality_score",
-      "artifact_digest",
-      "upload-promotion-advice",
-      "artifact-digest",
-      ".ofxggml-workflows/scripts/write-evidence-promotion-advice.ps1"
-    ],
-    "backend-runtime-check.yml": [
-      "require_runtime_smoke_source",
-      "require_linux_runtime_smoke_script",
-      "require_windows_runtime_smoke_scripts",
-      "require_macos_runtime_smoke_script",
-      "require_backend_runtime_smoke_evidence",
-      "upload-backend-runtime-smoke"
-    ],
-    "metadata-validation.yml": [
-      "require_feature_metadata",
-      "require_readme_features"
-    ],
-    "coding-agent-instructions.yml": [
-      "Verify ecosystem guardrails",
-      "companion addon boundary",
-      "generated artifact hygiene"
-    ],
-    "workflow-security-advice.yml": [
-      "recommended_consumer_ref",
-      "require_explicit_permissions",
-      "require_pinned_actions",
-      "artifact_digest",
-      "upload-workflow-security-advice",
-      "artifact-digest"
-    ]
-  },
-  "report_workflows": [
-    "backend-capability-report.yml",
-    "compatibility-matrix.yml",
-    "cross-repo-capability-map.yml",
-    "ecosystem-health-report.yml",
-    "metadata-reconciliation.yml",
-    "release-plan.yml",
-    "release-readiness-score.yml",
-    "workflow-security-advice.yml",
-    "workflow-status-plan.yml"
-  ],
-  "report_workflow_patterns": [
-    "require_generator",
-    "require_report_artifact",
-    "report_artifact_path"
-  ],
-  "runtime_workflows": [
-    "cuda-runtime-certification.yml",
-    "metal-runtime-certification.yml",
-    "vulkan-runtime-certification.yml"
-  ],
-  "runtime_workflow_patterns": [
-    "runtime_smoke_source_path",
-    "require_runtime_smoke_source",
-    "runtime_smoke_build_script_path",
-    "require_runtime_smoke_build_script",
-    "runtime_smoke_executable_path",
-    "require_runtime_smoke_evidence",
-    "runtime_smoke_evidence_path",
-    "artifact_digest",
-    "artifact-digest"
-  ],
-  "required_reusable_workflows": [
-    "addon-hygiene.yml",
-    "coding-agent-instructions.yml",
-    "release-check.yml"
-  ],
-  "required_reusable_workflow_patterns": [
-    "workflow_call"
-  ]
+    "required_paths":  [
+                           {
+                               "path":  "README.md",
+                               "label":  "README"
+                           },
+                           {
+                               "path":  "CHANGELOG.md",
+                               "label":  "CHANGELOG"
+                           },
+                           {
+                               "path":  ".gitignore",
+                               "label":  ".gitignore"
+                           },
+                           {
+                               "path":  ".github/dependabot.yml",
+                               "label":  "Dependabot GitHub Actions config"
+                           },
+                           {
+                               "path":  "HERMES.md",
+                               "label":  "Hermes instructions"
+                           },
+                           {
+                               "path":  "AGENTS.md",
+                               "label":  "Codex instructions"
+                           },
+                           {
+                               "path":  ".github/copilot-instructions.md",
+                               "label":  "Copilot instructions"
+                           },
+                           {
+                               "path":  ".github/instructions/ofxggml-ecosystem.instructions.md",
+                               "label":  "Copilot ecosystem instructions"
+                           },
+                           {
+                               "path":  "docs/agent-baseline.md",
+                               "label":  "agent baseline"
+                           },
+                           {
+                               "path":  "docs/agent-handoff-contract.md",
+                               "label":  "agent handoff contract"
+                           },
+                           {
+                               "path":  "docs/codex-ecosystem-usage.md",
+                               "label":  "ecosystem usage docs"
+                           },
+                           {
+                               "path":  "docs/codex-qwen3-rtx3090-profile.md",
+                               "label":  "Codex Qwen RTX 3090 profile"
+                           },
+                           {
+                               "path":  "docs/evidence-schema-v1.md",
+                               "label":  "evidence schema docs"
+                           },
+                           {
+                               "path":  "docs/evidence-promotion-playbook.md",
+                               "label":  "evidence promotion playbook"
+                           },
+                           {
+                               "path":  "docs/future-ecosystem-roadmap.md",
+                               "label":  "future ecosystem roadmap"
+                           },
+                           {
+                               "path":  "docs/hermes-agent-operating-loop.md",
+                               "label":  "Hermes agent operating loop"
+                           },
+                           {
+                               "path":  "docs/hermes-ecosystem-learning-plan.md",
+                               "label":  "Hermes ecosystem learning plan"
+                           },
+                           {
+                               "path":  "docs/hermes-memory-contract.md",
+                               "label":  "Hermes memory contract"
+                           },
+                           {
+                               "path":  "docs/hermes-multi-agent-improvement.md",
+                               "label":  "Hermes multi-agent improvement guide"
+                           },
+                           {
+                               "path":  "docs/hermes-openframeworks-ggml-skills.md",
+                               "label":  "Hermes openFrameworks and ggml skills"
+                           },
+                           {
+                               "path":  "docs/hermes-source-learning-map.md",
+                               "label":  "Hermes source learning map"
+                           },
+                           {
+                               "path":  "docs/managed-addon-rollout.md",
+                               "label":  "managed addon rollout matrix"
+                           },
+                           {
+                               "path":  "docs/sam-evidence-pilot-handoff.md",
+                               "label":  "Sam evidence pilot handoff"
+                           },
+                           {
+                               "path":  "docs/workflow-release-policy.md",
+                               "label":  "workflow release policy"
+                           },
+                           {
+                               "path":  "docs/workflow-adoption.md",
+                               "label":  "workflow adoption docs"
+                           },
+                           {
+                               "path":  "schemas/evidence-v1.schema.json",
+                               "label":  "evidence JSON schema"
+                           },
+                           {
+                               "path":  "schemas/hermes-memory-v1.schema.json",
+                               "label":  "Hermes memory JSON schema"
+                           },
+                           {
+                               "path":  "schemas/validation-manifest.json",
+                               "label":  "validation manifest"
+                           },
+                           {
+                               "path":  "scripts/test-evidence-schema-drift.ps1",
+                               "label":  "evidence schema drift tests"
+                           },
+                           {
+                               "path":  "scripts/test-evidence-promotion-advisor.ps1",
+                               "label":  "evidence promotion advisor tests"
+                           },
+                           {
+                               "path":  "scripts/test-evidence-validator.ps1",
+                               "label":  "evidence validator tests"
+                           },
+                           {
+                               "path":  "scripts/test-dependabot-actions.ps1",
+                               "label":  "Dependabot GitHub Actions tests"
+                           },
+                           {
+                               "path":  "scripts/test-hermes-agent-improvement-plan.ps1",
+                               "label":  "Hermes agent-improvement planner tests"
+                           },
+                           {
+                               "path":  "scripts/test-hermes-memory-index.ps1",
+                               "label":  "Hermes memory index tests"
+                           },
+                           {
+                               "path":  "scripts/test-hermes-memory-readiness.ps1",
+                               "label":  "Hermes memory readiness tests"
+                           },
+                           {
+                               "path":  "scripts/test-hermes-source-learning-plan.ps1",
+                               "label":  "Hermes source-learning planner tests"
+                           },
+                           {
+                               "path":  "scripts/test-validation-manifest.ps1",
+                               "label":  "validation manifest tests"
+                           },
+                           {
+                               "path":  "scripts/test-workflow-security-advice.ps1",
+                               "label":  "workflow security advice tests"
+                           },
+                           {
+                               "path":  "scripts/test-workflow-profiles.ps1",
+                               "label":  "workflow profile tests"
+                           },
+                           {
+                               "path":  "scripts/test-workflow-fixtures.ps1",
+                               "label":  "workflow fixture tests"
+                           },
+                           {
+                               "path":  "scripts/check-hermes-memory-index.ps1",
+                               "label":  "Hermes memory readiness checker"
+                           },
+                           {
+                               "path":  "scripts/plan-hermes-agent-improvement.ps1",
+                               "label":  "Hermes agent-improvement planner"
+                           },
+                           {
+                               "path":  "scripts/plan-hermes-source-learning.ps1",
+                               "label":  "Hermes source-learning planner"
+                           },
+                           {
+                               "path":  "scripts/write-evidence-promotion-advice.ps1",
+                               "label":  "evidence promotion advisor"
+                           },
+                           {
+                               "path":  "scripts/write-hermes-memory-index.ps1",
+                               "label":  "Hermes memory index writer"
+                           },
+                           {
+                               "path":  "scripts/write-workflow-security-advice.ps1",
+                               "label":  "workflow security advisor"
+                           },
+                           {
+                               "path":  "scripts/validate-evidence.py",
+                               "label":  "evidence validator"
+                           },
+                           {
+                               "path":  "scripts/validate-local.ps1",
+                               "label":  "local validation"
+                           },
+                           {
+                               "path":  "scripts/workflow-metadata-extractor.ps1",
+                               "label":  "workflow metadata extractor"
+                           },
+                           {
+                               "path":  "tests/evidence/full-quality.json",
+                               "label":  "full-quality evidence fixture"
+                           },
+                           {
+                               "path":  "tests/evidence/invalid-optional-fields.json",
+                               "label":  "invalid optional fields evidence fixture"
+                           },
+                           {
+                               "path":  "tests/workflows/evidence-validation-advisory.yml",
+                               "label":  "advisory workflow fixture"
+                           },
+                           {
+                               "path":  "tests/workflows/release-gate-required.yml",
+                               "label":  "required workflow fixture"
+                           }
+                       ],
+    "no_bom_paths":  [
+                         "README.md",
+                         "CHANGELOG.md",
+                         ".gitignore",
+                         ".github/dependabot.yml",
+                         ".github/copilot-instructions.md",
+                         "docs/agent-baseline.md",
+                         "docs/agent-handoff-contract.md",
+                         "docs/codex-ecosystem-usage.md",
+                         "docs/evidence-schema-v1.md",
+                         "docs/evidence-promotion-playbook.md",
+                         "docs/future-ecosystem-roadmap.md",
+                         "docs/hermes-agent-operating-loop.md",
+                         "docs/hermes-ecosystem-learning-plan.md",
+                         "docs/hermes-memory-contract.md",
+                         "docs/hermes-multi-agent-improvement.md",
+                         "docs/hermes-openframeworks-ggml-skills.md",
+                         "docs/hermes-source-learning-map.md",
+                         "docs/managed-addon-rollout.md",
+                         "docs/sam-evidence-pilot-handoff.md",
+                         "docs/workflow-release-policy.md",
+                         "schemas/evidence-v1.schema.json",
+                         "schemas/hermes-memory-v1.schema.json",
+                         "schemas/validation-manifest.json",
+                         "scripts/test-evidence-schema-drift.ps1",
+                         "scripts/test-evidence-promotion-advisor.ps1",
+                         "scripts/test-evidence-validator.ps1",
+                         "scripts/test-dependabot-actions.ps1",
+                         "scripts/test-hermes-agent-improvement-plan.ps1",
+                         "scripts/test-hermes-memory-index.ps1",
+                         "scripts/test-hermes-memory-readiness.ps1",
+                         "scripts/test-hermes-source-learning-plan.ps1",
+                         "scripts/test-validation-manifest.ps1",
+                         "scripts/test-workflow-security-advice.ps1",
+                         "scripts/test-workflow-profiles.ps1",
+                         "scripts/test-workflow-fixtures.ps1",
+                         "scripts/check-hermes-memory-index.ps1",
+                         "scripts/plan-hermes-agent-improvement.ps1",
+                         "scripts/plan-hermes-source-learning.ps1",
+                         "scripts/write-evidence-promotion-advice.ps1",
+                         "scripts/write-hermes-memory-index.ps1",
+                         "scripts/write-workflow-security-advice.ps1",
+                         "scripts/validate-evidence.py",
+                         "scripts/validate-local.ps1",
+                         "scripts/workflow-metadata-extractor.ps1"
+                     ],
+    "workflow_files":  [
+                           "addon-hygiene.yml",
+                           "backend-capability-report.yml",
+                           "backend-runtime-check.yml",
+                           "baseline-compatibility.yml",
+                           "coding-agent-instructions.yml",
+                           "compatibility-matrix.yml",
+                           "cross-repo-capability-map.yml",
+                           "cuda-runtime-certification.yml",
+                           "ecosystem-docs.yml",
+                           "ecosystem-health-report.yml",
+                           "ecosystem-health.yml",
+                           "evidence-promotion-advisor.yml",
+                           "evidence-validation.yml",
+                           "live-workflow-status.yml",
+                           "metadata-reconciliation.yml",
+                           "metadata-validation.yml",
+                           "metal-runtime-certification.yml",
+                           "multi-platform-smoke.yml",
+                           "of-smoke-build.yml",
+                           "release-check.yml",
+                           "release-gate.yml",
+                           "release-plan.yml",
+                           "release-readiness-score.yml",
+                           "vulkan-runtime-certification.yml",
+                           "workflow-repo-validation.yml",
+                           "workflow-security-advice.yml",
+                           "workflow-status-plan.yml"
+                       ],
+    "evidence_fixture_files":  [
+                                   "array-records.json",
+                                   "bad-certification-level.json",
+                                   "full-quality.json",
+                                   "invalid-optional-fields.json",
+                                   "minimal-quality.json",
+                                   "mismatched-sha.json",
+                                   "stale-evidence.json"
+                               ],
+    "workflow_fixture_files":  [
+                                   "accelerator-certification-advisory.yml",
+                                   "accelerator-certification-required.yml",
+                                   "backend-runtime-advisory.yml",
+                                   "backend-runtime-required.yml",
+                                   "evidence-promotion-advisory.yml",
+                                   "evidence-validation-advisory.yml",
+                                   "evidence-validation-required.yml",
+                                   "generator-report-advisory.yml",
+                                   "generator-report-required.yml",
+                                   "of-smoke-build-advisory.yml",
+                                   "of-smoke-build-required.yml",
+                                   "release-gate-advisory.yml",
+                                   "release-gate-required.yml"
+                               ],
+    "workflow_fixture_pairs":  [
+                                   {
+                                       "advisory_fixture":  "accelerator-certification-advisory.yml",
+                                       "required_fixture":  "accelerator-certification-required.yml",
+                                       "workflow":  "cuda-runtime-certification.yml",
+                                       "required_inputs":  [
+                                                               "require_runtime_smoke_source",
+                                                               "require_runtime_smoke_build_script",
+                                                               "require_runtime_smoke_evidence"
+                                                           ]
+                                   },
+                                   {
+                                       "advisory_fixture":  "backend-runtime-advisory.yml",
+                                       "required_fixture":  "backend-runtime-required.yml",
+                                       "workflow":  "backend-runtime-check.yml",
+                                       "required_inputs":  [
+                                                               "require_runtime_smoke_source",
+                                                               "require_linux_runtime_smoke_script",
+                                                               "require_windows_runtime_smoke_scripts",
+                                                               "require_macos_runtime_smoke_script",
+                                                               "require_backend_runtime_smoke_evidence"
+                                                           ]
+                                   },
+                                   {
+                                       "advisory_fixture":  "generator-report-advisory.yml",
+                                       "required_fixture":  "generator-report-required.yml",
+                                       "workflow":  "release-readiness-score.yml",
+                                       "required_inputs":  [
+                                                               "require_generator",
+                                                               "require_report_artifact"
+                                                           ]
+                                   },
+                                   {
+                                       "advisory_fixture":  "of-smoke-build-advisory.yml",
+                                       "required_fixture":  "of-smoke-build-required.yml",
+                                       "workflow":  "of-smoke-build.yml",
+                                       "required_inputs":  [
+                                                               "require_examples",
+                                                               "require_project_generator_script",
+                                                               "require_example_build_script",
+                                                               "require_smoke_build_evidence"
+                                                           ]
+                                   },
+                                   {
+                                       "required_inputs":  [
+                                                               "require_evidence_file",
+                                                               "require_schema_valid",
+                                                               "require_current_sha",
+                                                               "require_freshness"
+                                                           ],
+                                       "advisory_fixture":  "evidence-validation-advisory.yml",
+                                       "required_fixture":  "evidence-validation-required.yml",
+                                       "workflow":  "evidence-validation.yml"
+                                   },
+                                   {
+                                       "required_inputs":  [
+                                                               "require_release_readiness_score",
+                                                               "require_metadata_reconciliation_report",
+                                                               "require_cross_repo_capability_map",
+                                                               "require_evidence_file",
+                                                               "require_evidence_schema_valid",
+                                                               "require_current_sha_evidence",
+                                                               "require_fresh_evidence"
+                                                           ],
+                                       "advisory_fixture":  "release-gate-advisory.yml",
+                                       "required_fixture":  "release-gate-required.yml",
+                                       "workflow":  "release-gate.yml"
+                                   }
+                               ],
+    "coverage_checks":  [
+                            {
+                                "path":  "README.md",
+                                "label":  "README",
+                                "patterns":  [
+                                                 "workflow_call",
+                                                 "workflow-adoption.md",
+                                                 "future-ecosystem-roadmap.md",
+                                                 "managed-addon-rollout.md",
+                                                 "sam-evidence-pilot-handoff.md",
+                                                 "evidence-promotion-playbook.md",
+                                                 "agent-handoff-contract.md",
+                                                 "agent-baseline.md",
+                                                 "hermes-agent-operating-loop.md",
+                                                 "hermes-ecosystem-learning-plan.md",
+                                                 "hermes-multi-agent-improvement.md",
+                                                 "plan-hermes-agent-improvement.ps1",
+                                                 "specialized role profiles",
+                                                 "addon lane briefs",
+                                                 "addon-fanout",
+                                                 "hermes-memory-contract.md",
+                                                 "write-hermes-memory-index.ps1",
+                                                 "check-hermes-memory-index.ps1",
+                                                 "file hashes and timestamps",
+                                                 "hermes-openframeworks-ggml-skills.md",
+                                                 "hermes-source-learning-map.md",
+                                                 "plan-hermes-source-learning.ps1",
+                                                 "stable-diffusion.cpp",
+                                                 "openFrameworks",
+                                                 "coding-agent-instructions.yml",
+                                                 "addon-hygiene.yml",
+                                                 "metadata-validation.yml",
+                                                 "release-check.yml",
+                                                 "ecosystem-health.yml",
+                                                 "workflow-security-advice.yml",
+                                                 "evidence-validation.yml",
+                                                 "evidence-promotion-advisor.yml",
+                                                 "release-gate.yml",
+                                                 "validate-evidence.py",
+                                                 "quality_report_path",
+                                                 "reject_generated_project_files",
+                                                 "artifact_digest",
+                                                 "artifact-digest",
+                                                 "Hermes memory index and readiness checks",
+                                                 "Hermes agent and",
+                                                 "source-learning retrieval packet",
+                                                 "recommended_consumer_ref",
+                                                 "require_explicit_permissions",
+                                                 "require_pinned_actions",
+                                                 "workflow-release-policy.md",
+                                                 ".github/dependabot.yml"
+                                             ]
+                            },
+                            {
+                                "path":  "docs/workflow-adoption.md",
+                                "label":  "workflow adoption docs",
+                                "patterns":  [
+                                                 "coding-agent-instructions.yml",
+                                                 "evidence-validation.yml",
+                                                 "evidence-promotion-advisor.yml",
+                                                 "check-ecosystem-readiness.bat",
+                                                 "workflow_call",
+                                                 "evidence-promotion-playbook.md",
+                                                 "release_profile",
+                                                 "evidence_profile",
+                                                 "reject_generated_project_files",
+                                                 "artifact_digest",
+                                                 "artifact-digest",
+                                                 "workflow-security-advice.yml",
+                                                 "recommended_consumer_ref",
+                                                 "require_explicit_permissions",
+                                                 "require_pinned_actions",
+                                                 "workflow-release-policy.md",
+                                                 ".github/dependabot.yml"
+                                             ]
+                            },
+                            {
+                                "path":  "docs/workflow-release-policy.md",
+                                "label":  "workflow release policy",
+                                "patterns":  [
+                                                 "main",
+                                                 "v1",
+                                                 "v1.x.y",
+                                                 "Full commit SHA",
+                                                 "Dependabot Role",
+                                                 "workflow-security-advice.yml",
+                                                 "validate-local.ps1"
+                                             ]
+                            },
+                            {
+                                "path":  ".github/dependabot.yml",
+                                "label":  "Dependabot GitHub Actions config",
+                                "patterns":  [
+                                                 "package-ecosystem: \"github-actions\"",
+                                                 "directory: \"/\"",
+                                                 "interval: \"weekly\"",
+                                                 "github-actions"
+                                             ]
+                            },
+                            {
+                                "path":  "scripts/test-dependabot-actions.ps1",
+                                "label":  "Dependabot GitHub Actions tests",
+                                "patterns":  [
+                                                 "package-ecosystem",
+                                                 "github-actions",
+                                                 "weekly schedule",
+                                                 "grouped updates"
+                                             ]
+                            },
+                            {
+                                "path":  "docs/agent-baseline.md",
+                                "label":  "agent baseline",
+                                "patterns":  [
+                                                 "ofxGgmlWorkflows",
+                                                 "ofxGgmlCore",
+                                                 "agent-handoff-contract.md",
+                                                 "hermes-agent-operating-loop.md",
+                                                 "hermes-ecosystem-learning-plan.md",
+                                                 "hermes-openframeworks-ggml-skills.md",
+                                                 "openFrameworks",
+                                                 "ggml",
+                                                 "Evidence Schema v1",
+                                                 "dirty-state table",
+                                                 "delegation roles",
+                                                 "integration owner"
+                                             ]
+                            },
+                            {
+                                "path":  "docs/hermes-ecosystem-learning-plan.md",
+                                "label":  "Hermes ecosystem learning plan",
+                                "patterns":  [
+                                                 "Instruction Layer",
+                                                 "RAG And Memory Layer",
+                                                 "Skill Layer",
+                                                 "Evaluation Layer",
+                                                 "openFrameworks project layout",
+                                                 "ofLogNotice",
+                                                 "ggml/Core provider rules",
+                                                 "Core owns shared runtime",
+                                                 "companion addons own model UX",
+                                                 "hermes-agent-operating-loop.md",
+                                                 "openframeworks-addon-layout",
+                                                 "ggml-runtime-provider",
+                                                 "release-readiness-evidence",
+                                                 "plan-release-readiness.ps1 -Json",
+                                                 "hermes-memory-contract.md",
+                                                 "write-hermes-memory-index.ps1",
+                                                 "check-hermes-memory-index.ps1",
+                                                 "plan-hermes-agent-improvement.ps1",
+                                                 "multi-agent-improvement",
+                                                 "specialized role profiles",
+                                                 "addon lane briefs",
+                                                 "prompt_packet",
+                                                 "prompt_launch_queue",
+                                                 "-PromptQueue -Json",
+                                                 "-QueueType",
+                                                 "-QueueId",
+                                                 "agent_source_references",
+                                                 "NousResearch/hermes-agent",
+                                                 "openai/codex",
+                                                 "hermes-source-learning-map.md",
+                                                 "upstream-source-learning",
+                                                 "plan-hermes-source-learning.ps1"
+                                             ]
+                            },
+                            {
+                                "path":  "docs/hermes-agent-operating-loop.md",
+                                "label":  "Hermes agent operating loop",
+                                "patterns":  [
+                                                 "Task lane",
+                                                 "Retrieval Packets",
+                                                 "Hermes memory",
+                                                 "hermes-memory-contract.md",
+                                                 "check-hermes-memory-index.ps1",
+                                                 "plan-hermes-source-learning.ps1",
+                                                 "plan-hermes-agent-improvement.ps1",
+                                                 "specialized role profiles",
+                                                 "addon lane briefs",
+                                                 "prompt_packet",
+                                                 "prompt_launch_queue",
+                                                 "-PromptQueue -Json",
+                                                 "-QueueType",
+                                                 "-QueueId",
+                                                 "Multi-agent improvement",
+                                                 "Upstream source learning",
+                                                 "Stop Conditions",
+                                                 "Agent Output Shape",
+                                                 "workflow-security-advice.yml",
+                                                 "artifact digest",
+                                                 "validate"
+                                             ]
+                            },
+                            {
+                                "path":  "docs/hermes-multi-agent-improvement.md",
+                                "label":  "Hermes multi-agent improvement guide",
+                                "patterns":  [
+                                                 "Delegation Rules",
+                                                 "Addon Fanout",
+                                                 "one agent per addon",
+                                                 "Authority Model",
+                                                 "Recommended addon specializations",
+                                                 "specialization",
+                                                 "allowed_actions",
+                                                 "output_contract",
+                                                 "prompt_packet",
+                                                 "prompt_launch_queue",
+                                                 "-PromptQueue -Json",
+                                                 "-QueueType",
+                                                 "-QueueId",
+                                                 "Agent Source References",
+                                                 "NousResearch/hermes-agent",
+                                                 "openai/codex",
+                                                 "coordinator",
+                                                 "retriever",
+                                                 "reviewer",
+                                                 "integrator",
+                                                 "Integration owner",
+                                                 "Accepted outputs",
+                                                 "Rejected or unused outputs",
+                                                 "dirty-state table",
+                                                 "pause fanout",
+                                                 "anti-duplication",
+                                                 "Final validation owner"
+                                             ]
+                            },
+                            {
+                                "path":  "docs/hermes-openframeworks-ggml-skills.md",
+                                "label":  "Hermes openFrameworks and ggml skills",
+                                "patterns":  [
+                                                 "openFrameworks Skill Loop",
+                                                 "ggml Skill Loop",
+                                                 "hermes-ecosystem-learning-plan.md",
+                                                 "hermes-agent-operating-loop.md",
+                                                 "addon_config.mk",
+                                                 "ofLogNotice",
+                                                 "projectGenerator",
+                                                 "ofxGgmlCore",
+                                                 "workflow_call",
+                                                 "Evidence Schema v1",
+                                                 "artifact integrity",
+                                                 "memory indexes",
+                                                 "stale records",
+                                                 "hermes-source-learning-map.md",
+                                                 "stable-diffusion.cpp",
+                                                 "openFrameworks",
+                                                 "creative-coding",
+                                                 "self-contained",
+                                                 "Do not mix",
+                                                 "apps"
+                                             ]
+                            },
+                            {
+                                "path":  "docs/hermes-source-learning-map.md",
+                                "label":  "Hermes source learning map",
+                                "patterns":  [
+                                                 "ggml-org",
+                                                 "stable-diffusion.cpp",
+                                                 "openFrameworks",
+                                                 "llama.cpp",
+                                                 "whisper.cpp",
+                                                 "creative-coding",
+                                                 "self-contained",
+                                                 "Do not mix",
+                                                 "apps",
+                                                 "projectGenerator",
+                                                 "plan-hermes-source-learning.ps1",
+                                                 "Core runtime",
+                                                 "companion UX",
+                                                 "Stop Conditions"
+                                             ]
+                            },
+                            {
+                                "path":  "docs/hermes-memory-contract.md",
+                                "label":  "Hermes memory contract",
+                                "patterns":  [
+                                                 "schema_version",
+                                                 "source_path",
+                                                 "source_sha256",
+                                                 "source_modified_at",
+                                                 "commit_sha",
+                                                 "freshness",
+                                                 "retrieval_tags",
+                                                 "write-hermes-memory-index.ps1",
+                                                 "check-hermes-memory-index.ps1",
+                                                 "generated",
+                                                 "stale",
+                                                 "-Strict",
+                                                 "freshness"
+                                             ]
+                            },
+                            {
+                                "path":  "schemas/hermes-memory-v1.schema.json",
+                                "label":  "Hermes memory JSON schema",
+                                "patterns":  [
+                                                 "Hermes Memory Index v1",
+                                                 "schema_version",
+                                                 "commit_sha",
+                                                 "tree_state",
+                                                 "records",
+                                                 "source_sha256",
+                                                 "source_modified_at",
+                                                 "retrieval_tags"
+                                             ]
+                            },
+                            {
+                                "path":  "scripts/write-hermes-memory-index.ps1",
+                                "label":  "Hermes memory index writer",
+                                "patterns":  [
+                                                 "schema_version",
+                                                 "commit_sha",
+                                                 "tree_state",
+                                                 "retrieval_tags",
+                                                 "source_path",
+                                                 "source_sha256",
+                                                 "source_modified_at",
+                                                 "Get-FileHash",
+                                                 "source-learning-map",
+                                                 "plan-hermes-source-learning.ps1",
+                                                 "stable-diffusion.cpp",
+                                                 "openFrameworks"
+                                             ]
+                            },
+                            {
+                                "path":  "scripts/plan-hermes-source-learning.ps1",
+                                "label":  "Hermes source-learning planner",
+                                "patterns":  [
+                                                 "addon-layout",
+                                                 "core-runtime",
+                                                 "diffusion-image-video",
+                                                 "openFrameworks",
+                                                 "stable-diffusion.cpp",
+                                                 "read_first",
+                                                 "stop_conditions",
+                                                 "translate_to"
+                                             ]
+                            },
+                            {
+                                "path":  "scripts/check-hermes-memory-index.ps1",
+                                "label":  "Hermes memory readiness checker",
+                                "patterns":  [
+                                                 "MaxAgeHours",
+                                                 "refresh_required",
+                                                 "current_commit_sha",
+                                                 "source_path",
+                                                 "source_sha256",
+                                                 "source_modified_at",
+                                                 "changed_source_count",
+                                                 "freshness",
+                                                 "retrieval_tags",
+                                                 "Strict"
+                                             ]
+                            },
+                            {
+                                "path":  "scripts/plan-hermes-agent-improvement.ps1",
+                                "label":  "Hermes agent-improvement planner",
+                                "patterns":  [
+                                                 "memory-reviewer",
+                                                 "eval-reviewer",
+                                                 "operating-loop-reviewer",
+                                                 "source-learning-reviewer",
+                                                 "addon-fanout",
+                                                 "addon_review_targets",
+                                                 "addon_fanout_rules",
+                                                 "specialization",
+                                                 "allowed_actions",
+                                                 "output_contract",
+                                                 "prompt_packet",
+                                                 "prompt_launch_queue",
+                                                 "PromptQueue",
+                                                 "QueueType",
+                                                 "QueueId",
+                                                 "agent_source_references",
+                                                 "nousresearch-hermes-agent",
+                                                 "openai-codex",
+                                                 "generated_artifact_policy",
+                                                 "handoff_owner",
+                                                 "ofxGgmlStableDiffusion",
+                                                 "ofxGgmlRag",
+                                                 "authority_model",
+                                                 "dirty_state_table_columns",
+                                                 "integration_rules"
+                                             ]
+                            },
+                            {
+                                "path":  "scripts/test-hermes-memory-index.ps1",
+                                "label":  "Hermes memory index tests",
+                                "patterns":  [
+                                                 "Hermes Memory Index v1",
+                                                 "schema_version",
+                                                 "source_path",
+                                                 "source_sha256",
+                                                 "source_modified_at",
+                                                 "retrieval_tags",
+                                                 "operating-loop",
+                                                 "memory-contract"
+                                             ]
+                            },
+                            {
+                                "path":  "scripts/test-hermes-memory-readiness.ps1",
+                                "label":  "Hermes memory readiness tests",
+                                "patterns":  [
+                                                 "check-hermes-memory-index.ps1",
+                                                 "refresh_required",
+                                                 "stale",
+                                                 "changed-source",
+                                                 "changed_source_count",
+                                                 "source_sha256",
+                                                 "missing",
+                                                 "MaxAgeHours"
+                                             ]
+                            },
+                            {
+                                "path":  "scripts/test-hermes-agent-improvement-plan.ps1",
+                                "label":  "Hermes agent-improvement planner tests",
+                                "patterns":  [
+                                                 "plan-hermes-agent-improvement.ps1",
+                                                 "memory-reviewer",
+                                                 "eval-reviewer",
+                                                 "dirty_state_table_columns",
+                                                 "addon_review_targets",
+                                                 "addon_fanout_rules",
+                                                 "specialization",
+                                                 "output_contract",
+                                                 "prompt_packet",
+                                                 "prompt_launch_queue",
+                                                 "PromptQueue",
+                                                 "QueueType",
+                                                 "QueueId",
+                                                 "agent_source_references",
+                                                 "generated_artifact_policy",
+                                                 "handoff_owner",
+                                                 "main agent owns edits"
+                                             ]
+                            },
+                            {
+                                "path":  "scripts/test-hermes-source-learning-plan.ps1",
+                                "label":  "Hermes source-learning planner tests",
+                                "patterns":  [
+                                                 "plan-hermes-source-learning.ps1",
+                                                 "openframeworks",
+                                                 "stable-diffusion-cpp",
+                                                 "projectGenerator",
+                                                 "self-contained",
+                                                 "addon-layout"
+                                             ]
+                            },
+                            {
+                                "path":  "docs/agent-handoff-contract.md",
+                                "label":  "agent handoff contract",
+                                "patterns":  [
+                                                 "Core planning command",
+                                                 "Dirty-repo caveats",
+                                                 "Rollout profile",
+                                                 "Delegation roles",
+                                                 "Integration owner",
+                                                 "Accepted outputs",
+                                                 "Rejected/unused outputs",
+                                                 "Final validation owner",
+                                                 "Dirty-state table"
+                                             ]
+                            },
+                            {
+                                "path":  "docs/managed-addon-rollout.md",
+                                "label":  "managed addon rollout matrix",
+                                "patterns":  [
+                                                 "Ready managed repositories",
+                                                 "Dirty managed repositories",
+                                                 "ofxGgmlSam",
+                                                 "evidence_profile=advisory",
+                                                 "sam-evidence-pilot-handoff.md",
+                                                 "Reference Repositories",
+                                                 "Promotion Rules"
+                                             ]
+                            },
+                            {
+                                "path":  "docs/sam-evidence-pilot-handoff.md",
+                                "label":  "Sam evidence pilot handoff",
+                                "patterns":  [
+                                                 "ofxGgmlSam",
+                                                 "Evidence Schema v1",
+                                                 "build/evidence/sam3-runtime-evidence.json",
+                                                 "evidence_profile=advisory",
+                                                 "evidence-validation.yml",
+                                                 "schema_version",
+                                                 "commit_sha"
+                                             ]
+                            },
+                            {
+                                "path":  "docs/evidence-promotion-playbook.md",
+                                "label":  "evidence promotion playbook",
+                                "patterns":  [
+                                                 "advisory-visible",
+                                                 "schema-required",
+                                                 "current-sha-required",
+                                                 "fresh-current-sha-required",
+                                                 "release-gated",
+                                                 "evidence-promotion-advisor.yml",
+                                                 "Evidence Schema v1"
+                                             ]
+                            },
+                            {
+                                "path":  "scripts/write-evidence-promotion-advice.ps1",
+                                "label":  "evidence promotion advisor",
+                                "patterns":  [
+                                                 "MinimumQualityScore",
+                                                 "ObservedCleanRuns",
+                                                 "CandidateProfile",
+                                                 "recommendation",
+                                                 "ready for release-gate"
+                                             ]
+                            },
+                            {
+                                "path":  "HERMES.md",
+                                "label":  "Hermes instructions",
+                                "patterns":  [
+                                                 "ofxGgmlWorkflows",
+                                                 "workflow_call",
+                                                 "agent-handoff-contract.md",
+                                                 "agent-baseline.md",
+                                                 "generated binaries"
+                                             ]
+                            },
+                            {
+                                "path":  "AGENTS.md",
+                                "label":  "Codex instructions",
+                                "patterns":  [
+                                                 "ofxGgmlWorkflows",
+                                                 "workflow_call",
+                                                 "agent-handoff-contract.md",
+                                                 "agent-baseline.md",
+                                                 "generated project files"
+                                             ]
+                            },
+                            {
+                                "path":  ".github/copilot-instructions.md",
+                                "label":  "Copilot instructions",
+                                "patterns":  [
+                                                 "ofxGgmlWorkflows",
+                                                 "workflow_call",
+                                                 "agent-handoff-contract.md",
+                                                 "agent-baseline.md",
+                                                 "generated outputs"
+                                             ]
+                            },
+                            {
+                                "path":  ".github/instructions/ofxggml-ecosystem.instructions.md",
+                                "label":  "Copilot ecosystem instructions",
+                                "patterns":  [
+                                                 "ofxGgmlWorkflows",
+                                                 "check-ecosystem-readiness",
+                                                 "agent-handoff-contract.md",
+                                                 "agent-baseline.md",
+                                                 "generated artifact hygiene"
+                                             ]
+                            },
+                            {
+                                "path":  ".github/workflows/coding-agent-instructions.yml",
+                                "label":  "coding-agent-instructions.yml",
+                                "patterns":  [
+                                                 "ofxggml-ecosystem.instructions.md",
+                                                 "Verify ecosystem guardrails",
+                                                 "companion addon boundary",
+                                                 "generated artifact hygiene"
+                                             ]
+                            },
+                            {
+                                "path":  ".github/workflows/workflow-repo-validation.yml",
+                                "label":  "workflow-repo-validation.yml",
+                                "patterns":  [
+                                                 "scripts/validate-local.ps1"
+                                             ]
+                            },
+                            {
+                                "path":  "scripts/write-workflow-security-advice.ps1",
+                                "label":  "workflow security advisor",
+                                "patterns":  [
+                                                 "missing_permissions_count",
+                                                 "unpinned_action_count",
+                                                 "recommended_consumer_ref",
+                                                 "RequireExplicitPermissions",
+                                                 "RequirePinnedActions",
+                                                 "External actions not pinned to full SHA"
+                                             ]
+                            },
+                            {
+                                "path":  "scripts/validate-evidence.py",
+                                "label":  "evidence validator",
+                                "patterns":  [
+                                                 "VALID_RESULTS",
+                                                 "minimum_certification_level",
+                                                 "quality_report_path",
+                                                 "VALID_TREE_STATES",
+                                                 "artifact_integrity",
+                                                 "artifact_attestation",
+                                                 "sha256_digest"
+                                             ]
+                            }
+                        ],
+    "workflow_profiles":  {
+                              "evidence_profile":  {
+                                                       "workflow":  "evidence-validation.yml",
+                                                       "profiles":  [
+                                                                        "custom",
+                                                                        "advisory",
+                                                                        "schema",
+                                                                        "current-sha",
+                                                                        "fresh-current-sha",
+                                                                        "certification",
+                                                                        "release"
+                                                                    ],
+                                                       "fixture_profiles":  [
+                                                                                {
+                                                                                    "fixture":  "evidence-validation-advisory.yml",
+                                                                                    "profile":  "advisory"
+                                                                                },
+                                                                                {
+                                                                                    "fixture":  "evidence-validation-required.yml",
+                                                                                    "profile":  "fresh-current-sha"
+                                                                                }
+                                                                            ]
+                                                   },
+                              "release_profile":  {
+                                                      "workflow":  "release-gate.yml",
+                                                      "profiles":  [
+                                                                       "custom",
+                                                                       "advisory",
+                                                                       "reports",
+                                                                       "evidence",
+                                                                       "release"
+                                                                   ],
+                                                      "fixture_profiles":  [
+                                                                               {
+                                                                                   "fixture":  "release-gate-advisory.yml",
+                                                                                   "profile":  "advisory"
+                                                                               },
+                                                                               {
+                                                                                   "fixture":  "release-gate-required.yml",
+                                                                                   "profile":  "release"
+                                                                               }
+                                                                           ]
+                                                  }
+                          },
+    "workflow_patterns":  {
+                              "addon-hygiene.yml":  [
+                                                        "require_addon_config",
+                                                        "require_src",
+                                                        "require_examples",
+                                                        "require_addon_metadata",
+                                                        "require_core_dependency",
+                                                        "require_example_core_dependency",
+                                                        "forbidden_addon_dependencies",
+                                                        "reject_generated_project_files"
+                                                    ],
+                              "release-gate.yml":  [
+                                                       "release_profile",
+                                                       "require_release_readiness_score",
+                                                       "release_readiness_score_path",
+                                                       "require_evidence_file",
+                                                       "require_evidence_schema_valid",
+                                                       "require_current_sha_evidence",
+                                                       "require_fresh_evidence",
+                                                       "quality_report_path",
+                                                       ".ofxggml-workflows/scripts/validate-evidence.py"
+                                                   ],
+                              "evidence-validation.yml":  [
+                                                              "evidence_profile",
+                                                              "require_evidence_file",
+                                                              "require_schema_valid",
+                                                              "require_current_sha",
+                                                              "require_freshness",
+                                                              "quality_report_path",
+                                                              "artifact_digest",
+                                                              "upload-evidence",
+                                                              "artifact-digest",
+                                                              ".ofxggml-workflows/scripts/validate-evidence.py"
+                                                          ],
+                              "evidence-promotion-advisor.yml":  [
+                                                                     "current_profile",
+                                                                     "candidate_profile",
+                                                                     "required_clean_runs",
+                                                                     "observed_clean_runs",
+                                                                     "minimum_quality_score",
+                                                                     "artifact_digest",
+                                                                     "upload-promotion-advice",
+                                                                     "artifact-digest",
+                                                                     ".ofxggml-workflows/scripts/write-evidence-promotion-advice.ps1"
+                                                                 ],
+                              "backend-runtime-check.yml":  [
+                                                                "require_runtime_smoke_source",
+                                                                "require_linux_runtime_smoke_script",
+                                                                "require_windows_runtime_smoke_scripts",
+                                                                "require_macos_runtime_smoke_script",
+                                                                "require_backend_runtime_smoke_evidence",
+                                                                "upload-backend-runtime-smoke"
+                                                            ],
+                              "metadata-validation.yml":  [
+                                                              "require_feature_metadata",
+                                                              "require_readme_features"
+                                                          ],
+                              "coding-agent-instructions.yml":  [
+                                                                    "Verify ecosystem guardrails",
+                                                                    "companion addon boundary",
+                                                                    "generated artifact hygiene"
+                                                                ],
+                              "workflow-security-advice.yml":  [
+                                                                   "recommended_consumer_ref",
+                                                                   "require_explicit_permissions",
+                                                                   "require_pinned_actions",
+                                                                   "artifact_digest",
+                                                                   "upload-workflow-security-advice",
+                                                                   "artifact-digest"
+                                                               ]
+                          },
+    "report_workflows":  [
+                             "backend-capability-report.yml",
+                             "compatibility-matrix.yml",
+                             "cross-repo-capability-map.yml",
+                             "ecosystem-health-report.yml",
+                             "metadata-reconciliation.yml",
+                             "release-plan.yml",
+                             "release-readiness-score.yml",
+                             "workflow-security-advice.yml",
+                             "workflow-status-plan.yml"
+                         ],
+    "report_workflow_patterns":  [
+                                     "require_generator",
+                                     "require_report_artifact",
+                                     "report_artifact_path"
+                                 ],
+    "runtime_workflows":  [
+                              "cuda-runtime-certification.yml",
+                              "metal-runtime-certification.yml",
+                              "vulkan-runtime-certification.yml"
+                          ],
+    "runtime_workflow_patterns":  [
+                                      "runtime_smoke_source_path",
+                                      "require_runtime_smoke_source",
+                                      "runtime_smoke_build_script_path",
+                                      "require_runtime_smoke_build_script",
+                                      "runtime_smoke_executable_path",
+                                      "require_runtime_smoke_evidence",
+                                      "runtime_smoke_evidence_path",
+                                      "artifact_digest",
+                                      "artifact-digest"
+                                  ],
+    "required_reusable_workflows":  [
+                                        "addon-hygiene.yml",
+                                        "coding-agent-instructions.yml",
+                                        "release-check.yml"
+                                    ],
+    "required_reusable_workflow_patterns":  [
+                                                "workflow_call"
+                                            ]
 }

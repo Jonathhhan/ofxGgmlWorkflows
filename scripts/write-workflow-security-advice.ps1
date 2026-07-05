@@ -157,7 +157,7 @@ $lines.Add("| External actions not pinned to full SHA | $($summary.unpinned_acti
 $lines.Add("")
 $lines.Add("Recommended stable consumer ref: ``$RecommendedConsumerRef``.")
 $lines.Add("")
-$lines.Add("Enforcement: explicit permissions = `$($RequireExplicitPermissions.IsPresent)`; full-SHA action refs = `$($RequirePinnedActions.IsPresent)`.")
+$lines.Add("Enforcement: explicit permissions = ``$($RequireExplicitPermissions.IsPresent)``; full-SHA action refs = ``$($RequirePinnedActions.IsPresent)``.")
 $lines.Add("")
 $lines.Add("## Missing Job Permissions")
 $lines.Add("")
@@ -167,7 +167,7 @@ if ($missingPermissions.Count -eq 0) {
 	$lines.Add("| Workflow | Job |")
 	$lines.Add("| --- | --- |")
 	foreach ($entry in $missingPermissions) {
-		$lines.Add("| `$($entry.Workflow)` | `$($entry.Job)` |")
+		$w=$entry.Workflow;$j=$entry.Job;$lines.Add('| ' + [char]96 + '$' + $w + [char]96 + ' | ' + [char]96 + '$' + $j + [char]96 + ' |')
 	}
 }
 $lines.Add("")
@@ -180,7 +180,7 @@ if ($unpinnedActions.Count -eq 0) {
 	$lines.Add("| --- | --- | --- |")
 	foreach ($entry in $unpinnedActions) {
 		$ref = if ([string]::IsNullOrWhiteSpace($entry.Ref)) { "(missing)" } else { $entry.Ref }
-		$lines.Add("| `$($entry.Workflow)` | `$($entry.Uses)` | `$ref` |")
+		$refVal=if([string]::IsNullOrWhiteSpace($entry.Ref)){'(missing)'}else{$entry.Ref};$w=$entry.Workflow;$u=$entry.Uses;$lines.Add('| ' + [char]96 + '$' + $w + [char]96 + ' | ' + [char]96 + '$' + $u + [char]96 + ' | ' + [char]96 + '$' + $refVal + [char]96 + ' |')
 	}
 }
 $lines.Add("")

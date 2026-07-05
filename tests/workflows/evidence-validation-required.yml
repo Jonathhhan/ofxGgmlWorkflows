@@ -9,6 +9,10 @@ jobs:
     with:
       evidence_path: build/of-smoke/of-smoke-build.json
       evidence_profile: fresh-current-sha
+      require_evidence_file: true
+      require_schema_valid: true
+      require_current_sha: true
+      require_freshness: true
       allowed_schema_versions: "1"
       max_evidence_age_hours: "24"
       required_backend: cpu
