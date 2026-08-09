@@ -30,7 +30,7 @@ Generated from:
 | `ofxGgmlMusic` | Evidence writer ready (v1.0.0) -- quality 76.92% local, CI pending. | `evidence_profile=advisory` | `build/evidence/music-runtime-evidence.json` |
 | `ofxGgmlVision` | Evidence writer ready (v1.0.0) -- quality 76.92% local, CI pending. | `evidence_profile=advisory` | `build/evidence/vision-runtime-evidence.json` |
 | `ofxGgmlVideo` | Keep MontageAutomat handoff contracts validated before adding model-backed video evidence. | none | none |
-| `ofxGgmlAgents` | Validate planning and handoff records before enabling autonomous runtime behavior. | none | none |
+| `ofxGgmlAgents` | Read-only allowlisted tool loop proven with a real local model; keep arbitrary filesystem, command, memory, and RAG tools out of scope until separately demonstrated. | none | none |
 | `ofxGgmlWorkflows` | Keep reusable workflow fixtures, manifest coverage, and evidence policy aligned. | none | none |
 
 ## Dirty Repositories

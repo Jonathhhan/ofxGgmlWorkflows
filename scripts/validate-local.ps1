@@ -28,8 +28,12 @@ $repoRoot = Split-Path -Parent $scriptRoot
 $workflowRoot = Join-Path $repoRoot ".github\workflows"
 
 Write-Step "Checking manifest-backed repository inventory"
+Assert-Path (Join-Path $scriptRoot "run-creative-reference-workflow.ps1") "creative reference workflow"
+Assert-Path (Join-Path $scriptRoot "run-creative-reference-workflow.bat") "creative reference workflow launcher"
 Assert-Path (Join-Path $repoRoot "schemas\validation-manifest.json") "validation manifest"
 Assert-Path (Join-Path $repoRoot "scripts\test-validation-manifest.ps1") "validation manifest tests"
+Assert-Path (Join-Path $repoRoot "scripts\run-multimodal-reference-smoke.ps1") "multimodal reference smoke"
+Assert-Path (Join-Path $repoRoot "scripts\run-multimodal-reference-smoke.bat") "multimodal reference smoke Windows wrapper"
 Assert-Path $workflowRoot "workflow directory" -Directory
 & (Join-Path $repoRoot "scripts\test-validation-manifest.ps1")
 

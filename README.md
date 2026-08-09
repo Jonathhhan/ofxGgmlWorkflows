@@ -1,8 +1,51 @@
 # ofxGgmlWorkflows
 
+## Real multimodal reference smoke
+
+Run one reference image through the existing model-backed Vision and SAM3
+companion smokes:
+
+```powershell
+scripts\run-multimodal-reference-smoke.bat `
+  -Image C:\path\to\reference.png `
+  -VisionModel moondream:latest `
+  -VisionServerUrl http://127.0.0.1:11434 `
+  -SamBackend cpu `
+  -Json
+```
+
+The command passes only when Vision returns non-empty model text and SAM3
+returns at least one inferred mask. Model weights remain local and outside this
+repository.
+
 Reusable GitHub Actions workflows and policy templates for the ofxGgml addon ecosystem.
 
 This repository centralizes lightweight automation for openFrameworks addons in the `ofxGgml` family.
+
+## Ecosystem entry point
+
+Open `ofxGgmlWorkflows` as the primary folder when Codex is coordinating the
+whole ecosystem, with the companion repositories available as additional
+folders. [`ecosystem.yaml`](ecosystem.yaml) is the current scope and priority
+authority; [`AGENTS.md`](AGENTS.md) defines the binding boundaries; and
+[`ofxggml-capability-loop`](.agents/skills/ofxggml-capability-loop/SKILL.md)
+adds the local repository and approval constraints to the general
+`$recursive-codex` target, proof, and decision loop.
+
+`ofxGgmlCore` still supplies the shared runtime base and ecosystem planning
+commands. Workflows supplies the coordination constitution and reusable
+automation. Planning, documentation, schemas, validators, and mocks remain
+supporting evidence, not model-backed capability progress.
+
+## Quickstart
+
+To adopt the minimum workflow set for a new addon:
+
+1. Copy `.github/workflows/coding-agent-instructions.yml`, `.github/workflows/addon-hygiene.yml`, and `.github/workflows/release-check.yml` into your repository's `.github/workflows/` directory.
+2. Pin each workflow to `@main` (or a stable tag) when referencing `Jonathhhan/ofxGgmlWorkflows`.
+3. Run `scripts/validate-local.ps1` locally to verify the workflow templates stay aligned with this repository.
+
+For a complete rollout, follow the [adoption order](#adoption-order) and promote each workflow from advisory to required once the caller is ready.
 
 ## Workflows
 
@@ -365,3 +408,12 @@ On macOS/Linux:
 For local Codex runs with Qwen3.6-27B-Q4_0 on an RTX 3090, use
 [docs/codex-qwen3-rtx3090-profile.md](docs/codex-qwen3-rtx3090-profile.md)
 as the self-planning, self-optimizing, memory-aware operating baseline.
+
+
+# Creative reference workflow
+
+`scripts\run-creative-reference-workflow.ps1` composes the proven Vision, SAM3, Video, and ACE-Step lanes into one concrete artifact. It ranks at least two reference images with the vision model, segments the leading image, generates a matching native GGUF soundtrack, and renders the ordered still-image timeline plus soundtrack to MP4 with FFmpeg.
+
+```powershell
+scripts\run-creative-reference-workflow.ps1 -Images image-a.png,image-b.png -CreativePrompt "red energetic opening" -VisionModel moondream:latest -Json
+```

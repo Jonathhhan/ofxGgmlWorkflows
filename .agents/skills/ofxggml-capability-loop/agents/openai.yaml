@@ -1,0 +1,4 @@
+interface:
+  display_name: "ofxGgml Capability Loop"
+  short_description: "Apply ofxGgml scope to Recursive Codex"
+  default_prompt: "Use $ofxggml-capability-loop with $recursive-codex to advance the current ofxGgml capability within its repository and approval boundaries."

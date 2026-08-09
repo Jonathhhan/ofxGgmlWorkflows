@@ -1,9 +1,21 @@
 {
     "required_paths":  [
-                           {
-                               "path":  "README.md",
-                               "label":  "README"
-                           },
+                         {
+                             "path":  "README.md",
+                             "label":  "README"
+                         },
+                         {
+                             "path":  "ecosystem.yaml",
+                             "label":  "ecosystem authority"
+                         },
+                         {
+                             "path":  ".agents/skills/ofxggml-capability-loop/SKILL.md",
+                             "label":  "ofxGgml capability loop skill"
+                         },
+                         {
+                             "path":  ".agents/skills/ofxggml-capability-loop/agents/openai.yaml",
+                             "label":  "ofxGgml capability loop skill UI metadata"
+                         },
                            {
                                "path":  "CHANGELOG.md",
                                "label":  "CHANGELOG"
@@ -214,7 +226,10 @@
                            }
                        ],
     "no_bom_paths":  [
-                         "README.md",
+                           "README.md",
+                           "ecosystem.yaml",
+                           ".agents/skills/ofxggml-capability-loop/SKILL.md",
+                           ".agents/skills/ofxggml-capability-loop/agents/openai.yaml",
                          "CHANGELOG.md",
                          ".gitignore",
                          ".github/dependabot.yml",
@@ -382,6 +397,30 @@
                                    }
                                ],
     "coverage_checks":  [
+                            {
+                                "path":  "ecosystem.yaml",
+                                "label":  "ecosystem authority",
+                                "patterns":  [
+                                                 "entry_point: ofxGgmlWorkflows",
+                                                 "planning_commands: ofxGgmlCore",
+                                "capability: tool_using_orchestration",
+                                "proof: real_tools_over_proven_model_lanes",
+                                                 "development_order:",
+                                                 "reference_image_understanding",
+                                                 "end_to_end_multimodal_reference_workflow",
+                                                 "speculative_public_apis"
+                                             ]
+                            },
+                            {
+                                "path":  ".agents/skills/ofxggml-capability-loop/SKILL.md",
+                                "label":  "ofxGgml capability loop skill",
+                                "patterns":  [
+                                                 "\\$recursive-codex",
+                                                 "ofxGgmlCore",
+                                                 "workflow_call",
+                                                 "ecosystem.yaml"
+                                             ]
+                            },
                             {
                                 "path":  "README.md",
                                 "label":  "README",

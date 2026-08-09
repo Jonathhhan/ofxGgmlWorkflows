@@ -15,6 +15,15 @@ files should remain self-contained, but they should mirror these principles.
 
 ## Planning
 
+- When Codex coordinates the full ecosystem, start from `ofxGgmlWorkflows`,
+  read `ecosystem.yaml`, and use `$recursive-codex` together with
+  `.agents/skills/ofxggml-capability-loop/SKILL.md`. Core still supplies the
+  fresh planning/readiness command.
+- Tie every proposed change to an observable capability and real execution
+  proof. Classify it as runtime capability, required support, or speculative
+  preparation; require explicit approval for speculative preparation.
+- Do not count documentation, planning, schemas, validators, mocks, workflow
+  infrastructure, or public abstractions as capability progress by themselves.
 - Start cross-repo improvement, rollout, evidence promotion, release planning,
   or companion fanout with a fresh Core planning or readiness command.
 - Use `docs\agent-handoff-contract.md` when handing cross-repo work to another
