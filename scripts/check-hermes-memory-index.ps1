@@ -101,7 +101,11 @@ if (!(Test-Path -LiteralPath $resolvedIndexPath -PathType Leaf)) {
 		}
 
 		if ([string]::IsNullOrWhiteSpace($indexCommitSha) -or $indexCommitSha -eq "unknown") {
-			Add-Issue "Memory index is missing commit_sha."
+			if ($currentCommitSha -eq "unknown") {
+				Add-Warning "Memory index commit_sha could not be verified because Git metadata is unavailable."
+			} else {
+				Add-Issue "Memory index is missing commit_sha."
+			}
 		} elseif ($currentCommitSha -ne "unknown" -and $indexCommitSha -ne $currentCommitSha) {
 			Add-Issue "Memory index commit_sha $indexCommitSha does not match current checkout $currentCommitSha."
 		}

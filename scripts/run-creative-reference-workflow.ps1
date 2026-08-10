@@ -2,8 +2,8 @@ param(
 	[Parameter(Mandatory = $true)][string[]]$Images,
 	[Parameter(Mandatory = $true)][string]$CreativePrompt,
 	[Parameter(Mandatory = $true)][string]$VisionModel,
-	[string]$SamModel = "G:\Models\sam3-q8_0.ggml",
-	[string]$AceModelDir = "G:\Models",
+	[string]$SamModel = $(if ($env:OFXGGML_SAM_MODEL) { $env:OFXGGML_SAM_MODEL } else { "" }),
+	[string]$AceModelDir = $(if ($env:OFXGGML_ACESTEP_MODEL_DIR) { $env:OFXGGML_ACESTEP_MODEL_DIR } else { "" }),
 	[string]$AceServerExecutable = "",
 	[string]$AceServerUrl = "http://127.0.0.1:8085",
 	[string]$OutputDir = "",
@@ -116,8 +116,13 @@ $resolvedImages = @($Images | ForEach-Object { $_ -split ',' } | ForEach-Object 
 	if (-not [string]::IsNullOrWhiteSpace($path)) { (Resolve-Path -LiteralPath $path).Path }
 })
 if ($resolvedImages.Count -lt 2) { throw "Pass at least two reference images" }
-foreach ($required in @($multimodalScript, $montageScript, $aceStartScript, $SamModel, $AceModelDir, $AceServerExecutable)) {
+foreach ($required in @($multimodalScript, $montageScript, $aceStartScript, $AceServerExecutable)) {
 	if (!(Test-Path -LiteralPath $required)) { throw "Required workflow input was not found: $required" }
+}
+foreach ($optionalModelInput in @($SamModel, $AceModelDir)) {
+	if (-not [string]::IsNullOrWhiteSpace($optionalModelInput) -and !(Test-Path -LiteralPath $optionalModelInput)) {
+		throw "Configured model input was not found: $optionalModelInput"
+	}
 }
 if ($SegmentDurationSeconds -le 0) { throw "SegmentDurationSeconds must be greater than zero" }
 
@@ -142,7 +147,13 @@ try {
 	if (!$reference.Passed -or $reference.Segmentation.MaskCount -lt 1) { throw "Reference analysis did not produce a mask" }
 
 	if (!(Test-AceHealth)) {
-		$serverOutput = & $aceStartScript -ServerExecutable $AceServerExecutable -ModelPath $AceModelDir -ServerUrl $AceServerUrl -StartupTimeoutSeconds 90 2>&1
+		$aceStartArgs = @{
+			ServerExecutable = $AceServerExecutable
+			ServerUrl = $AceServerUrl
+			StartupTimeoutSeconds = 90
+		}
+		if (-not [string]::IsNullOrWhiteSpace($AceModelDir)) { $aceStartArgs.ModelPath = $AceModelDir }
+		$serverOutput = & $aceStartScript @aceStartArgs 2>&1
 		if (!$?) { throw "ACE-Step server failed to start: $(($serverOutput | ForEach-Object { $_.ToString() }) -join "`n")" }
 		$pidMatch = [regex]::Match((($serverOutput | ForEach-Object { $_.ToString() }) -join "`n"), "OFXGGML_ACESTEP_SERVER_PID=(\d+)")
 		if ($pidMatch.Success) { $startedAcePid = [int]$pidMatch.Groups[1].Value }

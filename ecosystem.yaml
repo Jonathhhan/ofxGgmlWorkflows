@@ -39,12 +39,12 @@ development_order:
     lane: ofxGgmlLlama
     capability: real_local_text_inference
     status: proven
-    proof: model_backed_cpu_smoke
+    proof: cuda_text_chat_and_embedding_smoke
   - order: 2
     lane: ofxGgmlStableDiffusion
     capability: real_local_image_generation
     status: proven
-    proof: model_backed_cli_image_smoke
+    proof: openframeworks_wrapper_cuda_image_smoke
   - order: 3
     lane: ofxGgmlVision
     capability: reference_image_understanding
@@ -74,12 +74,12 @@ development_order:
     lane: ofxGgmlRag
     capability: model_backed_retrieval_answering
     status: proven
-    proof: cpp_text_corpus_to_cited_ollama_answer
+    proof: llama_server_local_web_quote_search_with_citations
   - order: 9
     lane: ofxGgmlMusic
     capability: real_local_music_workflow
     status: proven
-    proof: acestep_gguf_lm_to_synth_wav
+    proof: acestep_cuda_lm_and_synth_to_validated_wav
   - order: 10
     lane: ofxGgmlAgents
     capability: tool_using_orchestration
