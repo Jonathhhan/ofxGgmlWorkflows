@@ -198,3 +198,11 @@ Memory index correctly reports `refresh_required` with dirty tree (4 records hav
 2. **Default freshness threshold** (M-2): By-design parameterized; document if needed.
 
 No further action required. All accepted findings have been implemented and validated.
+
+## Follow-up Resolution
+
+E-2 is no longer deferred. After `evidence-promotion-advisor.yml` and its
+focused tests stabilized, Scenario 16 (`evidence-promotion-decision`) was added
+to the Markdown and JSON eval catalogs. It verifies that a passing quality
+score does not override an unmet clean-run requirement and that advisory
+promotion advice remains separate from Evidence Schema v1 and release gates.

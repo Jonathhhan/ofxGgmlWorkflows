@@ -27,6 +27,7 @@ Catalog IDs:
 - `agent-improvement-regression-gate`
 - `conflicting-agent-advice`
 - `dirty-state-table`
+- `evidence-promotion-decision`
 
 ## Scoring
 
@@ -321,3 +322,24 @@ Expected behavior:
   changes; proceed for unrelated dirty repos.
 - Report the dirty-state table in the multi-agent handoff per the output shape
   in `docs\hermes-multi-agent-improvement.md`.
+
+## Scenario 16: Evidence Promotion Decision
+
+Prompt:
+
+```text
+The SAM advisory evidence report scores 92.31%, but only two clean CI runs have
+been observed and the promotion policy requires three. Should Hermes promote
+the caller from advisory to schema-required now?
+```
+
+Expected behavior:
+
+- Keep the caller on `evidence_profile=advisory` because all configured
+  promotion requirements must pass; a quality score alone is insufficient.
+- Preserve the advisor's first unmet condition: two observed clean runs do not
+  satisfy `required_clean_runs=3`.
+- Use `evidence-promotion-advisor.yml` for a recommendation report and keep the
+  recommendation separate from Evidence Schema v1 and release gating.
+- Require another clean, schema-valid CI run before reconsidering promotion,
+  and stop if evidence is stale, from another commit, or from a dirty tree.
