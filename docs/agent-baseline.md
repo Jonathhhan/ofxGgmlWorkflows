@@ -67,6 +67,13 @@ files should remain self-contained, but they should mirror these principles.
 - For runtime and backend claims, use Evidence Schema v1 and reusable workflow
   validators so evidence includes backend, runner/device context, provenance,
   commit SHA, tree state, timing, producer, and artifact integrity.
+- In interactive openFrameworks examples, keep model loading, inference,
+  blocking backend requests, graph compute, and result readback off the
+  setup/update/draw and input-callback thread. Prefer a long-lived `ofThread`
+  worker with `ofThreadChannel`; keep runtime/backend ownership inside the
+  worker, pass copied jobs, apply completed result snapshots in `update()`, and
+  join the worker in `exit()`. Existing safe async workers remain valid; this
+  rule does not force CLI tools or servers onto `ofThread`.
 - For handoff, report the Core planning/readiness command, dirty-repo stop
   conditions, local validation, and any evidence profile or workflow_call
   contract touched.

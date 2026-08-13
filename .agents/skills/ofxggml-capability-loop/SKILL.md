@@ -28,6 +28,13 @@ Preserve stable `workflow_call` inputs and the companion dependency direction.
 Use `docs/agent-handoff-contract.md` only when the task actually crosses
 repositories or performs rollout, promotion, release planning, or PR fanout.
 
+For interactive openFrameworks examples, treat inference on the event/render
+thread as a demonstrated responsiveness defect. Prefer a long-lived `ofThread`
+worker with copied jobs and result snapshots, and keep runtime/backend objects
+worker-owned. Preserve existing safe asynchronous implementations unless a
+real lifecycle or responsiveness problem justifies migration. Do not impose
+this UI lifecycle rule on CLI tools or servers.
+
 ## Enforce ecosystem authority
 
 Classify work using the categories in `AGENTS.md`. Do not create an addon,
