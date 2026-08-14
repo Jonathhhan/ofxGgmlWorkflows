@@ -27,7 +27,7 @@ repositories:
 
 current_priority:
   capability: tool_using_orchestration
-  status: proven
+  status: verification_required
   proof: real_tools_over_proven_model_lanes
   exclusions:
     - new_addons
@@ -38,52 +38,52 @@ development_order:
   - order: 1
     lane: ofxGgmlLlama
     capability: real_local_text_inference
-    status: proven
+    status: verification_required
     proof: cuda_text_chat_and_embedding_smoke
   - order: 2
     lane: ofxGgmlStableDiffusion
     capability: real_local_image_generation
-    status: proven
+    status: verification_required
     proof: openframeworks_wrapper_cuda_image_smoke
   - order: 3
     lane: ofxGgmlVision
     capability: reference_image_understanding
-    status: proven
+    status: verification_required
     proof: model_backed_openai_vision_smoke
   - order: 4
     lane: ofxGgmlSam
     capability: reference_image_segmentation
-    status: proven
+    status: verification_required
     proof: model_backed_sam3_point_mask_smoke
   - order: 5
     lane: existing_companion_example
     capability: end_to_end_multimodal_reference_workflow
-    status: proven
+    status: verification_required
     proof: vision_ranked_sam_masked_acestep_soundtracked_mp4
   - order: 6
     lane: ofxGgmlAudio
     capability: real_local_audio_understanding
-    status: proven
+    status: verification_required
     proof: model_backed_whisper_file_and_chunked_smoke
   - order: 7
     lane: ofxGgmlVideo
     capability: model_informed_montage
-    status: proven
+    status: verification_required
     proof: vision_caption_to_deterministic_ranked_timeline
   - order: 8
     lane: ofxGgmlRag
     capability: model_backed_retrieval_answering
-    status: proven
+    status: verification_required
     proof: llama_server_local_web_quote_search_with_citations
   - order: 9
     lane: ofxGgmlMusic
     capability: real_local_music_workflow
-    status: proven
+    status: verification_required
     proof: acestep_cuda_lm_and_synth_to_validated_wav
   - order: 10
     lane: ofxGgmlAgents
     capability: tool_using_orchestration
-    status: proven
+    status: verification_required
     proof: real_tools_over_proven_model_lanes
 
 progress_policy:

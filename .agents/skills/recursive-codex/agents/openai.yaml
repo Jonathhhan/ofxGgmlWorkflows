@@ -1,0 +1,4 @@
+interface:
+  display_name: "Recursive Codex"
+  short_description: "Tie changes to claim-matched evidence"
+  default_prompt: "Use $recursive-codex to trace this change to an observable outcome, match each claim to concrete evidence, and preserve only decision-relevant history."

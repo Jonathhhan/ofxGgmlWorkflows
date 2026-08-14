@@ -16,6 +16,30 @@
                              "path":  ".agents/skills/ofxggml-capability-loop/agents/openai.yaml",
                              "label":  "ofxGgml capability loop skill UI metadata"
                          },
+                         {
+                             "path":  ".agents/skills/recursive-codex/SKILL.md",
+                             "label":  "repository-local Recursive Codex skill"
+                         },
+                         {
+                             "path":  ".agents/skills/recursive-codex/agents/openai.yaml",
+                             "label":  "repository-local Recursive Codex skill UI metadata"
+                         },
+                         {
+                             "path":  ".agents/skills/recursive-codex/references/full-protocol.md",
+                             "label":  "Recursive Codex full protocol"
+                         },
+                         {
+                             "path":  ".agents/skills/recursive-codex/references/change-events.md",
+                             "label":  "Recursive Codex change-event reference"
+                         },
+                         {
+                             "path":  ".agents/skills/recursive-codex/references/collectives.md",
+                             "label":  "Recursive Codex collectives reference"
+                         },
+                         {
+                             "path":  ".agents/skills/recursive-codex/assets/change-event.yaml",
+                             "label":  "Recursive Codex change-event template"
+                         },
                            {
                                "path":  "CHANGELOG.md",
                                "label":  "CHANGELOG"
@@ -161,6 +185,10 @@
                                "label":  "validation manifest tests"
                            },
                            {
+                               "path":  "scripts/test-codex-ecosystem-bootstrap.ps1",
+                               "label":  "Codex ecosystem bootstrap tests"
+                           },
+                           {
                                "path":  "scripts/test-workflow-security-advice.ps1",
                                "label":  "workflow security advice tests"
                            },
@@ -230,6 +258,12 @@
                            "ecosystem.yaml",
                            ".agents/skills/ofxggml-capability-loop/SKILL.md",
                            ".agents/skills/ofxggml-capability-loop/agents/openai.yaml",
+                           ".agents/skills/recursive-codex/SKILL.md",
+                           ".agents/skills/recursive-codex/agents/openai.yaml",
+                           ".agents/skills/recursive-codex/references/full-protocol.md",
+                           ".agents/skills/recursive-codex/references/change-events.md",
+                           ".agents/skills/recursive-codex/references/collectives.md",
+                           ".agents/skills/recursive-codex/assets/change-event.yaml",
                          "CHANGELOG.md",
                          ".gitignore",
                          ".github/dependabot.yml",
@@ -260,7 +294,8 @@
                          "scripts/test-hermes-memory-index.ps1",
                          "scripts/test-hermes-memory-readiness.ps1",
                          "scripts/test-hermes-source-learning-plan.ps1",
-                         "scripts/test-validation-manifest.ps1",
+                          "scripts/test-validation-manifest.ps1",
+                          "scripts/test-codex-ecosystem-bootstrap.ps1",
                          "scripts/test-workflow-security-advice.ps1",
                          "scripts/test-workflow-profiles.ps1",
                          "scripts/test-workflow-fixtures.ps1",
@@ -403,24 +438,54 @@
                                 "patterns":  [
                                                  "entry_point: ofxGgmlWorkflows",
                                                  "planning_commands: ofxGgmlCore",
-                                "capability: tool_using_orchestration",
-                                "proof: real_tools_over_proven_model_lanes",
+                                                 "capability: tool_using_orchestration",
+                                                 "status: verification_required",
+                                                 "proof: real_tools_over_proven_model_lanes",
                                                  "development_order:",
                                                  "reference_image_understanding",
                                                  "end_to_end_multimodal_reference_workflow",
                                                  "speculative_public_apis"
                                              ]
                             },
-                            {
-                                "path":  ".agents/skills/ofxggml-capability-loop/SKILL.md",
-                                "label":  "ofxGgml capability loop skill",
-                                "patterns":  [
-                                                 "\\$recursive-codex",
-                                                 "ofxGgmlCore",
-                                                 "workflow_call",
-                                                 "ecosystem.yaml"
-                                             ]
-                            },
+                             {
+                                 "path":  ".agents/skills/ofxggml-capability-loop/SKILL.md",
+                                 "label":  "ofxGgml capability loop skill",
+                                 "patterns":  [
+                                                  "\\$recursive-codex",
+                                                  "../recursive-codex/SKILL.md",
+                                                  "do not assume a",
+                                                  "ofxGgmlCore",
+                                                  "workflow_call",
+                                                  "ecosystem.yaml",
+                                                  "blocking or observably expensive",
+                                                  "real lifecycle or responsiveness problem"
+                                              ]
+                             },
+                             {
+                                 "path":  ".agents/skills/recursive-codex/SKILL.md",
+                                 "label":  "repository-local Recursive Codex skill",
+                                 "patterns":  [
+                                                  "observable capability or effect",
+                                                  "first demonstrated blocker",
+                                                  "smallest necessary change",
+                                                  "Classify evidence by kind and claim",
+                                                  "Recur on the decision",
+                                                  "full-protocol.md"
+                                              ]
+                             },
+                             {
+                                 "path":  "docs/codex-ecosystem-usage.md",
+                                 "label":  "Codex ecosystem usage guide",
+                                 "patterns":  [
+                                                  "ecosystem.yaml",
+                                                  "ofxggml-capability-loop",
+                                                  "observable capability or effect",
+                                                  "first demonstrated blocker",
+                                                  "ofxGgmlAgents",
+                                                  "runtime-link independent",
+                                                  "Do not begin by inventing a workflow"
+                                              ]
+                             },
                             {
                                 "path":  "README.md",
                                 "label":  "README",
@@ -950,7 +1015,15 @@
                                                  "workflow_call",
                                                  "agent-handoff-contract.md",
                                                  "agent-baseline.md",
-                                                 "generated project files"
+                                                 "generated project files",
+                                                 "Ecosystem Authority",
+                                                 "repository-local",
+                                                 "\\$recursive-codex",
+                                                 "observable capability",
+                                                  "first demonstrated blocker",
+                                                  "speculative preparation",
+                                                  "claim identifiers",
+                                                  "verification_required"
                                              ]
                             },
                             {

@@ -36,6 +36,7 @@ Assert-Path (Join-Path $repoRoot "scripts\run-multimodal-reference-smoke.ps1") "
 Assert-Path (Join-Path $repoRoot "scripts\run-multimodal-reference-smoke.bat") "multimodal reference smoke Windows wrapper"
 Assert-Path $workflowRoot "workflow directory" -Directory
 & (Join-Path $repoRoot "scripts\test-validation-manifest.ps1")
+& (Join-Path $repoRoot "scripts\test-codex-ecosystem-bootstrap.ps1")
 
 Write-Step "Checking workflow file syntax"
 $workflowFiles = @(Get-ChildItem -LiteralPath $workflowRoot -Filter "*.yml" -File)

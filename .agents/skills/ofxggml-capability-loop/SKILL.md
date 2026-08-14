@@ -5,8 +5,11 @@ description: Apply ofxGgml-specific scope, repository-lane, planning, and approv
 
 # ofxGgml Capability Loop
 
-Use the general `$recursive-codex` skill for target recursion, proof honesty,
-and decision recursion. Add only the following ofxGgml-specific constraints.
+Load and use the repository-local `$recursive-codex` skill at
+`../recursive-codex/SKILL.md` for target recursion, proof honesty, and decision
+recursion. This repository copy is the required dependency; do not assume a
+global installation. Stop before ecosystem changes if it is missing or invalid.
+Add only the following ofxGgml-specific constraints.
 
 ## Read the governing state
 
@@ -28,12 +31,12 @@ Preserve stable `workflow_call` inputs and the companion dependency direction.
 Use `docs/agent-handoff-contract.md` only when the task actually crosses
 repositories or performs rollout, promotion, release planning, or PR fanout.
 
-For interactive openFrameworks examples, treat inference on the event/render
-thread as a demonstrated responsiveness defect. Prefer a long-lived `ofThread`
-worker with copied jobs and result snapshots, and keep runtime/backend objects
-worker-owned. Preserve existing safe asynchronous implementations unless a
-real lifecycle or responsiveness problem justifies migration. Do not impose
-this UI lifecycle rule on CLI tools or servers.
+For interactive openFrameworks examples, treat blocking or observably expensive
+inference on the event/render thread as a demonstrated responsiveness defect.
+Prefer a long-lived `ofThread` worker with copied jobs and result snapshots, and
+keep runtime/backend objects worker-owned. Preserve existing safe asynchronous
+implementations unless a real lifecycle or responsiveness problem justifies
+migration. Do not impose this UI lifecycle rule on CLI tools or servers.
 
 ## Enforce ecosystem authority
 
